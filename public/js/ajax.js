@@ -5,7 +5,7 @@ const handlerTab = getID('handler-tab'),
 // FUNCTIONS
 function ajaxSuccess() {
   let response = JSON.parse(this.responseText)
-  console.log(this.responseText, response);
+  console.log(response);
   // getID('ajaxResponse').innerHTML = response;
 }
 

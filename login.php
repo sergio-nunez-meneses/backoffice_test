@@ -24,7 +24,7 @@ include 'include/header.php';
       <fieldset class="sign-up-container">
       <legend>sign up</legend>
       <input class="" type="text" name="username" placeholder="username" required>
-      <select class="" name="status">
+      <select class="" name="status" required>
         <option value="admin">admin</option>
         <option value="collaborator">collaborator</option>
       </select>

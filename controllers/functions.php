@@ -173,7 +173,9 @@ function article() {
 
 function ajaxReceive() {
   $pdo = connection();
-  date_default_timezone_set('Europe/Paris');
+
+  // if (element == 'article') declare variable $article
+  // elseif (element == 'project') declare variable $project
 
   // echo 'check received data';
   // print_r($_POST);
@@ -184,7 +186,6 @@ function ajaxReceive() {
     echo 'sign in to edit this article';
   } else {
     $article_id = $_POST['id'];
-
     $error_message = '';
     $error = false;
 
@@ -211,7 +212,10 @@ function ajaxReceive() {
 
       if (!($error)) {
         $author_id = $_POST['author'];
+
+        date_default_timezone_set('Europe/Paris');
         $article_date = substr(date("Y-m-d H:i:sa"), 0, -2);
+
         $article_image = $_FILES['images']['tmp_name'][0];
 
         $pdo->prepare('UPDATE articles SET article_title = :article_title, article_text = :article_text, DATETIME = :article_date, article_image = :article_image, author_id = :author_id WHERE article_id = :article_id')->execute([
@@ -227,7 +231,7 @@ function ajaxReceive() {
     } elseif ($_POST['action'][0] == 'archive') {
       // echo 'project archived';
     } elseif ($_POST['action'][0] == 'delete') {
-      // $pdo->prepare('DELETE FROM articles WHERE article_id = :article_id')->execute(['article_id' => $article_id]);
+      $pdo->prepare('DELETE FROM articles WHERE article_id = :article_id')->execute(['article_id' => $article_id]);
       // echo 'project deleted';
     } else {
       echo 'could not perform requested action';
