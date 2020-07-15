@@ -25,6 +25,9 @@ img {
   padding: 0.5rem;
   border: 0.0625rem solid #000;
 }
+.header-container a {
+  margin: 0 0.125rem;
+}
 .main-container {
   display: flex;
   flex-wrap: wrap;
@@ -63,6 +66,6 @@ img {
 .hidden {
   display: none;
 }
-#displayInfo {
+#ajaxResponse {
   text-align: center;
 }

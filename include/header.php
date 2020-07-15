@@ -1,11 +1,11 @@
 <?php
-session_start();
 
+session_start();
 define('__ROOT__', dirname(dirname(__FILE__)));
-require_once(__ROOT__ . '/controllers/functions.php');
-echo basename(getcwd()) . '<br>';
+require_once __ROOT__ . '/controllers/functions.php';
 
 // error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING);
+
 ?>
 
 <!DOCTYPE html>

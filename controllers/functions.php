@@ -1,7 +1,8 @@
 <?php
 
 function connection() {
-  require __ROOT__ . '/controllers/database.php';
+  // require __ROOT__ . '/controllers/database.php';
+  require 'C:\wamp64\www\snunezmeneses\backoffice_test\controllers\database.php';
 
   $host = 'localhost';
   $charset = 'utf8';
@@ -27,8 +28,7 @@ function login() {
     $username = $_POST['username'];
     $password = $_POST['password'];
 
-    $sql = 'SELECT * FROM authors WHERE author_username = :username';
-    $stmt = $pdo->prepare($sql);
+    $stmt = $pdo->prepare('SELECT * FROM authors WHERE author_username = :username');
     $stmt->execute([
       'username' => $username
     ]);
@@ -62,32 +62,31 @@ function logout() {
 }
 
 function signUp() {
-  $username = $password = $status = '';
-  $errors = 0;
-  $error_message = '';
+  $username = $password = $status = $error_message = '';
+  $error = false;
 
   if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['sign-up'])) {
 
     if (empty($_POST['username'])) {
-      $error_message .= 'username cannot be empty <br>';
-      $errors++;
+      $error_message .= 'username cannot be empty';
+      $error = true;
     } elseif (strlen($_POST['username']) < 6){
-      $error_message .= 'username must contain more than 6 characters <br>';
-      $errors++;
+      $error_message .= 'username must contain more than 6 characters';
+      $error = true;
       // elseif ($_POST['username'] !== 'sergio') $status = 'collaborator';
     } else {
       $username = $_POST['username'];
     }
 
     if (empty($_POST['password'])) {
-      $error_message .= 'password cannot be empty <br>';
-      $errors++;
+      $error_message .= 'password cannot be empty';
+      $error = true;
     } elseif (strlen($_POST['password']) < 7){
-      $error_message .= 'password must contain more than 7 characters <br>';
-      $errors++;
+      $error_message .= 'password must contain more than 7 characters';
+      $error = true;
     } elseif ($_POST['password'] != $_POST['confirm-password']) {
-      $error_message .= 'passwords do not match <br>';
-      $errors++;
+      $error_message .= 'passwords do not match';
+      $error = true;
       // elseif (!(preg_match('/[\'^£$%&*()}{@#~<>,|=_+¬-]/', $_POST['password'])) echo 'password must contain at least 1 special character';
     } else {
       $options = [
@@ -99,10 +98,9 @@ function signUp() {
   }
 
   $pdo = connection();
-  $sql = 'INSERT INTO authors (author_status, author_username, author_password) VALUES (:status, :username, :password)';
 
-  if ($errors == 0) {
-    $pdo->prepare($sql)->execute([
+  if (!($error)) {
+    $pdo->prepare('INSERT INTO authors (author_status, author_username, author_password) VALUES (:status, :username, :password)')->execute([
       'status' => $status,
       'username' => $username,
       'password' => $password,
@@ -172,3 +170,80 @@ function article() {
   echo '<article>' . $article['article_text'] . '</article>';
   echo '</section>';
 }
+
+function ajaxReceive() {
+  $pdo = connection();
+  date_default_timezone_set('Europe/Paris');
+
+  // echo 'check received data';
+  // print_r($_POST);
+  // echo 'check uploaded files';
+  // print_r($_FILES);
+
+  if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) { // prevent editing
+    echo 'sign in to edit this article';
+  } else {
+    $article_id = $_POST['id'];
+
+    $error_message = '';
+    $error = false;
+
+    if ($_POST['action'][0] == 'edit') {
+      if (empty($_POST['title'])) {
+        $error_message .= 'title cannot be empty';
+        $error = true;
+      } elseif (strlen($_POST['title']) < 5) {
+        $error_message .= 'title must contain more than 5 characters';
+        $error = true;
+      } else {
+        $article_title = $_POST['title'];
+      }
+
+      if (empty($_POST['text'])) {
+        $error_message .= 'text cannot be empty';
+        $error = true;
+      } elseif (strlen($_POST['text']) < 10){
+        $error_message .= 'text must contain more than 10 characters';
+        $error = true;
+      } else {
+        $article_text = $_POST['text'];
+      }
+
+      if (!($error)) {
+        $author_id = $_POST['author'];
+        $article_date = substr(date("Y-m-d H:i:sa"), 0, -2);
+        $article_image = $_FILES['images']['tmp_name'][0];
+
+        $pdo->prepare('UPDATE articles SET article_title = :article_title, article_text = :article_text, DATETIME = :article_date, article_image = :article_image, author_id = :author_id WHERE article_id = :article_id')->execute([
+          'article_title' => $article_title,
+          'article_text' => $article_text,
+          'article_date' => $article_date,
+          'article_image' => $article_image,
+          'author_id' => $author_id,
+          'article_id' => $article_id
+        ]);
+        // echo 'project edited';
+      }
+    } elseif ($_POST['action'][0] == 'archive') {
+      // echo 'project archived';
+    } elseif ($_POST['action'][0] == 'delete') {
+      // $pdo->prepare('DELETE FROM articles WHERE article_id = :article_id')->execute(['article_id' => $article_id]);
+      // echo 'project deleted';
+    } else {
+      echo 'could not perform requested action';
+    }
+
+    // back to ajax.js
+    $array = [
+      'id' => $article_id,
+      'title' => $article_title,
+      'text' => $article_text,
+      'date' => $article_date,
+      'image' => $article_image,
+      'author' => $author_id
+    ];
+    echo json_encode($array);
+  }
+}
+
+?>

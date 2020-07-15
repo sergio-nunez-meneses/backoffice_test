@@ -4,11 +4,12 @@ const handlerTab = getID('handler-tab'),
 
 // FUNCTIONS
 function ajaxSuccess() {
-  console.log(this.responseText);
-  getID('displayInfo').innerHTML = this.responseText;
+  let response = JSON.parse(this.responseText)
+  console.log(this.responseText, response);
+  // getID('ajaxResponse').innerHTML = response;
 }
 
-function ajaxSubmit(oFormElement) {
+function ajaxSend(oFormElement) {
   if (!oFormElement.action) {
     return;
   }
@@ -38,11 +39,11 @@ function ajaxSubmit(oFormElement) {
 }
 
 function displayAjaxForm() {
-  if (ajaxForm.style.display === 'none') {
-    ajaxForm.style.display = 'block';
+  if (ajaxForm.classList.contains('hidden')) {
+    ajaxForm.classList.remove('hidden');
     handlerTab.innerHTML = 'hide';
   } else {
-    ajaxForm.style.display = 'none';
+    ajaxForm.classList.add('hidden');
     handlerTab.innerHTML = 'edit';
   }
 }
