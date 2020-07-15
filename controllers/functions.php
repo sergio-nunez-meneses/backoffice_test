@@ -151,7 +151,7 @@ function article() {
   ]);
   $article = $stmt->fetch();
 
-  echo '<section>';
+  echo '<div>';
   echo '<header>';
 
   if(isset($_SESSION['logged_in'])) {
@@ -168,7 +168,31 @@ function article() {
   echo '</div>';
   echo '</header>';
   echo '<article>' . $article['article_text'] . '</article>';
-  echo '</section>';
+  echo '</div>';
+}
+
+function projects() {
+  $pdo = connection();
+
+  $data = $pdo->query('SELECT * FROM projects ORDER BY project_id DESC LIMIT 10')->fetchAll();
+
+  foreach ($data as $row) {
+    echo '<article>';
+    echo '<header>';
+    echo '<h3><a href="article.php?id=' . $row['project_id'] . '">'. $row['project_title'].'</a></h3>';
+    echo '<img class="" src="' . $row['project_image'] . '">';
+    echo '<div class="">';
+    echo '<div>on ' . $row['DATETIME'] . '</div>';
+    echo '<div>by '  .$row['author_id'] . '</div>';
+    echo '<div>'  .$row['project_technologies'] . '</div>';
+    echo '</div>';
+    echo '</header>';
+    echo '<main>';
+    echo '<p>' . $row['project_text'] . '...</p>';
+    echo '<a class="" href="article.php?id=' . $row['project_id'] . '">continue reading</a>';
+    echo '</main>';
+    echo '</article>';
+  }
 }
 
 function ajaxReceive() {

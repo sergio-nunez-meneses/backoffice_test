@@ -36,12 +36,22 @@ img {
   padding: 0.5rem;
   border: 0.0625rem solid #000;
 }
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+}
+.tab-container {
+  display: flex;
+  justify-content: space-around;
+}
+.content-container {
+  display: flex;
+  flex-wrap: wrap;
+}
 .login-container {
   display: flex;
   flex-direction: column;
-}
-.form-filter {
-  /* align-self: center; */
 }
 .article-container {
   display: flex;
@@ -60,12 +70,13 @@ img {
 .footer-container {
   display: flex;
   justify-content: center;
+  margin: auto 0;
   padding: 0.5rem;
   border: 0.0625rem solid #000;
 }
 .hidden {
   display: none;
 }
-#ajaxResponse {
+.info {
   text-align: center;
 }

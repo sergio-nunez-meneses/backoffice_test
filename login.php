@@ -8,7 +8,7 @@ include 'include/header.php';
 <main class="main-container">
 
   <div class="login-container">
-    <button id="sign-in-tab" class="form-filter">sign in || sign up</button>
+    <button id="sign-in-tab" class="">sign in</button>
     <!-- sign in -->
     <form id="sign-in-form" class="" method="post" action="login.php">
       <fieldset class="sign-in-container">
@@ -37,8 +37,9 @@ include 'include/header.php';
 
 </main>
 
-<p> <?php login(); ?> </p>
+<?php
+echo '<p class="info">' . login() . '</p>';
+include 'include/footer.php';
+?>
 
 <script src="public/js/login.js"></script>
-
-<?php include 'include/footer.php'; ?>
