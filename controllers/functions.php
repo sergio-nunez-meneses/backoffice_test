@@ -43,7 +43,7 @@ function login() {
       if (password_verify($password, $stored_password)) {
         $_SESSION['logged_in'] = true;
         $_SESSION['user'] = $username;
-        header('Location:/portfolio_test/index.php');
+        header('Location:/backoffice_test/index.php');
         // if ($user['author_status'] == admin) header('Location:admin.php');
         // else header('Location:collaborator.php');
       } else {
@@ -74,6 +74,7 @@ function signUp() {
     } elseif (strlen($_POST['username']) < 6){
       $error_message .= 'username must contain more than 6 characters <br>';
       $errors++;
+      // elseif ($_POST['username'] !== 'sergio') $status = 'collaborator';
     } else {
       $username = $_POST['username'];
     }
@@ -87,6 +88,7 @@ function signUp() {
     } elseif ($_POST['password'] != $_POST['confirm-password']) {
       $error_message .= 'passwords do not match <br>';
       $errors++;
+      // elseif (!(preg_match('/[\'^£$%&*()}{@#~<>,|=_+¬-]/', $_POST['password'])) echo 'password must contain at least 1 special character';
     } else {
       $options = [
         'cost' => 12,
@@ -109,10 +111,12 @@ function signUp() {
     $_SESSION['logged_in'] = true;
     $_SESSION['user'] = $username;
 
-    header('Location:/portfolio_test/index.php');
+    header('Location:/backoffice_test/index.php');
+    // if ($status == admin) header('Location:admin.php');
+    // else header('Location:collaborator.php');
   } else {
     echo $error_message;
-    // header("Location:/portfolio_test/templates/login.php?error=$error_message");
+    // header("Location:/backoffice_test/templates/login.php?error=$error_message");
   }
 }
 
@@ -124,8 +128,7 @@ function articles() {
   foreach ($data as $row) {
     echo '<article>';
     echo '<header>';
-    echo '<h3><a href="article.php?id=' . $row['article_id'] . '">'.
-      $row['article_title'].'</a></h3>';
+    echo '<h3><a href="article.php?id=' . $row['article_id'] . '">'. $row['article_title'].'</a></h3>';
     echo '<img class="" src="' . $row['article_image'] . '">';
     echo '<div class="">';
     echo '<div>on ' . $row['DATETIME'] . '</div>';
@@ -144,8 +147,7 @@ function article() {
   $article_id = $_GET['id'];
 
   $pdo = connection();
-  $sql = 'SELECT * FROM articles JOIN authors ON articles.author_id = authors.author_id WHERE articles.article_id = :article_id';
-  $stmt = $pdo->prepare($sql);
+  $stmt = $pdo->prepare('SELECT * FROM articles JOIN authors ON articles.author_id = authors.author_id WHERE articles.article_id = :article_id');
   $stmt->execute([
     'article_id' => $article_id
   ]);

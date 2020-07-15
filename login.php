@@ -8,8 +8,7 @@ include 'include/header.php';
 <main class="main-container">
 
   <div class="login-container">
-    <button id="sign-in-tab" class="form-filter">sign in</button>
-    <button id="sign-up-tab" class="form-filter">sign up</button>
+    <button id="sign-in-tab" class="form-filter">sign in || sign up</button>
     <!-- sign in -->
     <form id="sign-in-form" class="" method="post" action="login.php">
       <fieldset class="sign-in-container">
@@ -17,7 +16,7 @@ include 'include/header.php';
       <!-- autofocus -->
       <input class="" type="text" name="username" value="" placeholder="username" required>
       <input class="" type="password" name="password" value="" placeholder="password" required>
-      <input class="" type="submit" name="sign-in">
+      <input class="" type="submit" name="sign-in" value="sign in">
       </fieldset>
     </form>
     <!-- sign up -->
@@ -31,7 +30,7 @@ include 'include/header.php';
       </select>
       <input type="password" class="" name="password" placeholder="password" required>
       <input type="password" class="" name="confirm-password" placeholder="confirm password" required>
-      <input class="" type="submit" name="sign-up">
+      <input class="" type="submit" name="sign-up" value="sign up">
       </fieldset>
     </form>
   </div>

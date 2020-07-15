@@ -1,24 +1,20 @@
 // VARIABLES
-const signInTab = getID('sign-in-tab'),
-  signUpTab = getID('sign-up-tab'),
+const signTab = getID('sign-in-tab'),
   signInForm = getID('sign-in-form'),
   signUpForm = getID('sign-up-form');
 
 // FUNCTIONS
-function displaySignIn() {
-  // signInTab.classList.remove('inactive');
-  // signUpTab.classList.add('inactive');
-  signInForm.classList.remove('hidden');
-  signUpForm.classList.add('hidden');
-}
-
-function displaySignUp() {
-  // signUpTab.classList.remove('inactive');
-  // signInTab.classList.add('inactive');
-  signUpForm.classList.remove('hidden');
-  signInForm.classList.add('hidden');
+function displaySignForm() {
+  if (signUpForm.classList.contains('hidden')) {
+    signUpForm.classList.remove('hidden');
+    signInForm.classList.add('hidden');
+    signTab.innerHTML = 'sign up';
+  } else {
+    signInForm.classList.remove('hidden');
+    signUpForm.classList.add('hidden');
+    signTab.innerHTML = 'sign in';
+  }
 }
 
 // EVENT LISTENERS
-signInTab.addEventListener('click', displaySignIn);
-signUpTab.addEventListener('click', displaySignUp);
+signTab.addEventListener('click', displaySignForm);

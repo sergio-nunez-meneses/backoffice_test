@@ -3,6 +3,7 @@ session_start();
 
 define('__ROOT__', dirname(dirname(__FILE__)));
 require_once(__ROOT__ . '/controllers/functions.php');
+echo basename(getcwd()) . '<br>';
 
 // error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING);
 ?>
@@ -21,7 +22,7 @@ require_once(__ROOT__ . '/controllers/functions.php');
 
   <header class="header-container">
 
-    <a href="/portfolio_test/index.php">home</a>
+    <a href="/backoffice_test/index.php">home</a>
     <?php isLogged(); ?>
 
   </header>

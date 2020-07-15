@@ -27,7 +27,7 @@ include 'include/header.php';
           <option>archive</option>
           <option>delete</option>
         </select>
-        <input id="" class="" type="submit" value="submit"/>
+        <input id="" class="" type="submit" name="submit" name="submit"/>
         </fieldset>
       </form>
     </div>

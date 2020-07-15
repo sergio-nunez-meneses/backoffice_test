@@ -1,9 +1,9 @@
 <?php
 
 // echo "\n\n:: Data received via POST ::\n\n";
-// print_r($_POST);
+print_r($_POST);
 // echo "\n\n:: Files received ::\n\n";
-// print_r($_FILES);
+print_r($_FILES);
 
 $project_id = $_POST['id'];
 $project_name = $_POST['title'];
