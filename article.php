@@ -1,8 +1,6 @@
 <?php
-
 $title = 'article';
 include 'include/header.php';
-
 ?>
 
 <main class="main-container">

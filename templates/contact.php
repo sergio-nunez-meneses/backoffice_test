@@ -1,5 +1,5 @@
 <?php
-$title = 'main';
+$title = 'contact me!';
 include '../include/header.php';
 ?>
 
@@ -18,11 +18,6 @@ include '../include/header.php';
 
 <p id="ajaxResponse" class="info"></p>
 
-<?php
-// if ($_GET['sent'] == 'yes') echo '<p class="info">mail sucessfully sent!</p>';
-// elseif ($_GET['sent'] == 'no') echo '<p class="info">failed to send email!</p>';
-
-include '../include/footer.php';
-?>
+<?php include '../include/footer.php'; ?>
 
 <script src="../public/js/ajax.js"></script>

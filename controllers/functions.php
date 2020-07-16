@@ -199,20 +199,18 @@ function projects() {
 function ajaxReceive() {
   $pdo = connection();
 
-  // echo 'check received data';
-  // print_r($_POST);
-  // echo 'check uploaded files';
-  // print_r($_FILES);
-
   if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) { // prevent editing
     echo 'sign in to edit this article';
   } else {
-    $form = 'database';
+
+    $form = 'ajax-form';
     $element_type = $_POST['content'][0];
     $error_message = '';
     $error = false;
+    date_default_timezone_set('Europe/Paris');
 
     if ($_POST['action'][0] === 'edit') {
+
       if (empty($_POST['title'])) {
         $error_message .= 'title cannot be empty';
         $error = true;
@@ -236,7 +234,6 @@ function ajaxReceive() {
       if (!($error)) {
         $element_id = $_POST['id'];
         $author_id = $_POST['author'];
-        date_default_timezone_set('Europe/Paris');
         $element_date = substr(date("Y-m-d H:i:sa"), 0, -2);
         $element_image = $_FILES['images']['tmp_name'][0];
 
@@ -251,16 +248,61 @@ function ajaxReceive() {
           ]);
           $action = 'element successfully edited';
         } elseif ($_POST['content'][0] === 'project') {
+          // update project
+        }
+      }
+    } elseif ($_POST['action'][0] === 'archive') {
+      // $action = 'element archived';
+    } elseif ($_POST['action'][0] === 'delete') {
+
+      $element_id = $_POST['id'];
+
+      $pdo->prepare('DELETE FROM articles WHERE article_id = :element_id')->execute([
+        'element_id' => $element_id
+      ]);
+      $action = 'element deleted';
+    } elseif ($_POST['action'][0] === 'create') {
+
+      if (empty($_POST['title'])) {
+        $error_message .= 'title cannot be empty';
+        $error = true;
+      } elseif (strlen($_POST['title']) < 5) {
+        $error_message .= 'title must contain at least 5 characters';
+        $error = true;
+      } else {
+        $element_title = $_POST['title'];
+      }
+
+      if (empty($_POST['text'])) {
+        $error_message .= 'text cannot be empty';
+        $error = true;
+      } elseif (strlen($_POST['text']) < 10){
+        $error_message .= 'text must contain at least 10 characters';
+        $error = true;
+      } else {
+        $element_text = $_POST['text'];
+      }
+
+      if (!($error)) {
+        $element_id = $_POST['id'];
+        $author_id = $_POST['author'];
+        $element_date = substr(date("Y-m-d H:i:sa"), 0, -2);
+        $element_image = $_FILES['images']['name'][0];
+
+        if ($_POST['content'][0] === 'article') {
+          $pdo->prepare('INSERT INTO articles VALUES (:element_id, :element_title, :element_text, :element_date, :element_image, :author_id)')->execute([
+            'element_id' => $element_id,
+            'element_title' => $element_title,
+            'element_text' => $element_text,
+            'element_date' => $element_date,
+            'element_image' => $element_image,
+            'author_id' => $author_id
+          ]);
+          $action = 'element successfully added';
+        } elseif ($_POST['content'][0] === 'project') {
           // edit project
         }
       }
-    } elseif ($_POST['action'][0] == 'archive') {
-      // $action = 'element archived';
-    } elseif ($_POST['action'][0] == 'delete') {
-      $pdo->prepare('DELETE FROM articles WHERE article_id = :article_id')->execute([
-        'article_id' => $article_id
-      ]);
-      $action = 'element deleted';
     } else {
       echo 'could not perform requested action';
     }
