@@ -199,9 +199,14 @@ function projects() {
 function ajaxReceive() {
   $pdo = connection();
 
-  if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) { // prevent editing
+  if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
     echo 'sign in to edit this article';
   } else {
+
+    // declare global variables
+    // check and format title, text, and the other variables
+    // check action and content and execute queries
+    // send data to ajax.js
 
     $form = 'ajax-form';
     $element_type = $_POST['content'][0];
