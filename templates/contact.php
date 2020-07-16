@@ -3,9 +3,8 @@ $title = 'main';
 include '../include/header.php';
 ?>
 
-<!-- onsubmit="ajaxSend(this); return false;" -->
 <main class="main-container">
-  <form id="" class="" action=" <?php echo ROOT_DIR . '/controllers/mail.php'; ?> " method="post" enctype="multipart/form-data">
+  <form id="ajax-mail-form" class="" action=" <?php echo ROOT_DIR . '/controllers/mail.php'; ?> " method="post" enctype="multipart/form-data" onsubmit="ajaxSend(this); return false;">
     <fieldset class="ajax-form-container">
     <legend>send message</legend>
     <input class="" type="text" name="firstname" value="" placeholder="firstname" required>
@@ -17,9 +16,13 @@ include '../include/header.php';
   </form>
 </main>
 
+<p id="ajaxResponse" class="info"></p>
+
 <?php
-if ($_GET['sent'] == 'yes') echo '<p class="info">mail sucessfully sent!</p>';
-elseif ($_GET['sent'] == 'no') echo '<p class="info">failed to send email!</p>';
+// if ($_GET['sent'] == 'yes') echo '<p class="info">mail sucessfully sent!</p>';
+// elseif ($_GET['sent'] == 'no') echo '<p class="info">failed to send email!</p>';
 
 include '../include/footer.php';
 ?>
+
+<script src="../public/js/ajax.js"></script>

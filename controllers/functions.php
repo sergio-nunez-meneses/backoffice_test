@@ -126,7 +126,7 @@ function articles() {
   foreach ($data as $row) {
     echo '<article>';
     echo '<header>';
-    echo '<h3><a href="article.php?id=' . $row['article_id'] . '&element=article">'. $row['article_title'].'</a></h3>';
+    echo '<h3><a href="article.php?id=' . $row['article_id'] . '">'. $row['article_title'].'</a></h3>';
     echo '<img class="" src="' . $row['article_image'] . '">';
     echo '<div class="">';
     echo '<div>on ' . $row['DATETIME'] . '</div>';
@@ -135,7 +135,7 @@ function articles() {
     echo '</header>';
     echo '<main>';
     echo '<p>' . $row['article_text'] . '...</p>';
-    echo '<a class="" href="article.php?id=' . $row['article_id'] . '&element=article">continue reading</a>';
+    echo '<a class="" href="article.php?id=' . $row['article_id'] . '">continue reading</a>';
     echo '</main>';
     echo '</article>';
   }
@@ -207,6 +207,7 @@ function ajaxReceive() {
   if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) { // prevent editing
     echo 'sign in to edit this article';
   } else {
+    $form = 'database';
     $element_type = $_POST['content'][0];
     $error_message = '';
     $error = false;
@@ -281,19 +282,25 @@ function ajaxReceive() {
 }
 
 function sendMail() {
-  if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['send-message'])) {
+  $to = 'email@mail.com';
+  $subject = 'contact';
+  $message = $_POST['message'];
+  $headers = 'From: ' . $_POST['email'];
+  $form = 'ajax-mail-form';
+  $info = '';
 
-    $to      = 'email@mail.com';
-    $subject = 'contact';
-    $message = $_POST['message'];
-    $headers = 'From: ' . $_POST['email'];
-
-    if (mail($to, $subject, $message, $headers)) {
-      header('Location:../templates/contact.php?sent=yes');
-    } else {
-      header('Location:../templates/contact.php?sent=no');
-    }
+  if (mail($to, $subject, $message, $headers)) {
+    $info = 'mail sucessfully sent!';
+  } else {
+    $info = 'failed to send email!';
   }
+
+  // back to ajax.js
+  $array = [
+    'form' => $form,
+    'info' => $info
+  ];
+  echo json_encode($array);
 }
 
 ?>

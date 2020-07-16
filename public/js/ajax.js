@@ -1,26 +1,31 @@
-// VARIABLES
 const handlerTab = getID('handler-tab'),
   ajaxForm = getID('ajax-form'),
+  mailForm = getID('ajax-mail-form'),
   infoText = getID('ajaxResponse');
 
-// FUNCTIONS
 function ajaxSuccess() {
   let response = JSON.parse(this.responseText);
-  // console.log(response);
+  console.log(this.responseText, response);
 
-  infoText.innerHTML = response['action'];
-  getID('title-' + response['id']).innerHTML = response['title'];
-  getID('image-' + response['id']).innerHTML = response['image'];
-  getID('date-' + response['id']).innerHTML = response['date'];
-  getID('text-' + response['id']).innerHTML = response['text'];
+  if (response['form'] === 'ajax-mail-form') {
+    infoText.innerHTML = response['info'];
+  } else {
+    infoText.innerHTML = response['action'];
+    getID('title-' + response['id']).innerHTML = response['title'];
+    getID('image-' + response['id']).innerHTML = response['image'];
+    getID('date-' + response['id']).innerHTML = response['date'];
+    getID('text-' + response['id']).innerHTML = response['text'];
+  }
 }
 
 function ajaxSend(oFormElement) {
   if (!oFormElement.action) {
     return;
   }
+
   let oReq = new XMLHttpRequest();
   oReq.onload = ajaxSuccess;
+
   if (oFormElement.method.toLowerCase() === 'post') {
     oReq.open('post', oFormElement.action);
     oReq.send(new FormData(oFormElement));
@@ -54,5 +59,4 @@ function displayAjaxForm() {
   }
 }
 
-// EVENT LISTENERS
 handlerTab.addEventListener('click', displayAjaxForm);

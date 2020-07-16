@@ -1,9 +1,7 @@
-// VARIABLES
 const signTab = getID('sign-in-tab'),
   signInForm = getID('sign-in-form'),
   signUpForm = getID('sign-up-form');
 
-// FUNCTIONS
 function displaySignForm() {
   if (signUpForm.classList.contains('hidden')) {
     signUpForm.classList.remove('hidden');
@@ -16,5 +14,4 @@ function displaySignForm() {
   }
 }
 
-// EVENT LISTENERS
 signTab.addEventListener('click', displaySignForm);
