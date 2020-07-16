@@ -1,10 +1,10 @@
 <nav class="">
 
-  <a href="user.php" class="">
-    signed up as <?php echo $_SESSION['user']; ?>
+  <span class="">welcome, </span><a href="script.php" class="">
+    <span class=""> <?php echo $_SESSION['user']; ?> </span>
   </a>
-  <a href="write.php" class="">
-    <span class="large">write</span>
+  <a href="script.php" class="">
+    <span class="">add</span>
   </a>
   <a href="logout.php?logout=yes" class="">
     <span class="">logout</span>

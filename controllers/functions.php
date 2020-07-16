@@ -126,7 +126,7 @@ function articles() {
   foreach ($data as $row) {
     echo '<article>';
     echo '<header>';
-    echo '<h3><a href="article.php?id=' . $row['article_id'] . '">'. $row['article_title'].'</a></h3>';
+    echo '<h3><a href="article.php?id=' . $row['article_id'] . '&element=article">'. $row['article_title'].'</a></h3>';
     echo '<img class="" src="' . $row['article_image'] . '">';
     echo '<div class="">';
     echo '<div>on ' . $row['DATETIME'] . '</div>';
@@ -135,7 +135,7 @@ function articles() {
     echo '</header>';
     echo '<main>';
     echo '<p>' . $row['article_text'] . '...</p>';
-    echo '<a class="" href="article.php?id=' . $row['article_id'] . '">continue reading</a>';
+    echo '<a class="" href="article.php?id=' . $row['article_id'] . '&element=article">continue reading</a>';
     echo '</main>';
     echo '</article>';
   }
@@ -143,6 +143,7 @@ function articles() {
 
 function article() {
   $article_id = $_GET['id'];
+  // format time and text
 
   $pdo = connection();
   $stmt = $pdo->prepare('SELECT * FROM articles JOIN authors ON articles.author_id = authors.author_id WHERE articles.article_id = :article_id');
@@ -160,14 +161,14 @@ function article() {
     }
   }
 
-  echo '<h2 class="">' . $article['article_title'] . '</h2>';
-  echo '<img class="" src="' . $article['article_image'] . '">';
+  echo '<h2 id="title-' . $article_id . '" class="">' . $article['article_title'] . '</h2>';
+  echo '<img id="image-' . $article_id . '" class="" src="' . $article['article_image'] . '">';
   echo '<div class="">';
-  echo '<div>on ' . $article['DATETIME'] . '</div>';
+  echo '<div id="date-' . $article_id . '">on ' . $article['DATETIME'] . '</div>';
   echo '<div>by ' . $article['author_username'] . '</div>';
   echo '</div>';
   echo '</header>';
-  echo '<article>' . $article['article_text'] . '</article>';
+  echo '<article id="text-' . $article_id . '">' . $article['article_text'] . '</article>';
   echo '</div>';
 }
 
@@ -179,7 +180,7 @@ function projects() {
   foreach ($data as $row) {
     echo '<article>';
     echo '<header>';
-    echo '<h3><a href="article.php?id=' . $row['project_id'] . '">'. $row['project_title'].'</a></h3>';
+    echo '<h3><a href="project.php?id=' . $row['project_id'] . '&element=project">'. $row['project_title'].'</a></h3>';
     echo '<img class="" src="' . $row['project_image'] . '">';
     echo '<div class="">';
     echo '<div>on ' . $row['DATETIME'] . '</div>';
@@ -189,7 +190,7 @@ function projects() {
     echo '</header>';
     echo '<main>';
     echo '<p>' . $row['project_text'] . '...</p>';
-    echo '<a class="" href="article.php?id=' . $row['project_id'] . '">continue reading</a>';
+    echo '<a class="" href="project.php?id=' . $row['project_id'] . '&element=project">continue reading</a>';
     echo '</main>';
     echo '</article>';
   }
@@ -197,9 +198,6 @@ function projects() {
 
 function ajaxReceive() {
   $pdo = connection();
-
-  // if (element == 'article') declare variable $article
-  // elseif (element == 'project') declare variable $project
 
   // echo 'check received data';
   // print_r($_POST);
@@ -209,11 +207,11 @@ function ajaxReceive() {
   if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) { // prevent editing
     echo 'sign in to edit this article';
   } else {
-    $article_id = $_POST['id'];
+    $element_type = $_POST['content'][0];
     $error_message = '';
     $error = false;
 
-    if ($_POST['action'][0] == 'edit') {
+    if ($_POST['action'][0] === 'edit') {
       if (empty($_POST['title'])) {
         $error_message .= 'title cannot be empty';
         $error = true;
@@ -221,7 +219,7 @@ function ajaxReceive() {
         $error_message .= 'title must contain more than 5 characters';
         $error = true;
       } else {
-        $article_title = $_POST['title'];
+        $element_title = $_POST['title'];
       }
 
       if (empty($_POST['text'])) {
@@ -231,46 +229,54 @@ function ajaxReceive() {
         $error_message .= 'text must contain more than 10 characters';
         $error = true;
       } else {
-        $article_text = $_POST['text'];
+        $element_text = $_POST['text'];
       }
 
       if (!($error)) {
+        $element_id = $_POST['id'];
         $author_id = $_POST['author'];
-
         date_default_timezone_set('Europe/Paris');
-        $article_date = substr(date("Y-m-d H:i:sa"), 0, -2);
+        $element_date = substr(date("Y-m-d H:i:sa"), 0, -2);
+        $element_image = $_FILES['images']['tmp_name'][0];
 
-        $article_image = $_FILES['images']['tmp_name'][0];
-
-        $pdo->prepare('UPDATE articles SET article_title = :article_title, article_text = :article_text, DATETIME = :article_date, article_image = :article_image, author_id = :author_id WHERE article_id = :article_id')->execute([
-          'article_title' => $article_title,
-          'article_text' => $article_text,
-          'article_date' => $article_date,
-          'article_image' => $article_image,
-          'author_id' => $author_id,
-          'article_id' => $article_id
-        ]);
-        // echo 'project edited';
+        if ($_POST['content'][0] === 'article') {
+          $pdo->prepare('UPDATE articles SET article_title = :element_title, article_text = :element_text, DATETIME = :element_date, article_image = :element_image, author_id = :author_id WHERE article_id = :element_id')->execute([
+            'element_title' => $element_title,
+            'element_text' => $element_text,
+            'element_date' => $element_date,
+            'element_image' => $element_image,
+            'author_id' => $author_id,
+            'element_id' => $element_id
+          ]);
+          $action = 'element successfully edited';
+        } elseif ($_POST['content'][0] === 'project') {
+          // edit project
+        }
       }
     } elseif ($_POST['action'][0] == 'archive') {
-      // echo 'project archived';
+      // $action = 'element archived';
     } elseif ($_POST['action'][0] == 'delete') {
-      $pdo->prepare('DELETE FROM articles WHERE article_id = :article_id')->execute(['article_id' => $article_id]);
-      // echo 'project deleted';
+      $pdo->prepare('DELETE FROM articles WHERE article_id = :article_id')->execute([
+        'article_id' => $article_id
+      ]);
+      $action = 'element deleted';
     } else {
       echo 'could not perform requested action';
     }
 
     // back to ajax.js
     $array = [
-      'id' => $article_id,
-      'title' => $article_title,
-      'text' => $article_text,
-      'date' => $article_date,
-      'image' => $article_image,
+      'action' => $action,
+      'element' => $element_type,
+      'id' => $element_id,
+      'title' => $element_title,
+      'text' => $element_text,
+      'date' => $element_date,
+      'image' => $element_image,
       'author' => $author_id
     ];
     echo json_encode($array);
+
   }
 }
 

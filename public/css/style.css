@@ -61,7 +61,7 @@ img {
   padding: 0.5rem;
   border: 0.0625rem solid #000;
 }
-.sign-in-container, .sign-up-container, .handler-container {
+.sign-in-container, .sign-up-container, .ajax-form-container {
   display: flex;
   flex-direction: column;
   margin: 0.5rem 0;

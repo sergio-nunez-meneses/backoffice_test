@@ -23,6 +23,12 @@ require_once __ROOT__ . '/controllers/functions.php';
   <header class="header-container">
 
     <a href="/backoffice_test/index.php">home</a>
+    <a href="/backoffice_test/about.php">
+      <span class="">about</span>
+    </a>
+    <a href="/backoffice_test/templates/contact.php" class="">
+      <span class="">contact</span>
+    </a>
     <?php isLogged(); ?>
 
   </header>
