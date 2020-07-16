@@ -281,14 +281,19 @@ function ajaxReceive() {
 }
 
 function sendMail() {
-  // $to      = 'nobody@example.com';
-  // $subject = 'the subject';
-  // $message = 'hello';
-  // $headers = 'From: webmaster@example.com' . "\r\n" .
-  // 'Reply-To: webmaster@example.com' . "\r\n" .
-  // 'X-Mailer: PHP/' . phpversion();
-  //
-  // mail($to, $subject, $message, $headers);
+  if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['send-message'])) {
+
+    $to      = 'email@mail.com';
+    $subject = 'contact';
+    $message = $_POST['message'];
+    $headers = 'From: ' . $_POST['email'];
+
+    if (mail($to, $subject, $message, $headers)) {
+      header('Location:../templates/contact.php?sent=yes');
+    } else {
+      header('Location:../templates/contact.php?sent=no');
+    }
+  }
 }
 
 ?>

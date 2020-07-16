@@ -4,7 +4,7 @@ define('__ROOT__', dirname(dirname(__FILE__)));
 define('ROOT_DIR', '/' . basename(__ROOT__));
 require_once __ROOT__ . '/controllers/functions.php';
 
-// error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING);
+error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING);
 ?>
 
 <!DOCTYPE html>
