@@ -1,17 +1,17 @@
-const signTab = getID('sign-in-tab'),
-  signInForm = getID('sign-in-form'),
-  signUpForm = getID('sign-up-form');
+const SIGN_TAB = getID('sign-in-tab'),
+  SIGN_IN_FORM = getID('sign-in-form'),
+  SIGN_UP_FORM = getID('sign-up-form');
 
 function displaySignForm() {
-  if (signUpForm.classList.contains('hidden')) {
-    signUpForm.classList.remove('hidden');
-    signInForm.classList.add('hidden');
-    signTab.innerHTML = 'sign up';
+  if (SIGN_UP_FORM.classList.contains('hidden')) {
+    SIGN_UP_FORM.classList.remove('hidden');
+    SIGN_IN_FORM.classList.add('hidden');
+    SIGN_TAB.innerHTML = 'sign in';
   } else {
-    signInForm.classList.remove('hidden');
-    signUpForm.classList.add('hidden');
-    signTab.innerHTML = 'sign in';
+    SIGN_IN_FORM.classList.remove('hidden');
+    SIGN_UP_FORM.classList.add('hidden');
+    SIGN_TAB.innerHTML = 'sign up';
   }
 }
 
-signTab.addEventListener('click', displaySignForm);
+SIGN_TAB.addEventListener('click', displaySignForm);

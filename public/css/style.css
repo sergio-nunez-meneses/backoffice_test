@@ -67,6 +67,10 @@ img {
   margin: 0.5rem 0;
   padding: 0.5rem;
 }
+.contact-container {
+  display: flex;
+  flex-direction: column;
+}
 .footer-container {
   display: flex;
   justify-content: center;

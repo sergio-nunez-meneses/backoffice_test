@@ -105,4 +105,17 @@ function displayAjaxForm() {
   }
 }
 
+function changeContactForm() {
+  if (getID('ajax-recover-form').classList.contains('hidden')) {
+    getID('ajax-recover-form').classList.remove('hidden');
+    getID('ajax-mail-form').classList.add('hidden');
+    getID('mail-tab').innerHTML = 'contact me';
+  } else {
+    getID('ajax-recover-form').classList.add('hidden');
+    getID('ajax-mail-form').classList.remove('hidden');
+    getID('mail-tab').innerHTML = 'recover password';
+  }
+}
+
 if (HANDLER_TAB !== null) HANDLER_TAB.addEventListener('click', displayAjaxForm);
+if (getID('mail-tab') !== null) getID('mail-tab').addEventListener('click', changeContactForm);

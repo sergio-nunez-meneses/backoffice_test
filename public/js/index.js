@@ -1,17 +1,17 @@
-const articleTab = getID('articlesTab'),
-  projectTab = getID('projectsTab'),
-  articles = getID('recentArticles'),
-  projects = getID('recentProjects');
+const ELEMENTS_TAB = getID('articlesTab'),
+  ARTICLES = getID('recentArticles'),
+  PROJECTS = getID('recentProjects');
 
-function displayProjects() {
-  projects.classList.remove('hidden');
-  articles.classList.add('hidden');
+function displayElements() {
+  if (PROJECTS.classList.contains('hidden')) {
+    PROJECTS.classList.remove('hidden');
+    ARTICLES.classList.add('hidden');
+    ELEMENTS_TAB.innerHTML = 'show articles';
+  } else {
+    ARTICLES.classList.remove('hidden');
+    PROJECTS.classList.add('hidden');
+    ELEMENTS_TAB.innerHTML = 'show projects';
+  }
 }
 
-function displayArticles() {
-  articles.classList.remove('hidden');
-  projects.classList.add('hidden');
-}
-
-articleTab.addEventListener('click', displayArticles);
-projectTab.addEventListener('click', displayProjects);
+ELEMENTS_TAB.addEventListener('click', displayElements);

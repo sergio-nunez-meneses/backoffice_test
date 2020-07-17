@@ -9,8 +9,7 @@ include 'include/header.php';
 
   <div class="container">
     <div class="tab-container">
-      <button id="articlesTab" class="">articles</button>
-      <button id="projectsTab" class="">projects</button>
+      <button id="articlesTab" class="">show projects</button>
     </div>
     <div id="recentArticles" class="content-container"> <?php articles(); ?> </div>
     <div id="recentProjects" class="content-container hidden"> <?php projects(); ?> </div>

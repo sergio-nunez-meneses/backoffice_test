@@ -344,12 +344,14 @@ function ajaxReceive() {
 }
 
 function sendMail() {
+  $pdo = connection();
+  $form = 'ajax-mail-form';
+  $info = '';
+
   $to = 'email@mail.com';
   $subject = 'contact';
   $message = $_POST['message'];
   $headers = 'From: ' . $_POST['email'];
-  $form = 'ajax-mail-form';
-  $info = '';
 
   if (mail($to, $subject, $message, $headers)) {
     $info = 'mail sucessfully sent!';
