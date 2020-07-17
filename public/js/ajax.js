@@ -60,7 +60,11 @@ function ajaxSuccess() {
       getID('handler-tab').addEventListener('click', displayAjaxForm);
     }
   } else if (response['form'] === 'ajax-mail-form') {
-    INFO_TEXT.innerHTML = response['info'];
+    if (response['info'].length > 0) {
+      INFO_TEXT.innerHTML = response['info'];
+    } else {
+      INFO_TEXT.innerHTML = response['error'];
+    }
   }
 }
 

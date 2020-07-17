@@ -84,10 +84,21 @@ function signUp() {
     } elseif (strlen($_POST['password']) < 7){
       $error_message .= 'password must contain more than 7 characters';
       $error = true;
+    } elseif(!preg_match("#[0-9]+#", $_POST['password'])) {
+      $error_message .= 'password must contain at least one number!';
+      $error = true;
+    } elseif(!preg_match("#[a-z]+#", $_POST['password'])) {
+      $error_message .= 'password must contain at least one lowercase character!';
+      $error = true;
+    } elseif(!preg_match("#[A-Z]+#", $_POST['password'])) {
+      $error_message .= 'password must contain at least one uppercase character!';
+      $error = true;
+    } elseif(!preg_match("#\W+#", $_POST['password'])) {
+      $error_message .= 'password must contain at least one symbol!';
+      $error = true;
     } elseif ($_POST['password'] != $_POST['confirm-password']) {
       $error_message .= 'passwords do not match';
       $error = true;
-      // elseif (!(preg_match('/[\'^£$%&*()}{@#~<>,|=_+¬-]/', $_POST['password'])) echo 'password must contain at least 1 special character';
     } else {
       $options = [
         'cost' => 12,
@@ -344,25 +355,60 @@ function ajaxReceive() {
 }
 
 function sendMail() {
-  $pdo = connection();
+  // $pdo = connection();
+
   $form = 'ajax-mail-form';
-  $info = '';
+  $info = $error_message = '';
+  $error = false;
 
-  $to = 'email@mail.com';
-  $subject = 'contact';
-  $message = $_POST['message'];
-  $headers = 'From: ' . $_POST['email'];
-
-  if (mail($to, $subject, $message, $headers)) {
-    $info = 'mail sucessfully sent!';
+  if (empty($_POST['firstname'])) {
+    $error_message .= 'firstname cannot be empty';
+    $error = true;
+  } elseif (!preg_match('/^[a-z]{2,20}$/i', $_POST['firstname'])) {
+    $error_message .= 'invalid firstname format';
+    $error = true;
   } else {
-    $info = 'failed to send email!';
+    $username = $_POST['firstname'];
+  }
+
+  if (empty($_POST['lastname'])) {
+    $error_message .= 'firstname cannot be empty';
+    $error = true;
+  } elseif (!preg_match('/^[a-z]{2,20}$/i', $_POST['lastname'])) {
+    $error_message .= 'invalid lastname format';
+    $error = true;
+  } else {
+    $lastname = $_POST['lastname'];
+  }
+
+  if (empty($_POST['email'])) {
+    $error_message .= 'email cannot be empty';
+    $error = true;
+  } elseif (!preg_match('/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i', $_POST['email'])) {
+    $error_message .= 'invalid email format';
+    $error = true;
+  } else {
+    $from = $_POST['email'];
+  }
+
+  if (!($error)) {
+    $to = "To: $from";
+    $subject = "message from $username $lastname";
+    $message = $_POST['message'];
+    $headers = 'From: contact@site.com';
+
+    if (mail($to, $subject, $message, $headers)) {
+      $info = 'mail sucessfully sent!';
+    } else {
+      $info = 'failed to send email!';
+    }
   }
 
   // back to ajax.js
   $array = [
     'form' => $form,
-    'info' => $info
+    'info' => $info,
+    'error' => $error_message
   ];
   echo json_encode($array);
 }
