@@ -5,6 +5,10 @@ include '../include/header.php';
 
 <main class="main-container">
 
+  <div class="new-element">
+
+  </div>
+
   <div>
     <form id="" class="" action="../controllers/ajaxReceive.php" method="post" enctype="multipart/form-data"
     onsubmit="ajaxSend(this); return false;">
@@ -16,6 +20,10 @@ include '../include/header.php';
       <label for="content_project">
         <input type="checkbox" name="content[]" value="project"/>project
       </label>
+      <select class="" name="element[]">
+        <option>article</option>
+        <option>project</option>
+      </select>
       <input class="" type="text" name="id" value="" placeholder="element id">
       <input class="" type="text" name="title" value="" placeholder="element title">
       <input class="" type="text" name="author" value="" placeholder="author id">

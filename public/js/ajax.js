@@ -5,16 +5,27 @@ const handlerTab = getID('handler-tab'),
 
 function ajaxSuccess() {
   let response = JSON.parse(this.responseText);
-  console.log(this.responseText, response);
+  console.log(response);
 
-  if (response['form'] === 'ajax-mail-form') {
+  if (response['form'] === 'ajax-element-form') {
+    if (response['action'] === 'edit') {
+      infoText.innerHTML = response['action_message'];
+      getID('title-' + response['id']).innerHTML = response['title'];
+      getID('image-' + response['id']).innerHTML = response['image'];
+      getID('date-' + response['id']).innerHTML = response['date'];
+      getID('text-' + response['id']).innerHTML = response['text'];
+    } else if (response['action'] === 'delete') {
+      infoText.innerHTML = response['action_message'];
+      getID('title-' + response['id']).innerHTML = '';
+      getID('image-' + response['id']).innerHTML = '';
+      getID('date-' + response['id']).innerHTML = '';
+      getID('text-' + response['id']).innerHTML = '';
+    } else if (response['action'] === 'create') {
+      infoText.innerHTML = response['action_message'];
+      // create HTML elements
+    }
+  } else if (response['form'] === 'ajax-mail-form') {
     infoText.innerHTML = response['info'];
-  } else {
-    infoText.innerHTML = response['action'];
-    getID('title-' + response['id']).innerHTML = response['title'];
-    getID('image-' + response['id']).innerHTML = response['image'];
-    getID('date-' + response['id']).innerHTML = response['date'];
-    getID('text-' + response['id']).innerHTML = response['text'];
   }
 }
 

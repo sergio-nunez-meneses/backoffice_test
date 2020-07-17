@@ -208,10 +208,11 @@ function ajaxReceive() {
     // check action and content and execute queries
     // send data to ajax.js
 
-    $form = 'ajax-form';
-    $element_type = $_POST['content'][0];
-    $error_message = '';
+    $form = 'ajax-element-form';
+    $action = $action_message = $error_message = '';
     $error = false;
+    $element_type = $_POST['content'][0];
+
     date_default_timezone_set('Europe/Paris');
 
     if ($_POST['action'][0] === 'edit') {
@@ -251,21 +252,28 @@ function ajaxReceive() {
             'author_id' => $author_id,
             'element_id' => $element_id
           ]);
-          $action = 'element successfully edited';
+
+          $action = 'edit';
+          $action_message = 'element edited';
+
         } elseif ($_POST['content'][0] === 'project') {
           // update project
         }
+      } else {
+        // display error message
       }
     } elseif ($_POST['action'][0] === 'archive') {
       // $action = 'element archived';
     } elseif ($_POST['action'][0] === 'delete') {
-
       $element_id = $_POST['id'];
 
       $pdo->prepare('DELETE FROM articles WHERE article_id = :element_id')->execute([
         'element_id' => $element_id
       ]);
-      $action = 'element deleted';
+
+      $action = 'delete';
+      $action_message = 'element deleted';
+
     } elseif ($_POST['action'][0] === 'create') {
 
       if (empty($_POST['title'])) {
@@ -303,10 +311,15 @@ function ajaxReceive() {
             'element_image' => $element_image,
             'author_id' => $author_id
           ]);
-          $action = 'element successfully added';
+
+          $action = 'create';
+          $action_message = 'element created';
+
         } elseif ($_POST['content'][0] === 'project') {
           // edit project
         }
+      } else {
+        // display error message
       }
     } else {
       echo 'could not perform requested action';
@@ -314,7 +327,9 @@ function ajaxReceive() {
 
     // back to ajax.js
     $array = [
+      'form' => $form,
       'action' => $action,
+      'action_message' => $action_message,
       'element' => $element_type,
       'id' => $element_id,
       'title' => $element_title,
