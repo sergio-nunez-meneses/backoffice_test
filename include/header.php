@@ -21,8 +21,10 @@ error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING);
 
   <header class="header-container">
 
-    <a href=" <?php echo ROOT_DIR . '/index.php'; ?> ">home</a>
-    <a href=" <?php echo ROOT_DIR . '/about.php'; ?> ">
+    <a href=" <?php echo ROOT_DIR . '/index.php'; ?> ">
+      <span class="">home</span>
+    </a>
+    <a href=" <?php echo ROOT_DIR . '/templates/about.php'; ?> ">
       <span class="">about</span>
     </a>
     <a href=" <?php echo ROOT_DIR . '/templates/contact.php'; ?> " class="">

@@ -53,6 +53,20 @@ img {
   display: flex;
   flex-direction: column;
 }
+.about-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 500px;
+  height: auto;
+  text-align: center;
+}
+.about-image {
+  max-width: 100%;
+  height: auto;
+  margin: 1rem;
+  border-radius: 100%;
+}
 .article-container {
   display: flex;
   flex-direction: column;

@@ -17,8 +17,13 @@ function connection() {
 }
 
 function isLogged() {
-  if(!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) include(__ROOT__ . '/include/logout_nav.php');
-  else include(__ROOT__ . '/include/login_nav.php');
+  if(!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
+    include(__ROOT__ . '/include/logout_nav.php');
+  } else {
+    // if ($user['author_status'] === 'admin')
+    include(__ROOT__ . '/include/login_nav.php');
+    // elseif ($user['author_status'] === 'collaborator') different nqvar
+  }
 }
 
 function login() {
@@ -44,8 +49,6 @@ function login() {
         $_SESSION['logged_in'] = true;
         $_SESSION['user'] = $username;
         header('Location:/backoffice_test/index.php');
-        // if ($user['author_status'] == admin) header('Location:admin.php');
-        // else header('Location:collaborator.php');
       } else {
         echo 'password incorrect';
       }
@@ -108,9 +111,8 @@ function signUp() {
     $status = $_POST['status'];
   }
 
-  $pdo = connection();
-
   if (!($error)) {
+    $pdo = connection();
     $pdo->prepare('INSERT INTO authors (author_status, author_username, author_password) VALUES (:status, :username, :password)')->execute([
       'status' => $status,
       'username' => $username,
@@ -121,12 +123,36 @@ function signUp() {
     $_SESSION['user'] = $username;
 
     header('Location:/backoffice_test/index.php');
-    // if ($status == admin) header('Location:admin.php');
-    // else header('Location:collaborator.php');
   } else {
     echo $error_message;
     // header("Location:/backoffice_test/templates/login.php?error=$error_message");
   }
+}
+
+function aboutMe() {
+  // format time and text
+  $pdo = connection();
+  $stmt = $pdo->prepare('SELECT * FROM about');
+  $stmt->execute();
+  $about = $stmt->fetch();
+
+  echo '<section class="about-container">';
+  echo '<header>';
+
+  if(isset($_SESSION['logged_in'])) {
+    if ($_SESSION['logged_in'] == true && $_SESSION['user'] === 'sergio') {
+      echo '<button id="handler-tab">edit</button>';
+    }
+  }
+
+  echo '<h2 id="aboutTitle" class="about-title">' . $about['about_title'] . '</h2>';
+  echo '<img id="aboutImage" class="about-image" src="' . ROOT_DIR . DIRECTORY_SEPARATOR . 'img' . DIRECTORY_SEPARATOR . $about['about_image'] . '">';
+  // echo '<div class="">';
+  // echo '<p id="date-' . $about_id . '">on ' . $about['DATETIME'] . '</p>';
+  // echo '</div>';
+  echo '</header>';
+  echo '<article id="aboutText" class="about-text">' . $about['about_text'] . '</article>';
+  echo '</section>';
 }
 
 function articles() {
@@ -252,7 +278,7 @@ function ajaxReceive() {
         $element_id = $_POST['id'];
         $author_id = $_POST['author'];
         $element_date = substr(date("Y-m-d H:i:sa"), 0, -2);
-        $element_image = $_FILES['images']['tmp_name'][0];
+        $element_image = $_FILES['images']['name'][0];
 
         if ($_POST['content'][0] === 'article') {
           $pdo->prepare('UPDATE articles SET article_title = :element_title, article_text = :element_text, DATETIME = :element_date, article_image = :element_image, author_id = :author_id WHERE article_id = :element_id')->execute([
@@ -332,7 +358,21 @@ function ajaxReceive() {
       } else {
         // display error message
       }
-    } else {
+    // } elseif ($_POST['content'][0] === 'about' && $_POST['action'][0] === 'edit') {
+    //   $element_id = $_POST['id'];
+    //   $element_title = $_POST['title'];
+    //   $element_image = $_FILES['images']['name'][0];
+    //   $element_text = $_POST['text'];
+    //
+    //   $pdo->prepare('UPDATE about SET about_title = :element_title, about_image = :element_image, about_text = :element_text WHERE about_id = :element_id')->execute([
+    //     'element_title' => $element_title,
+    //     'element_image' => $element_image,
+    //     'element_text' => $element_text
+    //   ]);
+    //
+    //   $action = 'edit';
+    //   $action_message = 'element edited';
+    // } else {
       echo 'could not perform requested action';
     }
 
