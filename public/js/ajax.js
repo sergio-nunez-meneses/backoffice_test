@@ -1,7 +1,5 @@
-const handlerTab = getID('handler-tab'),
-  ajaxForm = getID('ajax-form'),
-  mailForm = getID('ajax-mail-form'),
-  infoText = getID('ajaxResponse');
+const HANDLER_TAB = getID('handler-tab'),
+  INFO_TEXT = getID('ajaxResponse');
 
 function ajaxSuccess() {
   let response = JSON.parse(this.responseText);
@@ -9,23 +7,60 @@ function ajaxSuccess() {
 
   if (response['form'] === 'ajax-element-form') {
     if (response['action'] === 'edit') {
-      infoText.innerHTML = response['action_message'];
       getID('title-' + response['id']).innerHTML = response['title'];
-      getID('image-' + response['id']).innerHTML = response['image'];
+      getID('image-' + response['id']).setAttribute('src', response['image']);
       getID('date-' + response['id']).innerHTML = response['date'];
       getID('text-' + response['id']).innerHTML = response['text'];
+
+      INFO_TEXT.innerHTML = response['action_message'];
     } else if (response['action'] === 'delete') {
-      infoText.innerHTML = response['action_message'];
       getID('title-' + response['id']).innerHTML = '';
       getID('image-' + response['id']).innerHTML = '';
       getID('date-' + response['id']).innerHTML = '';
       getID('text-' + response['id']).innerHTML = '';
+
+      INFO_TEXT.innerHTML = response['action_message'];
     } else if (response['action'] === 'create') {
-      infoText.innerHTML = response['action_message'];
-      // create HTML elements
+      let sec = document.createElement('SECTION'),
+        btnImgTitleDiv = document.createElement('HEADER'),
+        btn = document.createElement('BUTTON'),
+        image = document.createElement('IMG'),
+        title = document.createElement('H2'),
+        dateAuthorDiv = document.createElement('DIV'),
+        date = document.createElement('P'),
+        author = document.createElement('P'),
+        text = document.createElement('ARTICLE');
+
+      sec.setAttribute('id', 'container-' + response['id']);
+      btn.setAttribute('id', 'handler-tab');
+      btn.innerHTML = 'edit';
+      title.setAttribute('id', 'title-' + response['id']);
+      title.innerHTML = response['title'];
+      image.setAttribute('id', 'image-' + response['id']);
+      image.setAttribute('src', response['image']);
+      date.setAttribute('id', 'date-' + response['id']);
+      date.innerHTML = response['date'];
+      author.setAttribute('id', 'author-' + response['id']);
+      author.innerHTML = response['author'];
+      text.setAttribute('id', 'text-' + response['id']);
+      text.innerHTML = response['text'];
+
+      dateAuthorDiv.appendChild(date);
+      dateAuthorDiv.appendChild(author);
+      btnImgTitleDiv.appendChild(btn);
+      btnImgTitleDiv.appendChild(title);
+      btnImgTitleDiv.appendChild(image);
+      btnImgTitleDiv.appendChild(dateAuthorDiv);
+      sec.appendChild(btnImgTitleDiv);
+      sec.appendChild(text);
+      getID('newArticleContainer').prepend(sec);
+
+      INFO_TEXT.innerHTML = response['action_message'];
+
+      getID('handler-tab').addEventListener('click', displayAjaxForm);
     }
   } else if (response['form'] === 'ajax-mail-form') {
-    infoText.innerHTML = response['info'];
+    INFO_TEXT.innerHTML = response['info'];
   }
 }
 
@@ -49,7 +84,7 @@ function ajaxSend(oFormElement) {
         continue;
       }
       sFieldType = oField.nodeName.toUpperCase() === 'INPUT' ?
-        oField.getAttribute("type").toUpperCase() : 'TEXT';
+      oField.getAttribute("type").toUpperCase() : 'TEXT';
       if (sFieldType === 'FILE') {
         for (nFile = 0; nFile < oField.files.length; sSearch += '&' + escape(oField.name) + '=' + escape(oField.files[nFile++].name));
       } else if ((sFieldType !== 'RADIO' && sFieldType !== 'CHECKBOX') || oField.checked) {
@@ -61,13 +96,13 @@ function ajaxSend(oFormElement) {
 }
 
 function displayAjaxForm() {
-  if (ajaxForm.classList.contains('hidden')) {
-    ajaxForm.classList.remove('hidden');
-    handlerTab.innerHTML = 'hide';
+  if (getID('ajax-form').classList.contains('hidden')) {
+    getID('ajax-form').classList.remove('hidden');
+    getID('handler-tab').innerHTML = 'hide';
   } else {
-    ajaxForm.classList.add('hidden');
-    handlerTab.innerHTML = 'edit';
+    getID('ajax-form').classList.add('hidden');
+    getID('handler-tab').innerHTML = 'edit';
   }
 }
 
-handlerTab.addEventListener('click', displayAjaxForm);
+if (HANDLER_TAB !== null) HANDLER_TAB.addEventListener('click', displayAjaxForm);
