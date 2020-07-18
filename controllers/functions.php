@@ -71,37 +71,37 @@ function signUp() {
   if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['sign-up'])) {
 
     if (empty($_POST['username'])) {
-      $error_message .= 'username cannot be empty';
       $error = true;
+      $error_message .= 'username cannot be empty <br>';
     } elseif (strlen($_POST['username']) < 6){
-      $error_message .= 'username must contain more than 6 characters';
       $error = true;
+      $error_message .= 'username must contain more than 6 characters <br>';
       // elseif ($_POST['username'] !== 'sergio') $status = 'collaborator';
     } else {
       $username = $_POST['username'];
     }
 
     if (empty($_POST['password'])) {
-      $error_message .= 'password cannot be empty';
       $error = true;
+      $error_message .= 'password cannot be empty <br>';
     } elseif (strlen($_POST['password']) < 7){
-      $error_message .= 'password must contain more than 7 characters';
       $error = true;
+      $error_message .= 'password must contain more than 7 characters <br>';
     } elseif(!preg_match("#[0-9]+#", $_POST['password'])) {
-      $error_message .= 'password must contain at least one number!';
       $error = true;
+      $error_message .= 'password must contain at least one number! <br>';
     } elseif(!preg_match("#[a-z]+#", $_POST['password'])) {
-      $error_message .= 'password must contain at least one lowercase character!';
       $error = true;
+      $error_message .= 'password must contain at least one lowercase character! <br>';
     } elseif(!preg_match("#[A-Z]+#", $_POST['password'])) {
-      $error_message .= 'password must contain at least one uppercase character!';
       $error = true;
+      $error_message .= 'password must contain at least one uppercase character! <br>';
     } elseif(!preg_match("#\W+#", $_POST['password'])) {
-      $error_message .= 'password must contain at least one symbol!';
       $error = true;
+      $error_message .= 'password must contain at least one symbol! <br>';
     } elseif ($_POST['password'] != $_POST['confirm-password']) {
-      $error_message .= 'passwords do not match';
       $error = true;
+      $error_message .= 'passwords do not match <br>';
     } else {
       $options = [
         'cost' => 12,
@@ -164,7 +164,7 @@ function articles() {
     echo '<article>';
     echo '<header>';
     echo '<h3><a href="article.php?id=' . $row['article_id'] . '">'. $row['article_title'].'</a></h3>';
-    echo '<img class="" src="' . $row['article_image'] . '">';
+    echo '<img class="" src="' . dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'img' . DIRECTORY_SEPARATOR . $row['article_image'] . '">';
     echo '<div class="">';
     echo '<div>on ' . $row['DATETIME'] . '</div>';
     echo '<div>by '  .$row['author_id'] . '</div>';
@@ -199,7 +199,7 @@ function article() {
   }
 
   echo '<h2 id="title-' . $article_id . '" class="">' . $article['article_title'] . '</h2>';
-  echo '<img id="image-' . $article_id . '" class="" src="' . $article['article_image'] . '">';
+  echo '<img id="image-' . $article_id . '" class="" src="' . dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'img' . DIRECTORY_SEPARATOR . $article['article_image'] . '">';
   echo '<div class="">';
   echo '<div id="date-' . $article_id . '">on ' . $article['DATETIME'] . '</div>';
   echo '<div>by ' . $article['author_username'] . '</div>';
@@ -235,121 +235,59 @@ function projects() {
 
 function ajaxReceive() {
   $pdo = connection();
+  $form = 'ajax-element-form';
+  $section = $element_type = $action = $action_message = $error_message = '';
+  $error = false;
+
+  date_default_timezone_set('Europe/Paris');
 
   if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
-    echo 'sign in to edit this article';
+    $error = true;
+    $error_message .= 'sign in to edit this article <br>';
   } else {
 
-    // declare global variables
-    // check and format title, text, and the other variables
-    // check action and content and execute queries
-    // send data to ajax.js
+    if (empty($_POST['title'])) {
+      $error_message .= 'title cannot be empty <br>';
+      $error = true;
+    } elseif (strlen($_POST['title']) < 5) {
+      $error_message .= 'title must contain more than 5 characters <br>';
+      $error = true;
+    } else {
+      $element_title = filter_var($_POST['title'], FILTER_SANITIZE_STRING);
+    }
 
-    $form = 'ajax-element-form';
-    $action = $action_message = $error_message = '';
-    $error = false;
-    $element_type = $_POST['content'][0];
+    if (empty($_POST['text'])) {
+      $error_message .= 'text cannot be empty <br>';
+      $error = true;
+    } elseif (strlen($_POST['text']) < 10){
+      $error_message .= 'text must contain more than 10 characters <br>';
+      $error = true;
+    } else {
+      $element_text = filter_var($_POST['text'], FILTER_SANITIZE_STRING);
+    }
 
-    date_default_timezone_set('Europe/Paris');
+    if (!$error) {
+      $element_type = $_POST['content'][0];
+      $element_id = filter_var($_POST['id'], FILTER_SANITIZE_STRING);
+      $element_date = filter_var(substr(date("Y-m-d H:i:sa"), 0, -2), FILTER_SANITIZE_STRING);
+      $image_dir = dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'img' . DIRECTORY_SEPARATOR;
+      $element_image = filter_var($_FILES['images']['name'][0], FILTER_SANITIZE_STRING);
 
-    if ($_POST['action'][0] === 'edit') {
+      move_uploaded_file($_FILES['images']['tmp_name'][0], $image_dir . $element_image);
 
-      if (empty($_POST['title'])) {
-        $error_message .= 'title cannot be empty';
-        $error = true;
-      } elseif (strlen($_POST['title']) < 5) {
-        $error_message .= 'title must contain more than 5 characters';
-        $error = true;
-      } else {
-        $element_title = $_POST['title'];
-      }
-
-      if (empty($_POST['text'])) {
-        $error_message .= 'text cannot be empty';
-        $error = true;
-      } elseif (strlen($_POST['text']) < 10){
-        $error_message .= 'text must contain more than 10 characters';
-        $error = true;
-      } else {
-        $element_text = $_POST['text'];
-      }
-
-      if (!($error)) {
-        $element_id = $_POST['id'];
-        $author_id = $_POST['author'];
-        $element_date = substr(date("Y-m-d H:i:sa"), 0, -2);
-        $element_image = $_FILES['images']['name'][0];
-
-        if ($_POST['content'][0] === 'article') {
-          $pdo->prepare('UPDATE articles SET article_title = :element_title, article_text = :element_text, DATETIME = :element_date, article_image = :element_image, author_id = :author_id WHERE article_id = :element_id')->execute([
-            'element_title' => $element_title,
-            'element_text' => $element_text,
-            'element_date' => $element_date,
-            'element_image' => $element_image,
-            'author_id' => $author_id,
-            'element_id' => $element_id
-          ]);
-
-          $action = 'edit';
-          $action_message = 'element edited';
-
-        } elseif ($_POST['content'][0] === 'project') {
-          // update project
-        } elseif ($_POST['content'][0] === 'about') {
-          $pdo->prepare('UPDATE about SET about_title = :element_title, about_image = :element_image, about_text = :element_text WHERE about_id = :element_id')->execute([
-            'element_title' => $element_title,
-            'element_image' => $element_image,
-            'element_text' => $element_text,
-            'element_id' => $element_id
-          ]);
-
-          $action = 'edit';
-          $action_message = 'about edited';
-        }
-      } else {
-        // display error message
-      }
-    } elseif ($_POST['action'][0] === 'archive') {
-      // $action = 'element archived';
-    } elseif ($_POST['action'][0] === 'delete') {
-      $element_id = $_POST['id'];
-
-      $pdo->prepare('DELETE FROM articles WHERE article_id = :element_id')->execute([
-        'element_id' => $element_id
+      $username = $_SESSION['user'];
+      $stmt = $pdo->prepare('SELECT author_id FROM authors WHERE author_username = :username');
+      $stmt->execute([
+        'username' => $username
       ]);
+      $author = $stmt->fetch();
+      $author_id = filter_var($author['author_id'], FILTER_SANITIZE_STRING);
 
-      $action = 'delete';
-      $action_message = 'element deleted';
-
-    } elseif ($_POST['action'][0] === 'create') {
-
-      if (empty($_POST['title'])) {
-        $error_message .= 'title cannot be empty';
-        $error = true;
-      } elseif (strlen($_POST['title']) < 5) {
-        $error_message .= 'title must contain at least 5 characters';
-        $error = true;
-      } else {
-        $element_title = $_POST['title'];
-      }
-
-      if (empty($_POST['text'])) {
-        $error_message .= 'text cannot be empty';
-        $error = true;
-      } elseif (strlen($_POST['text']) < 10){
-        $error_message .= 'text must contain at least 10 characters';
-        $error = true;
-      } else {
-        $element_text = $_POST['text'];
-      }
-
-      if (!($error)) {
-        $element_id = $_POST['id'];
-        $author_id = $_POST['author'];
-        $element_date = substr(date("Y-m-d H:i:sa"), 0, -2);
-        $element_image = $_FILES['images']['name'][0];
-
+      if ($_POST['action'][0] === 'create') {
         if ($_POST['content'][0] === 'article') {
+          // move image
+          $section = $_POST['content'][0];
+
           $pdo->prepare('INSERT INTO articles VALUES (:element_id, :element_title, :element_text, :element_date, :element_image, :author_id)')->execute([
             'element_id' => $element_id,
             'element_title' => $element_title,
@@ -358,18 +296,64 @@ function ajaxReceive() {
             'element_image' => $element_image,
             'author_id' => $author_id
           ]);
-
-          $action = 'create';
-          $action_message = 'element created';
-
         } elseif ($_POST['content'][0] === 'project') {
           // edit project
+          // $section = $_POST['content'][0];
         }
-      } else {
-        // display error message
+
+        $action = $_POST['action'][0];
+        $action_message = 'element created <br>';
+
+      } elseif ($_POST['action'][0] === 'edit') {
+        if ($_POST['content'][0] === 'about') {
+          // move image
+          $section = $_POST['content'][0];
+
+          $pdo->prepare('UPDATE about SET about_title = :element_title, about_image = :element_image, about_text = :element_text WHERE about_id = :element_id')->execute([
+            'element_title' => $element_title,
+            'element_image' => $element_image,
+            'element_text' => $element_text,
+            'element_id' => $element_id
+          ]);
+        } elseif ($_POST['content'][0] === 'article') {
+          // move image
+          $section = $_POST['content'][0];
+
+          $pdo->prepare('UPDATE articles SET article_title = :element_title, article_text = :element_text, DATETIME = :element_date, article_image = :element_image, author_id = :author_id WHERE article_id = :element_id')->execute([
+            'element_title' => $element_title,
+            'element_text' => $element_text,
+            'element_date' => $element_date,
+            'element_image' => $element_image,
+            'author_id' => $author_id,
+            'element_id' => $element_id
+          ]);
+        } elseif ($_POST['content'][0] === 'project') {
+          // update project
+          // $section = $_POST['content'][0];
+        }
+
+        $action = $_POST['action'][0];
+        $action_message = 'element edited <br>';
+
+      } elseif ($_POST['action'][0] === 'archive') {
+        // $section = $_POST['content'][0];
+      } elseif ($_POST['action'][0] === 'delete') {
+        if ($_POST['content'][0] === 'article') {
+          $pdo->prepare('DELETE FROM articles WHERE article_id = :element_id')->execute([
+            'element_id' => $element_id
+          ]);
+        } elseif ($_POST['content'][0] === 'project') {
+          $pdo->prepare('DELETE FROM projects WHERE project_id = :element_id')->execute([
+            'element_id' => $element_id
+          ]);
+        }
+
+        $action = $_POST['action'][0];
+        $action_message = 'element deleted <br>';
+
       }
     } else {
-      echo 'could not perform requested action';
+      $error_message .= 'could not perform requested action <br>';
     }
 
     // back to ajax.js
@@ -386,6 +370,7 @@ function ajaxReceive() {
       'author' => $author_id
     ];
     echo json_encode($array);
+    // var_dump($array);
 
   }
 }
@@ -398,7 +383,7 @@ function sendMail() {
   $error = false;
 
   if (empty($_POST['firstname'])) {
-    $error_message .= 'firstname cannot be empty';
+    $error_message .= 'firstname cannot be empty <br>';
     $error = true;
   } elseif (!preg_match('/^[a-z]{2,20}$/i', $_POST['firstname'])) {
     $error_message .= 'invalid firstname format';
@@ -408,20 +393,20 @@ function sendMail() {
   }
 
   if (empty($_POST['lastname'])) {
-    $error_message .= 'firstname cannot be empty';
+    $error_message .= 'lastname cannot be empty <br>';
     $error = true;
   } elseif (!preg_match('/^[a-z]{2,20}$/i', $_POST['lastname'])) {
-    $error_message .= 'invalid lastname format';
+    $error_message .= 'invalid lastname format <br>';
     $error = true;
   } else {
     $lastname = $_POST['lastname'];
   }
 
   if (empty($_POST['email'])) {
-    $error_message .= 'email cannot be empty';
+    $error_message .= 'email cannot be empty <br>';
     $error = true;
   } elseif (!preg_match('/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i', $_POST['email'])) {
-    $error_message .= 'invalid email format';
+    $error_message .= 'invalid email format <br>';
     $error = true;
   } else {
     $from = $_POST['email'];

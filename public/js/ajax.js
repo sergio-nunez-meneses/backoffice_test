@@ -4,15 +4,23 @@ const HANDLER_TAB = getID('handler-tab'),
 function ajaxSuccess() {
   let response = JSON.parse(this.responseText);
   console.log(response);
+  // console.log(this.responseText);
 
   if (response['form'] === 'ajax-element-form') {
     if (response['action'] === 'edit') {
-      getID('title-' + response['id']).innerHTML = response['title'];
-      getID('image-' + response['id']).setAttribute('src', response['image']);
-      getID('date-' + response['id']).innerHTML = response['date'];
-      getID('text-' + response['id']).innerHTML = response['text'];
+      if (response['element'] === 'about') {
+        getID('aboutTitle').innerHTML = response['title'];
+        getID('aboutImage').setAttribute('src', response['image']); // path is missing
+        getID('aboutText').innerHTML = response['text'];
+      } else {
+        getID('title-' + response['id']).innerHTML = response['title'];
+        getID('image-' + response['id']).setAttribute('src', response['image']);
+        getID('date-' + response['id']).innerHTML = response['date'];
+        getID('text-' + response['id']).innerHTML = response['text'];
+      }
 
       INFO_TEXT.innerHTML = response['action_message'];
+
     } else if (response['action'] === 'delete') {
       getID('title-' + response['id']).innerHTML = '';
       getID('image-' + response['id']).innerHTML = '';
