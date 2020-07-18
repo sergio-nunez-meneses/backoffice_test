@@ -30,6 +30,6 @@ error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING);
     <a href=" <?php echo ROOT_DIR . '/templates/contact.php'; ?> " class="">
       <span class="">contact</span>
     </a>
-    <?php isLogged(); ?>
+    <?php is_logged(); ?>
 
   </header>

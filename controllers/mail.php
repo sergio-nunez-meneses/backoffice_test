@@ -2,5 +2,5 @@
 session_start();
 include 'functions.php';
 
-sendMail();
+send_mail();
 ?>

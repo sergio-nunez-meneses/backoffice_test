@@ -2,7 +2,7 @@
 $title = 'sign in or sign up';
 include '../include/header.php';
 
-// if ($_GET['error'] == '') echo '';
+if ($_GET['error'] == 'yes') echo $_GET['error_message'];
 ?>
 
 <main class="main-container">
@@ -20,7 +20,7 @@ include '../include/header.php';
       </fieldset>
     </form>
     <!-- sign up -->
-    <form id="sign-up-form" class="hidden" method="post" action="controllers/validate.php">
+    <form id="sign-up-form" class="hidden" method="post" action="../controllers/validate.php">
       <fieldset class="sign-up-container">
       <legend>sign up</legend>
       <input class="" type="text" name="username" placeholder="username" required>

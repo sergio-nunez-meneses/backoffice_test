@@ -5,7 +5,7 @@ include '../include/header.php';
 
 <main class="main-container">
 
-  <?php signUp(); ?>
+  <?php sign_up(); ?>
 
 </main>
 

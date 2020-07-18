@@ -2,5 +2,5 @@
 session_start();
 include 'functions.php';
 
-ajaxReceive();
+ajax_receiver();
 ?>

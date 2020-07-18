@@ -1,5 +1,7 @@
 <?php
 
+// declare constant for script's absolute path
+
 function connection() {
   // require __ROOT__ . '/controllers/database.php';
   require 'C:\wamp64\www\snunezmeneses\backoffice_test\controllers\database.php';
@@ -16,13 +18,17 @@ function connection() {
   return $pdo;
 }
 
-function isLogged() {
+function is_logged() {
+  // $pdo = connection();
+
   if(!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
     include(__ROOT__ . '/include/logout_nav.php');
   } else {
-    // if ($user['author_status'] === 'admin')
-    include(__ROOT__ . '/include/login_nav.php');
-    // elseif ($user['author_status'] === 'collaborator') different nqvar
+    if ($_SESSION['status'] === 'admin') {
+      include(__ROOT__ . '/include/admin_login_nav.php');
+    } elseif ($_SESSION['status'] === 'collaborator') {
+      include(__ROOT__ . '/include/collaborator_login_nav.php');
+    }
   }
 }
 
@@ -42,12 +48,14 @@ function login() {
     if ($user == false) {
       echo 'user does not exist';
     } else {
-      $stored_password = $user['author_password'];
       $username = $user['author_username'];
+      $stored_password = $user['author_password'];
+      $status = $user['author_status'];
 
       if (password_verify($password, $stored_password)) {
         $_SESSION['logged_in'] = true;
         $_SESSION['user'] = $username;
+        $_SESSION['status'] = $status;
         header('Location:/backoffice_test/index.php');
       } else {
         echo 'password incorrect';
@@ -64,7 +72,7 @@ function logout() {
   }
 }
 
-function signUp() {
+function sign_up() {
   $username = $password = $status = $error_message = '';
   $error = false;
 
@@ -76,9 +84,8 @@ function signUp() {
     } elseif (strlen($_POST['username']) < 6){
       $error = true;
       $error_message .= 'username must contain more than 6 characters <br>';
-      // elseif ($_POST['username'] !== 'sergio') $status = 'collaborator';
     } else {
-      $username = $_POST['username'];
+      $username = filter_var($_POST['username'], FILTER_SANITIZE_STRING);
     }
 
     if (empty($_POST['password'])) {
@@ -108,11 +115,12 @@ function signUp() {
       ];
       $password = password_hash($_POST['password'], PASSWORD_BCRYPT, $options);
     }
-    $status = $_POST['status'];
   }
 
+  $status = filter_var($_POST['status'], FILTER_SANITIZE_STRING);
+
   if (!($error)) {
-    $pdo = connection();
+
     $pdo->prepare('INSERT INTO authors (author_status, author_username, author_password) VALUES (:status, :username, :password)')->execute([
       'status' => $status,
       'username' => $username,
@@ -121,15 +129,15 @@ function signUp() {
 
     $_SESSION['logged_in'] = true;
     $_SESSION['user'] = $username;
+    $_SESSION['status'] = $status;
 
     header('Location:/backoffice_test/index.php');
   } else {
-    echo $error_message;
-    // header("Location:/backoffice_test/templates/login.php?error=$error_message");
+    header("Location:/backoffice_test/templates/login.php?error=yes&error_message=$error_message");
   }
 }
 
-function aboutMe() {
+function display_about() {
   // format time and text
   $pdo = connection();
   $stmt = $pdo->prepare('SELECT * FROM about');
@@ -139,10 +147,8 @@ function aboutMe() {
   echo '<section class="about-container">';
   echo '<header>';
 
-  if(isset($_SESSION['logged_in'])) {
-    if ($_SESSION['logged_in'] == true && $_SESSION['user'] === 'sergio') {
-      echo '<button id="handler-tab">edit</button>';
-    }
+  if ($_SESSION['logged_in'] == true && $_SESSION['status'] === 'admin') {
+    echo '<button id="handler-tab">edit</button>';
   }
 
   echo '<h2 id="aboutTitle" class="about-title">' . $about['about_title'] . '</h2>';
@@ -155,7 +161,7 @@ function aboutMe() {
   echo '</section>';
 }
 
-function articles() {
+function display_articles() {
   $pdo = connection();
 
   $data = $pdo->query('SELECT * FROM articles ORDER BY article_id DESC LIMIT 10')->fetchAll();
@@ -182,7 +188,7 @@ function articles() {
   }
 }
 
-function article() {
+function display_article() {
   $pdo = connection();
 
   $article_id = $_GET['id'];
@@ -216,7 +222,7 @@ function article() {
   echo '</div>';
 }
 
-function projects() {
+function display_projects() {
   $pdo = connection();
 
   $data = $pdo->query('SELECT * FROM projects ORDER BY project_id DESC LIMIT 10')->fetchAll();
@@ -240,7 +246,7 @@ function projects() {
   }
 }
 
-function ajaxReceive() {
+function ajax_receiver() {
   $pdo = connection();
   $form = 'ajax-element-form';
   $section = $element_type = $action = $action_message = $error_message = '';
@@ -382,7 +388,7 @@ function ajaxReceive() {
   }
 }
 
-function sendMail() {
+function send_mail() {
   // $pdo = connection();
 
   $form = 'ajax-mail-form';

@@ -6,7 +6,7 @@ include '../include/header.php';
 <main class="main-container">
 
   <div class="article-container">
-    <?php aboutMe(); ?>
+    <?php display_about(); ?>
     <div>
       <form id="ajax-form" class="hidden" action=" <?php echo ROOT_DIR . '/controllers/ajaxReceive.php'; ?> " method="post" enctype="multipart/form-data"
       onsubmit="ajaxSend(this); return false;">
