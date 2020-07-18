@@ -27,8 +27,9 @@ include '../include/header.php';
           <option>project</option>
         </select>
         -->
-        <input class="" type="number" name="id" value="" placeholder="id">
+        <input class="" type="number" name="id" value="" placeholder="element id">
         <input class="" type="text" name="title" value="" placeholder="element title">
+        <input class="" type="number" name="author" value="" placeholder="author id">
         <input class="" type="file" multiple name="images[]" value="">
         <textarea class="" name="text" cols="50" rows="8" placeholder="element text"></textarea>
         <legend>choose action</legend>

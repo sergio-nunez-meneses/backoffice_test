@@ -295,6 +295,16 @@ function ajaxReceive() {
 
         } elseif ($_POST['content'][0] === 'project') {
           // update project
+        } elseif ($_POST['content'][0] === 'about') {
+          $pdo->prepare('UPDATE about SET about_title = :element_title, about_image = :element_image, about_text = :element_text WHERE about_id = :element_id')->execute([
+            'element_title' => $element_title,
+            'element_image' => $element_image,
+            'element_text' => $element_text,
+            'element_id' => $element_id
+          ]);
+
+          $action = 'edit';
+          $action_message = 'about edited';
         }
       } else {
         // display error message
@@ -358,21 +368,7 @@ function ajaxReceive() {
       } else {
         // display error message
       }
-    // } elseif ($_POST['content'][0] === 'about' && $_POST['action'][0] === 'edit') {
-    //   $element_id = $_POST['id'];
-    //   $element_title = $_POST['title'];
-    //   $element_image = $_FILES['images']['name'][0];
-    //   $element_text = $_POST['text'];
-    //
-    //   $pdo->prepare('UPDATE about SET about_title = :element_title, about_image = :element_image, about_text = :element_text WHERE about_id = :element_id')->execute([
-    //     'element_title' => $element_title,
-    //     'element_image' => $element_image,
-    //     'element_text' => $element_text
-    //   ]);
-    //
-    //   $action = 'edit';
-    //   $action_message = 'element edited';
-    // } else {
+    } else {
       echo 'could not perform requested action';
     }
 
