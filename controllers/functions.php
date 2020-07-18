@@ -164,7 +164,7 @@ function articles() {
     echo '<article>';
     echo '<header>';
     echo '<h3><a href="article.php?id=' . $row['article_id'] . '">'. $row['article_title'].'</a></h3>';
-    echo '<img class="" src="' . dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'img' . DIRECTORY_SEPARATOR . $row['article_image'] . '">';
+    echo '<img class="" src="' . 'img' . DIRECTORY_SEPARATOR . $row['article_image'] . '">';
     echo '<div class="">';
     echo '<div>on ' . $row['DATETIME'] . '</div>';
     echo '<div>by '  .$row['author_id'] . '</div>';
@@ -218,7 +218,7 @@ function projects() {
     echo '<article>';
     echo '<header>';
     echo '<h3><a href="project.php?id=' . $row['project_id'] . '&element=project">'. $row['project_title'].'</a></h3>';
-    echo '<img class="" src="' . $row['project_image'] . '">';
+    echo '<img class="" src="' . 'img' . DIRECTORY_SEPARATOR . $row['project_image'] . '">';
     echo '<div class="">';
     echo '<div>on ' . $row['DATETIME'] . '</div>';
     echo '<div>by '  .$row['author_id'] . '</div>';
