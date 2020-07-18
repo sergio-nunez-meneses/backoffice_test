@@ -14,7 +14,7 @@ function ajaxSuccess() {
         getID('aboutText').innerHTML = response['text'];
       } else {
         getID('title-' + response['id']).innerHTML = response['title'];
-        getID('image-' + response['id']).setAttribute('src', response['image']);
+        getID('image-' + response['id']).setAttribute('src', response['image']); // path is missing
         getID('date-' + response['id']).innerHTML = response['date'];
         getID('text-' + response['id']).innerHTML = response['text'];
       }
@@ -45,7 +45,7 @@ function ajaxSuccess() {
       title.setAttribute('id', 'title-' + response['id']);
       title.innerHTML = response['title'];
       image.setAttribute('id', 'image-' + response['id']);
-      image.setAttribute('src', response['image']);
+      image.setAttribute('src', response['image']); // path is missing
       date.setAttribute('id', 'date-' + response['id']);
       date.innerHTML = response['date'];
       author.setAttribute('id', 'author-' + response['id']);

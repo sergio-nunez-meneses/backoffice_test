@@ -160,6 +160,10 @@ function articles() {
 
   $data = $pdo->query('SELECT * FROM articles ORDER BY article_id DESC LIMIT 10')->fetchAll();
 
+  // declare and format date and text
+  // $text = substr($row['article_text'], 0, 50);
+  // $date = date('on d/m/Y at H:i', strtotime($row['DATETIME']));
+
   foreach ($data as $row) {
     echo '<article>';
     echo '<header>';
@@ -179,15 +183,18 @@ function articles() {
 }
 
 function article() {
-  $article_id = $_GET['id'];
-  // format time and text
-
   $pdo = connection();
+
+  $article_id = $_GET['id'];
   $stmt = $pdo->prepare('SELECT * FROM articles JOIN authors ON articles.author_id = authors.author_id WHERE articles.article_id = :article_id');
   $stmt->execute([
     'article_id' => $article_id
   ]);
   $article = $stmt->fetch();
+
+  // format date and text
+  // $text = wordwrap($article['article_text'], 40);
+  // $date = date('on d/m/Y at H:i', strtotime($article['DATETIME']));
 
   echo '<div>';
   echo '<header>';
