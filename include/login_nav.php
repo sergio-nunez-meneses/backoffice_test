@@ -6,7 +6,7 @@
   <a href=" <?php echo ROOT_DIR . '/templates/add_element.php'; ?> " class="">
     <span class="">add</span>
   </a>
-  <a href=" <?php echo ROOT_DIR . '/logout.php?logout=yes'; ?> " class="">
+  <a href=" <?php echo ROOT_DIR . '/templates/logout.php?logout=yes'; ?> " class="">
     <span class="">logout</span>
   </a>
 

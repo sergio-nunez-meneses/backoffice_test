@@ -60,7 +60,7 @@ function logout() {
   if ($_GET['logout'] == 'yes') {
     session_unset();
     session_destroy();
-    header('Location:.');
+    header('Location:/backoffice_test/index.php');
   }
 }
 
@@ -163,7 +163,7 @@ function articles() {
   foreach ($data as $row) {
     echo '<article>';
     echo '<header>';
-    echo '<h3><a href="article.php?id=' . $row['article_id'] . '">'. $row['article_title'].'</a></h3>';
+    echo '<h3><a href="templates/article.php?id=' . $row['article_id'] . '">'. $row['article_title'].'</a></h3>';
     echo '<img class="" src="' . 'img' . DIRECTORY_SEPARATOR . $row['article_image'] . '">';
     echo '<div class="">';
     echo '<div>on ' . $row['DATETIME'] . '</div>';
@@ -172,7 +172,7 @@ function articles() {
     echo '</header>';
     echo '<main>';
     echo '<p>' . $row['article_text'] . '...</p>';
-    echo '<a class="" href="article.php?id=' . $row['article_id'] . '">continue reading</a>';
+    echo '<a class="" href="templates/article.php?id=' . $row['article_id'] . '">continue reading</a>';
     echo '</main>';
     echo '</article>';
   }
