@@ -24,7 +24,7 @@ error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING);
     <a href=" <?php echo ROOT_DIR . '/index.php'; ?> ">
       <span class="">home</span>
     </a>
-    <a href=" <?php echo ROOT_DIR . '/templates/about.php'; ?> ">
+    <a href=" <?php echo ROOT_DIR . '/templates/about.php?id=1&element=about'; ?> ">
       <span class="">about</span>
     </a>
     <a href=" <?php echo ROOT_DIR . '/templates/contact.php'; ?> " class="">

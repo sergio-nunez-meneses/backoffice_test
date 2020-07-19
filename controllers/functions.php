@@ -3,8 +3,7 @@
 // declare constant for script's absolute path
 
 function connection() {
-  // require __ROOT__ . '/controllers/database.php';
-  require 'C:\wamp64\www\snunezmeneses\backoffice_test\controllers\database.php';
+  require dirname(dirname(__FILE__))  . '/controllers/database.php';
 
   $host = 'localhost';
   $charset = 'utf8';
@@ -137,6 +136,80 @@ function sign_up() {
   }
 }
 
+function content_handler() {
+  $element_id = $_GET['id'];
+  $element_type = $_GET['element'];
+
+  $pdo = connection();
+
+  if ($element_type === 'about') {
+    $stmt = $pdo->prepare('SELECT * FROM about WHERE about_id = :element_id');
+    $stmt->execute([
+      'element_id' => $element_id
+    ]);
+    $element = $stmt->fetch();
+
+    $element_title = $element['about_title'];
+    $element_text = $element['about_text'];
+    $element_image = $element['about_image'];
+    $element_author = '1';
+  } elseif ($element_type === 'article') {
+    $stmt = $pdo->prepare('SELECT * FROM articles JOIN authors ON articles.author_id = authors.author_id WHERE articles.article_id = :element_id');
+    $stmt->execute([
+      'element_id' => $element_id
+    ]);
+    $element = $stmt->fetch();
+
+    $element_title = $element['article_title'];
+    $element_text = $element['article_text'];
+    $element_image = $element['article_image'];
+    $element_author = $element['author_id'];
+  } elseif ($element_type === 'project') {
+    $stmt = $pdo->prepare('SELECT * FROM projects JOIN authors ON projects.author_id = authors.author_id WHERE projects.project_id = :element_id');
+    $stmt->execute([
+      'element_id' => $element_id
+    ]);
+    $element = $stmt->fetch();
+
+    $element_title = $element['article_title'];
+    $element_text = $element['article_text'];
+    $element_image = $element['article_image'];
+    $element_author = $element['author_id'];
+  }
+
+  $username = $_SESSION['user'];
+  $stmt = $pdo->prepare('SELECT * FROM authors WHERE author_username = :username');
+  $stmt->execute([
+    'username' => $username
+  ]);
+  $author = $stmt->fetch();
+
+  echo
+  '<form id="ajax-form" class="hidden" action="../controllers/ajaxReceive.php" method="post" enctype="multipart/form-data"
+  onsubmit="ajaxSend(this); return false;">
+  <fieldset class="ajax-form-container">
+  <legend>element handler</legend>
+  <select class="" name="content[]">
+  <option value="' . $element_type . '">' . $element_type . '</option>
+  </select>
+  <input class="" type="number" name="id" value="' . $element_id . '" placeholder="id: ' . $element_id . '">
+  <input class="" type="text" name="title" value="' . $element_title . '" placeholder="title: ' . $element_title . '">
+  <input class="" type="number" name="author" value="' . $element_author . '" placeholder="author: ' . $author['author_username'] . '">
+  <input class="" type="file" multiple name="images[]" value="' . $element_image . '">
+  <textarea class="" name="text" cols="50" rows="8" placeholder="">' . $element_text . '</textarea>
+  <legend>choose action</legend>
+  <select class="" name="action[]">
+  <option></option>
+  <option>create</option>
+  <option>edit</option>
+  <option>archive</option>
+  <option>delete</option>
+  </select>
+  <input id="" class="" type="submit" name="submit" value="submit"/>
+  </fieldset>
+  </form>';
+}
+
 function display_about() {
   // format time and text
   $pdo = connection();
@@ -144,21 +217,23 @@ function display_about() {
   $stmt->execute();
   $about = $stmt->fetch();
 
-  echo '<section class="about-container">';
-  echo '<header>';
+  echo
+  '<section class="about-container">
+  <header>';
 
   if ($_SESSION['logged_in'] == true && $_SESSION['status'] === 'admin') {
     echo '<button id="handler-tab">edit</button>';
   }
 
-  echo '<h2 id="aboutTitle" class="about-title">' . $about['about_title'] . '</h2>';
-  echo '<img id="aboutImage" class="about-image" src="' . ROOT_DIR . DIRECTORY_SEPARATOR . 'img' . DIRECTORY_SEPARATOR . $about['about_image'] . '">';
+  echo
+  '<h2 id="aboutTitle" class="about-title">' . $about['about_title'] . '</h2>
+  <img id="aboutImage" class="about-image" src="' . ROOT_DIR . DIRECTORY_SEPARATOR . 'img' . DIRECTORY_SEPARATOR . $about['about_image'] . '">
+  </header>
+  <article id="aboutText" class="about-text">' . $about['about_text'] . '</article>
+  </section>';
   // echo '<div class="">';
   // echo '<p id="date-' . $about_id . '">on ' . $about['DATETIME'] . '</p>';
   // echo '</div>';
-  echo '</header>';
-  echo '<article id="aboutText" class="about-text">' . $about['about_text'] . '</article>';
-  echo '</section>';
 }
 
 function display_articles() {
@@ -171,27 +246,28 @@ function display_articles() {
   // $date = date('on d/m/Y at H:i', strtotime($row['DATETIME']));
 
   foreach ($data as $row) {
-    echo '<article>';
-    echo '<header>';
-    echo '<h3><a href="templates/article.php?id=' . $row['article_id'] . '">'. $row['article_title'].'</a></h3>';
-    echo '<img class="" src="' . 'img' . DIRECTORY_SEPARATOR . $row['article_image'] . '">';
-    echo '<div class="">';
-    echo '<div>on ' . $row['DATETIME'] . '</div>';
-    echo '<div>by '  .$row['author_id'] . '</div>';
-    echo '</div>';
-    echo '</header>';
-    echo '<main>';
-    echo '<p>' . $row['article_text'] . '...</p>';
-    echo '<a class="" href="templates/article.php?id=' . $row['article_id'] . '">continue reading</a>';
-    echo '</main>';
-    echo '</article>';
+    echo
+    '<article>
+    <header>
+    <h3><a href="templates/article.php?id=' . $row['article_id'] . '&element=article">'. $row['article_title'].'</a></h3>
+    <img class="" src="' . 'img' . DIRECTORY_SEPARATOR . $row['article_image'] . '">
+    <div class="">
+    <div>on ' . $row['DATETIME'] . '</div>
+    <div>by '  .$row['author_id'] . '</div>
+    </div>
+    </header>
+    <main>
+    <p>' . $row['article_text'] . '...</p>
+    <a class="" href="templates/article.php?id=' . $row['article_id'] . '&element=article">continue reading</a>
+    </main>
+    </article>';
   }
 }
 
 function display_article() {
-  $pdo = connection();
-
   $article_id = $_GET['id'];
+
+  $pdo = connection();
   $stmt = $pdo->prepare('SELECT * FROM articles JOIN authors ON articles.author_id = authors.author_id WHERE articles.article_id = :article_id');
   $stmt->execute([
     'article_id' => $article_id
@@ -202,8 +278,9 @@ function display_article() {
   // $text = wordwrap($article['article_text'], 40);
   // $date = date('on d/m/Y at H:i', strtotime($article['DATETIME']));
 
-  echo '<div>';
-  echo '<header>';
+  echo
+  '<div>
+  <header>';
 
   if(isset($_SESSION['logged_in'])) {
     if ($_SESSION['logged_in'] == true && $article['author_username'] === $_SESSION['user']) {
@@ -211,15 +288,16 @@ function display_article() {
     }
   }
 
-  echo '<h2 id="title-' . $article_id . '" class="">' . $article['article_title'] . '</h2>';
-  echo '<img id="image-' . $article_id . '" class="" src="' . dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'img' . DIRECTORY_SEPARATOR . $article['article_image'] . '">';
-  echo '<div class="">';
-  echo '<div id="date-' . $article_id . '">on ' . $article['DATETIME'] . '</div>';
-  echo '<div>by ' . $article['author_username'] . '</div>';
-  echo '</div>';
-  echo '</header>';
-  echo '<article id="text-' . $article_id . '">' . $article['article_text'] . '</article>';
-  echo '</div>';
+  echo
+  '<h2 id="title-' . $article_id . '" class="">' . $article['article_title'] . '</h2>
+  <img id="image-' . $article_id . '" class="" src="' . dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'img' . DIRECTORY_SEPARATOR . $article['article_image'] . '">
+  <div class="">
+  <div id="date-' . $article_id . '">on ' . $article['DATETIME'] . '</div>
+  <div>by ' . $article['author_username'] . '</div>
+  </div>
+  </header>
+  <article id="text-' . $article_id . '">' . $article['article_text'] . '</article>
+  </div>';
 }
 
 function display_projects() {
@@ -228,21 +306,22 @@ function display_projects() {
   $data = $pdo->query('SELECT * FROM projects ORDER BY project_id DESC LIMIT 10')->fetchAll();
 
   foreach ($data as $row) {
-    echo '<article>';
-    echo '<header>';
-    echo '<h3><a href="project.php?id=' . $row['project_id'] . '&element=project">'. $row['project_title'].'</a></h3>';
-    echo '<img class="" src="' . 'img' . DIRECTORY_SEPARATOR . $row['project_image'] . '">';
-    echo '<div class="">';
-    echo '<div>on ' . $row['DATETIME'] . '</div>';
-    echo '<div>by '  .$row['author_id'] . '</div>';
-    echo '<div>'  .$row['project_technologies'] . '</div>';
-    echo '</div>';
-    echo '</header>';
-    echo '<main>';
-    echo '<p>' . $row['project_text'] . '...</p>';
-    echo '<a class="" href="project.php?id=' . $row['project_id'] . '&element=project">continue reading</a>';
-    echo '</main>';
-    echo '</article>';
+    echo
+    '<article>
+    <header>
+    <h3><a href="project.php?id=' . $row['project_id'] . '&element=project">'. $row['project_title'].'</a></h3>
+    <img class="" src="' . 'img' . DIRECTORY_SEPARATOR . $row['project_image'] . '">
+    <div class="">
+    <div>on ' . $row['DATETIME'] . '</div>
+    <div>by '  .$row['author_id'] . '</div>
+    <div>'  .$row['project_technologies'] . '</div>
+    </div>
+    </header>
+    <main>
+    <p>' . $row['project_text'] . '...</p>
+    <a class="" href="project.php?id=' . $row['project_id'] . '&element=project">continue reading</a>
+    </main>
+    </article>';
   }
 }
 
@@ -294,7 +373,7 @@ function ajax_receiver() {
         'username' => $username
       ]);
       $author = $stmt->fetch();
-      $author_id = filter_var($author['author_id'], FILTER_SANITIZE_STRING);
+      $author_id = $author['author_id'];
 
       if ($_POST['action'][0] === 'create') {
         if ($_POST['content'][0] === 'article') {
