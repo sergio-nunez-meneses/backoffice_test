@@ -279,7 +279,7 @@ function display_article() {
   // $date = date('on d/m/Y at H:i', strtotime($article['DATETIME']));
 
   echo
-  '<div>
+  '<div id="article-' . $article_id . '">
   <header>';
 
   if(isset($_SESSION['logged_in'])) {
