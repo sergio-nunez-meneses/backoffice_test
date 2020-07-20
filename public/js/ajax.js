@@ -22,7 +22,7 @@ function ajaxSuccess() {
       INFO_TEXT.innerHTML = response['action_message'];
 
     } else if (response['action'] === 'delete') {
-      getID('article-' + response['id']).classList.add('hidden');
+      getID('element-' + response['id']).classList.add('hidden');
 
       INFO_TEXT.innerHTML = response['action_message'];
     } else if (response['action'] === 'create') {
