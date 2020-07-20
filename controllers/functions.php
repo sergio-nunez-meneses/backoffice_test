@@ -185,7 +185,7 @@ function content_handler() {
   $author = $stmt->fetch();
 
   echo
-  '<form id="ajax-form" class="hidden" action="../controllers/ajaxReceive.php" method="post" enctype="multipart/form-data"
+  '<form id="ajax-form" class="hidden" action="../controllers/content_editor_receiver.php" method="post" enctype="multipart/form-data"
   onsubmit="ajaxSend(this); return false;">
   <fieldset class="ajax-form-container">
   <legend>element handler</legend>
