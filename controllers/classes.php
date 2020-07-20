@@ -7,7 +7,7 @@ class Element extends Database
   public function display_content($element) {
     if ($element !== 'about') {
       if ($element === 'articles') {
-        $data = $this->$pdo->query('SELECT * FROM articles ORDER BY article_id DESC LIMIT 10')->fetchAll();
+        $data = $this->run_query('SELECT * FROM articles ORDER BY article_id DESC LIMIT 10');
 
         $id = 'article_id';
         $title = 'article_title';
@@ -16,7 +16,7 @@ class Element extends Database
         $image = 'article_image';
         $author = 'author_id';
       } elseif ($element === 'projects') {
-        $data = $this->$pdo->query('SELECT * FROM projects ORDER BY project_id DESC LIMIT 10')->fetchAll();
+        $data = $this->run_query('SELECT * FROM projects ORDER BY project_id DESC LIMIT 10');
 
         $id = 'project_id';
         $title = 'project_title';
@@ -43,9 +43,7 @@ class Element extends Database
         </article>';
       }
     } else {
-      $stmt = $this->$pdo->prepare('SELECT * FROM about');
-      $stmt->execute();
-      $about = $stmt->fetch();
+      $about = $this->run_query('SELECT * FROM about')->fetch();
 
       echo
       '<section class="about-container">
@@ -69,20 +67,16 @@ class Element extends Database
     $element_id = $_GET['id'];
 
     if ($element === 'articles') {
-      $stmt = $this->$pdo->prepare('SELECT * FROM articles JOIN authors ON articles.author_id = authors.author_id WHERE article_id = :element_id');
-      $stmt->execute([
-        'element_id' => $element_id
-      ]);
+      $stmt = $this->run_query('SELECT * FROM articles JOIN authors ON articles.author_id = authors.author_id WHERE article_id = :element_id', ['element_id' => $element_id]);
+
       $title = 'article_title';
       $text = 'article_text';
       $date = 'DATETIME';
       $image = 'article_image';
       $author = 'author_id';
     } elseif ($element === 'projects') {
-      $stmt = $this->$pdo->prepare('SELECT * FROM projects JOIN authors ON projects.author_id = authors.author_id WHERE project_id = :element_id');
-      $stmt->execute([
-        'element_id' => $element_id
-      ]);
+      $stmt = $this->run_query('SELECT * FROM projects JOIN authors ON projects.author_id = authors.author_id WHERE project_id = :element_id', ['element_id' => $element_id]);
+
       $title = 'project_title';
       $text = 'project_text';
       $date = 'DATETIME';
@@ -127,20 +121,14 @@ class Editor extends Database
     if (basename($_SERVER['SCRIPT_FILENAME']) !== 'create_element.php') {
       if ($element_type !== 'about') {
         if ($element_type === 'articles') {
-          $stmt = $this->$pdo->prepare('SELECT * FROM articles JOIN authors ON articles.author_id = authors.author_id WHERE article_id = :element_id');
-          $stmt->execute([
-            'element_id' => $element_id
-          ]);
+          $stmt = $this->run_query('SELECT * FROM articles JOIN authors ON articles.author_id = authors.author_id WHERE article_id = :element_id', ['element_id' => $element_id]);
 
           $title = 'article_title';
           $text = 'article_text';
           $image = 'article_image';
           $author_id = 'author_id';
         } elseif ($element_type === 'projects') {
-          $stmt = $this->$pdo->prepare('SELECT * FROM projects JOIN authors ON projects.author_id = authors.author_id WHERE project_id = :element_id');
-          $stmt->execute([
-            'element_id' => $element_id
-          ]);
+          $stmt = $this->run_query('SELECT * FROM projects JOIN authors ON projects.author_id = authors.author_id WHERE project_id = :element_id', ['element_id' => $element_id]);
 
           $title = 'project_title';
           $text = 'project_text';
@@ -149,10 +137,7 @@ class Editor extends Database
         }
         $element = $stmt->fetch();
       } else {
-        $stmt = $this->$pdo->prepare('SELECT * FROM about WHERE about_id = :element_id');
-        $stmt->execute([
-          'element_id' => $element_id
-        ]);
+        $stmt = $this->run_query('SELECT * FROM about WHERE about_id = :element_id', ['element_id' => $element_id]);
         $element = $stmt->fetch();
 
         $title = 'about_title';
@@ -162,10 +147,7 @@ class Editor extends Database
       }
 
       $username = $_SESSION['user'];
-      $stmt = $this->$pdo->prepare('SELECT * FROM authors WHERE author_username = :username');
-      $stmt->execute([
-        'username' => $username
-      ]);
+      $stmt = $this->run_query('SELECT * FROM authors WHERE author_username = :username', ['username' => $username]);
       $author = $stmt->fetch();
 
       echo
@@ -196,10 +178,7 @@ class Editor extends Database
       // query to get articles and projects' last ids
 
       $username = $_SESSION['user'];
-      $stmt = $this->$pdo->prepare('SELECT * FROM authors WHERE author_username = :username');
-      $stmt->execute([
-        'username' => $username
-      ]);
+      $stmt = $this->run_query('SELECT * FROM authors WHERE author_username = :username', ['username' => $username]);
       $author = $stmt->fetch();
 
       echo
