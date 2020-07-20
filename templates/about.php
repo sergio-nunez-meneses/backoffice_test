@@ -6,7 +6,8 @@ include '../include/header.php';
 <main class="main-container">
 
   <div class="article-container">
-    <?php display_content('about'); ?>
+    <?php // display_content('about'); ?>
+    <?php (new Element())->display_content('about'); ?>
     <div class="">
       <?php content_handler(); ?>
     </div>

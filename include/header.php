@@ -1,8 +1,10 @@
 <?php
 session_start();
+
 define('__ROOT__', dirname(dirname(__FILE__)));
 define('ROOT_DIR', '/' . basename(__ROOT__));
 require_once __ROOT__ . '/controllers/functions.php';
+require_once __ROOT__ . '/controllers/classes.php';
 
 error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING);
 ?>
