@@ -153,8 +153,8 @@ function content_handler() {
     $element_text = $element['about_text'];
     $element_image = $element['about_image'];
     $element_author = '1';
-  } elseif ($element_type === 'article') {
-    $stmt = $pdo->prepare('SELECT * FROM articles JOIN authors ON articles.author_id = authors.author_id WHERE articles.article_id = :element_id');
+  } elseif ($element_type === 'articles') {
+    $stmt = $pdo->prepare('SELECT * FROM articles JOIN authors ON articles.author_id = authors.author_id WHERE article_id = :element_id');
     $stmt->execute([
       'element_id' => $element_id
     ]);
@@ -164,16 +164,16 @@ function content_handler() {
     $element_text = $element['article_text'];
     $element_image = $element['article_image'];
     $element_author = $element['author_id'];
-  } elseif ($element_type === 'project') {
-    $stmt = $pdo->prepare('SELECT * FROM projects JOIN authors ON projects.author_id = authors.author_id WHERE projects.project_id = :element_id');
+  } elseif ($element_type === 'projects') {
+    $stmt = $pdo->prepare('SELECT * FROM projects JOIN authors ON projects.author_id = authors.author_id WHERE project_id = :element_id');
     $stmt->execute([
       'element_id' => $element_id
     ]);
     $element = $stmt->fetch();
 
-    $element_title = $element['article_title'];
-    $element_text = $element['article_text'];
-    $element_image = $element['article_image'];
+    $element_title = $element['project_title'];
+    $element_text = $element['project_text'];
+    $element_image = $element['project_image'];
     $element_author = $element['author_id'];
   }
 
@@ -195,7 +195,7 @@ function content_handler() {
   <input class="" type="number" name="id" value="' . $element_id . '" placeholder="id: ' . $element_id . '">
   <input class="" type="text" name="title" value="' . $element_title . '" placeholder="title: ' . $element_title . '">
   <input class="" type="number" name="author" value="' . $element_author . '" placeholder="author: ' . $author['author_username'] . '">
-  <input class="" type="file" multiple name="images[]" value="' . $element_image . '">
+  <input class="" type="file" multiple name="images[]" value="' . '../img' . DIRECTORY_SEPARATOR . $element_image . '">
   <textarea class="" name="text" cols="50" rows="8" placeholder="">' . $element_text . '</textarea>
   <legend>choose action</legend>
   <select class="" name="action[]">
@@ -210,125 +210,126 @@ function content_handler() {
   </form>';
 }
 
-function display_about() {
-  // format time and text
-  $pdo = connection();
-  $stmt = $pdo->prepare('SELECT * FROM about');
-  $stmt->execute();
-  $about = $stmt->fetch();
-
-  // $lines = explode("\n", $about['about_text']);
-  // $text = '';
-  // foreach ($lines as $line) {
-  //   $text .= "<p>$line</p>";
-  // }
-
-  echo
-  '<section class="about-container">
-  <header>';
-
-  if ($_SESSION['logged_in'] == true && $_SESSION['status'] === 'admin') {
-    echo '<button id="handler-tab">edit</button>';
-  }
-
-  echo
-  '<h2 id="aboutTitle" class="about-title">' . $about['about_title'] . '</h2>
-  <img id="aboutImage" class="about-image" src="' . ROOT_DIR . DIRECTORY_SEPARATOR . 'img' . DIRECTORY_SEPARATOR . $about['about_image'] . '">
-  </header>
-  <article id="aboutText" class="about-text">' . $about['about_text'] . '</article>
-  </section>';
-  // echo '<div class="">';
-  // echo '<p id="date-' . $about_id . '">on ' . $about['DATETIME'] . '</p>';
-  // echo '</div>';
-}
-
-function display_articles() {
+function display_content($element) {
   $pdo = connection();
 
-  $data = $pdo->query('SELECT * FROM articles ORDER BY article_id DESC LIMIT 10')->fetchAll();
+  if ($element !== 'about') {
+    if ($element === 'articles') {
+      $data = $pdo->query('SELECT * FROM articles ORDER BY article_id DESC LIMIT 10')->fetchAll();
 
-  // declare and format date and text
-  // $text = substr($row['article_text'], 0, 50);
-  // $date = date('on d/m/Y at H:i', strtotime($row['DATETIME']));
+      $id = 'article_id';
+      $title = 'article_title';
+      $text = 'article_text';
+      $date = 'DATETIME';
+      $image = 'article_image';
+      $author = 'author_id';
+    } elseif ($element === 'projects') {
+      $data = $pdo->query('SELECT * FROM projects ORDER BY project_id DESC LIMIT 10')->fetchAll();
 
-  foreach ($data as $row) {
+      $id = 'project_id';
+      $title = 'project_title';
+      $text = 'project_text';
+      $date = 'DATETIME';
+      $image = 'project_image';
+      $author = 'author_id';
+    }
+    // declare and format date and text
+    // $text = substr($row[$text], 0, 50);
+    // $date = date('on d/m/Y at H:i', strtotime($row[$date]));
+
+    foreach ($data as $row) {
+      echo
+      '<article>
+      <header>
+      <h3><a href="templates/element.php?id=' . $row[$id] . '&element=' . $element .'">' . $row[$title].'</a></h3>
+      <img class="" src="' . 'img' . DIRECTORY_SEPARATOR . $row[$image] . '">
+      <div class="">
+      <div>on ' . $row[$date] . '</div>
+      <div>by '  . $row[$author] . '</div>
+      </div>
+      </header>
+      <main>
+      <p>' . $row[$text] . '...</p>
+      <a class="" href="templates/element.php?id=' . $row[$id] . '&element=' . $element . '">continue reading</a>
+      </main>
+      </article>';
+    }
+  } else {
+    $stmt = $pdo->prepare('SELECT * FROM about');
+    $stmt->execute();
+    $about = $stmt->fetch();
+
     echo
-    '<article>
-    <header>
-    <h3><a href="templates/article.php?id=' . $row['article_id'] . '&element=article">'. $row['article_title'].'</a></h3>
-    <img class="" src="' . 'img' . DIRECTORY_SEPARATOR . $row['article_image'] . '">
-    <div class="">
-    <div>on ' . $row['DATETIME'] . '</div>
-    <div>by '  .$row['author_id'] . '</div>
-    </div>
+    '<section class="about-container">
+    <header>';
+
+    if ($_SESSION['logged_in'] == true && $_SESSION['status'] === 'admin') {
+      echo '<button id="handler-tab">edit</button>';
+    }
+
+    echo
+    '<h2 id="aboutTitle" class="about-title">' . $about['about_title'] . '</h2>
+    <img id="aboutImage" class="about-image" src="' . ROOT_DIR . DIRECTORY_SEPARATOR . 'img' . DIRECTORY_SEPARATOR . $about['about_image'] . '">
     </header>
-    <main>
-    <p>' . $row['article_text'] . '...</p>
-    <a class="" href="templates/article.php?id=' . $row['article_id'] . '&element=article">continue reading</a>
-    </main>
-    </article>';
+    <article id="aboutText" class="about-text">' . $about['about_text'] . '</article>
+    </section>';
   }
 }
 
-function display_article() {
-  $article_id = $_GET['id'];
-
+function display_element() {
   $pdo = connection();
-  $stmt = $pdo->prepare('SELECT * FROM articles JOIN authors ON articles.author_id = authors.author_id WHERE articles.article_id = :article_id');
-  $stmt->execute([
-    'article_id' => $article_id
-  ]);
-  $article = $stmt->fetch();
+  $element = $_GET['element'];
+  $element_id = $_GET['id'];
 
+  if ($element === 'articles') {
+    $stmt = $pdo->prepare('SELECT * FROM articles JOIN authors ON articles.author_id = authors.author_id WHERE article_id = :element_id');
+    $stmt->execute([
+      'element_id' => $element_id
+    ]);
+    $title = 'article_title';
+    $text = 'article_text';
+    $date = 'DATETIME';
+    $image = 'article_image';
+    $author = 'author_id';
+  } elseif ($element === 'projects') {
+    $stmt = $pdo->prepare('SELECT * FROM projects JOIN authors ON projects.author_id = authors.author_id WHERE project_id = :element_id');
+    $stmt->execute([
+      'element_id' => $element_id
+    ]);
+    $title = 'project_title';
+    $text = 'project_text';
+    $date = 'DATETIME';
+    $image = 'project_image';
+    $author = 'author_id';
+  } else {
+    return;
+  }
+
+  $element = $stmt->fetch();
   // format date and text
-  // $text = wordwrap($article['article_text'], 40);
-  // $date = date('on d/m/Y at H:i', strtotime($article['DATETIME']));
+  // $text = wordwrap($element[$text], 40);
+  // $date = date('on d/m/Y at H:i', strtotime($element[$date]));
 
   echo
-  '<div id="article-' . $article_id . '">
+  '<div>
   <header>';
 
   if(isset($_SESSION['logged_in'])) {
-    if ($_SESSION['logged_in'] == true && $article['author_username'] === $_SESSION['user']) {
+    if ($_SESSION['logged_in'] == true && $element['author_username'] === $_SESSION['user']) {
       echo '<button id="handler-tab">edit</button>';
     }
   }
 
   echo
-  '<h2 id="title-' . $article_id . '" class="">' . $article['article_title'] . '</h2>
-  <img id="image-' . $article_id . '" class="" src="' . dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'img' . DIRECTORY_SEPARATOR . $article['article_image'] . '">
+  '<h2 id="title-' . $element_id . '" class="">' . $element[$title] . '</h2>
+  <img id="image-' . $element_id . '" class="" src="' . dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'img' . DIRECTORY_SEPARATOR . $element[$image] . '">
   <div class="">
-  <div id="date-' . $article_id . '">on ' . $article['DATETIME'] . '</div>
-  <div>by ' . $article['author_username'] . '</div>
+  <div id="date-' . $element_id . '">on ' . $element[$date] . '</div>
+  <div>by ' . $element['author_username'] . '</div>
   </div>
   </header>
-  <article id="text-' . $article_id . '">' . $article['article_text'] . '</article>
+  <article id="text-' . $element_id . '">' . $element[$text] . '</article>
   </div>';
-}
-
-function display_projects() {
-  $pdo = connection();
-
-  $data = $pdo->query('SELECT * FROM projects ORDER BY project_id DESC LIMIT 10')->fetchAll();
-
-  foreach ($data as $row) {
-    echo
-    '<article>
-    <header>
-    <h3><a href="project.php?id=' . $row['project_id'] . '&element=project">'. $row['project_title'].'</a></h3>
-    <img class="" src="' . 'img' . DIRECTORY_SEPARATOR . $row['project_image'] . '">
-    <div class="">
-    <div>on ' . $row['DATETIME'] . '</div>
-    <div>by '  .$row['author_id'] . '</div>
-    <div>'  .$row['project_technologies'] . '</div>
-    </div>
-    </header>
-    <main>
-    <p>' . $row['project_text'] . '...</p>
-    <a class="" href="project.php?id=' . $row['project_id'] . '&element=project">continue reading</a>
-    </main>
-    </article>';
-  }
 }
 
 function ajax_receiver() {
@@ -382,7 +383,7 @@ function ajax_receiver() {
       $author_id = $author['author_id'];
 
       if ($_POST['action'][0] === 'create') {
-        if ($_POST['content'][0] === 'article') {
+        if ($_POST['content'][0] === 'articles') {
           // move image
           $section = $_POST['content'][0];
 
@@ -394,7 +395,7 @@ function ajax_receiver() {
             'element_image' => $element_image,
             'author_id' => $author_id
           ]);
-        } elseif ($_POST['content'][0] === 'project') {
+        } elseif ($_POST['content'][0] === 'projects') {
           // edit project
           // $section = $_POST['content'][0];
         }
@@ -413,7 +414,7 @@ function ajax_receiver() {
             'element_text' => $element_text,
             'element_id' => $element_id
           ]);
-        } elseif ($_POST['content'][0] === 'article') {
+        } elseif ($_POST['content'][0] === 'articles') {
           // move image
           $section = $_POST['content'][0];
 
@@ -425,7 +426,7 @@ function ajax_receiver() {
             'author_id' => $author_id,
             'element_id' => $element_id
           ]);
-        } elseif ($_POST['content'][0] === 'project') {
+        } elseif ($_POST['content'][0] === 'projects') {
           // update project
           // $section = $_POST['content'][0];
         }
@@ -436,11 +437,11 @@ function ajax_receiver() {
       } elseif ($_POST['action'][0] === 'archive') {
         // $section = $_POST['content'][0];
       } elseif ($_POST['action'][0] === 'delete') {
-        if ($_POST['content'][0] === 'article') {
+        if ($_POST['content'][0] === 'articles') {
           $pdo->prepare('DELETE FROM articles WHERE article_id = :element_id')->execute([
             'element_id' => $element_id
           ]);
-        } elseif ($_POST['content'][0] === 'project') {
+        } elseif ($_POST['content'][0] === 'projects') {
           $pdo->prepare('DELETE FROM projects WHERE project_id = :element_id')->execute([
             'element_id' => $element_id
           ]);
