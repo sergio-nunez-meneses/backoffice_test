@@ -217,6 +217,12 @@ function display_about() {
   $stmt->execute();
   $about = $stmt->fetch();
 
+  // $lines = explode("\n", $about['about_text']);
+  // $text = '';
+  // foreach ($lines as $line) {
+  //   $text .= "<p>$line</p>";
+  // }
+
   echo
   '<section class="about-container">
   <header>';

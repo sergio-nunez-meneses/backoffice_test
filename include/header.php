@@ -12,6 +12,7 @@ error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING);
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href=" <?php echo ROOT_DIR . '/public/css/normalize.css'; ?> ">
   <link rel="stylesheet" href=" <?php echo ROOT_DIR . '/public/css/style.css'; ?> ">
   <script src=" <?php echo ROOT_DIR . '/public/js/functions.js'; ?> "></script>
   <title> <?php echo $title; ?> </title>
