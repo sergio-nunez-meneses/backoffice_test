@@ -1,7 +1,5 @@
 <?php
 
-// declare constant for script's absolute path
-
 function connection() {
   require dirname(dirname(__FILE__))  . '/controllers/database.php';
 
