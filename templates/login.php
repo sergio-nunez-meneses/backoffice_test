@@ -1,6 +1,8 @@
 <?php
 $title = 'sign';
 include '../include/header.php';
+
+if ($_GET['error'] === 'yes') echo $_GET['error_message'];
 ?>
 
 <main class="main-container">

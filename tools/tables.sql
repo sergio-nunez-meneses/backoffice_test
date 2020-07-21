@@ -29,3 +29,20 @@ CREATE TABLE articles(
   PRIMARY KEY (article_id),
   FOREIGN KEY (author_id) REFERENCES authors(author_id)
 )charset=utf8;
+
+CREATE TABLE archives(
+  archive_id INT AUTO_INCREMENT NOT NULL,
+  archive_title VARCHAR (150) NOT NULL,
+  archive_text TEXT NOT NULL,
+  DATETIME DATETIME NOT NULL,
+  archive_image VARCHAR (250) NOT NULL,
+  author_id INT NOT NULL,
+  PRIMARY KEY (archive_id),
+  FOREIGN KEY (author_id) REFERENCES authors(author_id)
+)charset=utf8;
+
+CREATE TABLE categories(
+  category_id INT AUTO_INCREMENT NOT NULL,
+  category_name VARCHAR(150) NOT NULL,
+  PRIMARY KEY (category_id)
+)charset=utf8;

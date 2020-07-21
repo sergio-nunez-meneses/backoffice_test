@@ -17,12 +17,11 @@ include '../include/header.php';
 </main>
 
 <?php
-echo '<p id="ajaxResponse" class="info"></p>';
+echo '<p id="ajaxResponse" class="info"></p>
+<script src="../public/js/about.js"></script>';
 
 // load ajax or the corresponding script
-if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
-  echo '<script src="public/js/someScript.js"></script>';
-} else {
+if (isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
   echo '<script src="../public/js/ajax.js"></script>';
 }
 
