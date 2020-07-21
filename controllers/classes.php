@@ -2,6 +2,54 @@
 
 require_once dirname(dirname(__FILE__)) . '/controllers/class_db.php';
 
+class User extends Database
+{
+  public function login() {
+    if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['sign-in'])) {
+      $username = $_POST['username'];
+      $password = $_POST['password'];
+
+      $stmt = $this->run_query('SELECT * FROM authors WHERE author_username = :username', ['username' => $username]);
+      $user = $stmt->fetch();
+
+      if ($user == false) {
+        echo 'user does not exist';
+      } else {
+        $username = $user['author_username'];
+        $stored_password = $user['author_password'];
+        $status = $user['author_status'];
+
+        if (password_verify($password, $stored_password)) {
+          $_SESSION['logged_in'] = true;
+          $_SESSION['user'] = $username;
+          $_SESSION['status'] = $status;
+          header('Location:../index.php');
+        } else {
+          echo 'password incorrect';
+        }
+      }
+    }
+  }
+  public function logout() {
+    if ($_GET['logout'] == 'yes') {
+      session_unset();
+      session_destroy();
+      header('Location:../index.php');
+    }
+  }
+  function is_logged() {
+    if(!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
+      include(__ROOT__ . '/include/logout_nav.php');
+    } else {
+      if ($_SESSION['status'] === 'admin') {
+        include(__ROOT__ . '/include/admin_login_nav.php');
+      } elseif ($_SESSION['status'] === 'collaborator') {
+        include(__ROOT__ . '/include/collaborator_login_nav.php');
+      }
+    }
+  }
+}
+
 class Element extends Database
 {
   public function display_content($element) {

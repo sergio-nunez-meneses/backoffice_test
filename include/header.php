@@ -7,6 +7,8 @@ require_once __ROOT__ . '/controllers/functions.php';
 require_once __ROOT__ . '/controllers/classes.php';
 
 error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING);
+
+$user = new User();
 ?>
 
 <!DOCTYPE html>
@@ -33,6 +35,7 @@ error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING);
     <a href=" <?php echo ROOT_DIR . '/templates/contact.php'; ?> " class="">
       <span class="">contact</span>
     </a>
-    <?php is_logged(); ?>
+    <?php // is_logged(); ?>
+    <?php $user->is_logged(); ?>
 
   </header>

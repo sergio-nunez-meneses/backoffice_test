@@ -17,60 +17,6 @@ function connection() {
   return $pdo;
 }
 
-function is_logged() {
-  // $pdo = connection();
-
-  if(!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
-    include(__ROOT__ . '/include/logout_nav.php');
-  } else {
-    if ($_SESSION['status'] === 'admin') {
-      include(__ROOT__ . '/include/admin_login_nav.php');
-    } elseif ($_SESSION['status'] === 'collaborator') {
-      include(__ROOT__ . '/include/collaborator_login_nav.php');
-    }
-  }
-}
-
-function login() {
-  $pdo = connection();
-
-  if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['sign-in'])) {
-    $username = $_POST['username'];
-    $password = $_POST['password'];
-
-    $stmt = $pdo->prepare('SELECT * FROM authors WHERE author_username = :username');
-    $stmt->execute([
-      'username' => $username
-    ]);
-    $user = $stmt->fetch();
-
-    if ($user == false) {
-      echo 'user does not exist';
-    } else {
-      $username = $user['author_username'];
-      $stored_password = $user['author_password'];
-      $status = $user['author_status'];
-
-      if (password_verify($password, $stored_password)) {
-        $_SESSION['logged_in'] = true;
-        $_SESSION['user'] = $username;
-        $_SESSION['status'] = $status;
-        header('Location:/backoffice_test/index.php');
-      } else {
-        echo 'password incorrect';
-      }
-    }
-  }
-}
-
-function logout() {
-  if ($_GET['logout'] == 'yes') {
-    session_unset();
-    session_destroy();
-    header('Location:/backoffice_test/index.php');
-  }
-}
-
 function sign_up() {
   $username = $password = $status = $error_message = '';
   $error = false;

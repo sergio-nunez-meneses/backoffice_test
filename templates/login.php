@@ -1,8 +1,6 @@
 <?php
-$title = 'sign in or sign up';
+$title = 'sign';
 include '../include/header.php';
-
-if ($_GET['error'] == 'yes') echo $_GET['error_message'];
 ?>
 
 <main class="main-container">
@@ -38,8 +36,9 @@ if ($_GET['error'] == 'yes') echo $_GET['error_message'];
 </main>
 
 <?php
-echo '<p class="info">' . login() . '</p>';
+// echo '<p class="info">' . login() . '</p>';
+echo '<p class="info">' . $user->login() . '</p>
+<script src="../public/js/login.js"></script>';
+
 include '../include/footer.php';
 ?>
-
-<script src="../public/js/login.js"></script>
