@@ -16,12 +16,10 @@ include '../include/header.php';
 <?php
 echo '<p id="ajaxResponse" class="info"></p>';
 
-// load ajax or the corresponding script
-if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
-  echo '<script src="public/js/someScript.js"></script>';
-} else {
+// load ajax.js
+if (isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
   echo '<script src="../public/js/ajax.js"></script>';
 }
 
-include 'include/footer.php';
+include '../include/footer.php';
 ?>

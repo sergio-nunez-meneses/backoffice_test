@@ -1,7 +1,7 @@
     <footer class="footer-container">
 
       <div class="icons-container">
-        <a href="#" class="">
+        <a href="https://github.com/sergio-nunez-meneses" class="">
           <i class="icon-item fa fa-github" aria-hidden="true"></i>
           <span class="icon-text">github</span>
         </a>

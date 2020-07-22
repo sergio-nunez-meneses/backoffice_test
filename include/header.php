@@ -28,9 +28,9 @@ $user = new User();
   <header class="header-container">
 
     <div class="collapsed-menu">
-      <h3><a href=" <?php echo ROOT_DIR . '/index.php'; ?> ">
-        <strong class="heading-text">sergio núñez meneses</strong>
-      </a></h3>
+      <a href=" <?php echo ROOT_DIR . '/index.php'; ?> ">
+        <h3><strong class="heading-text">sergio núñez meneses</strong></h3>
+      </a>
       <button id="navbarTab" class="navbar-toggle" type="button"><i class="fa fa-bars" aria-hidden="true"></i>
       </button>
     </div>

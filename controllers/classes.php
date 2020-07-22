@@ -175,9 +175,12 @@ class Element extends Database
       <p>' . $about['about_text'] . '</p>
       </article>
       </section>
+
       <button id="cvTab">show cv</button>
       <div id="myModal" class="modal hidden">
-      <button id="closeBtn" class="close cursor">&times;</button>
+      <button id="closeBtn" class="close cursor">
+      <i class="fa fa-times" aria-hidden="true"></i>
+      </button>
       <div class="cv-container">
       <iframe src="../img' . DIRECTORY_SEPARATOR . 'cv.pdf"></iframe>
       </div>
@@ -211,10 +214,6 @@ class Element extends Database
 
     $element = $stmt->fetch();
 
-    echo
-    '<div id="element-' . $element_id . '">
-    <header>';
-
     if(isset($_SESSION['logged_in'])) {
       if ($_SESSION['logged_in'] == true && $element['author_username'] === $_SESSION['user']) {
         echo '<button id="handler-tab">edit</button>';
@@ -222,14 +221,16 @@ class Element extends Database
     }
 
     echo
-    '<h2 id="title-' . $element_id . '" class="">' . $element[$title] . '</h2>
-    <img id="image-' . $element_id . '" class="" src="../img' . DIRECTORY_SEPARATOR . $element[$image] . '">
-    <div class="">
-    <div id="date-' . $element_id . '">on ' . $element[$date] . '</div>
-    <div>by ' . $element['author_username'] . '</div>
+    '<div id="element-' . $element_id . '" class="focus-element-container">
+    <section class="focus-element-header">
+    <img id="image-' . $element_id . '" class="focus-element-image" src="../img' . DIRECTORY_SEPARATOR . $element[$image] . '">
+    <div class="focus-content-container">
+    <h2 id="title-' . $element_id . '" class="focus-element-title">' . $element[$title] . '</h2>
+    <div id="date-' . $element_id . '" class="focus-element-date">on ' . $element[$date] . '</div>
+    <div class="focus-element-username">by ' . $element['author_username'] . '</div>
+    <article id="text-' . $element_id . '" class="focus-element-text">' . $element[$text] . '</article>
     </div>
-    </header>
-    <article id="text-' . $element_id . '" class="element-text">' . $element[$text] . '</article>
+    </section>
     </div>';
   }
 }
