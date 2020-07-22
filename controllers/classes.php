@@ -139,20 +139,24 @@ class Element extends Database
       }
       foreach ($data as $row) {
         echo
-        '<article>
+        '<section class="element-box">
+        <img class="element-image" src="' . 'img' . DIRECTORY_SEPARATOR . $row[$image] . '">
+        <div class="transparent-box">
+        <article class="element-caption">
         <header>
-        <h3><a href="templates/element.php?id=' . $row[$id] . '&element=' . $element .'">' . $row[$title].'</a></h3>
-        <img class="" src="' . 'img' . DIRECTORY_SEPARATOR . $row[$image] . '">
+        <h3><a class="element-title" href="templates/element.php?id=' . $row[$id] . '&element=' . $element .'">' . $row[$title].'</a></h3>
         <div class="">
-        <div>on ' . $row[$date] . '</div>
-        <div>by '  .$row[$author] . '</div>
+        <div class="element-date">on ' . $row[$date] . '</div>
+        <div class="element-author">by '  .$row[$author] . '</div>
         </div>
         </header>
         <main>
         <p>' . $row[$text] . '...</p>
-        <a class="" href="templates/element.php?id=' . $row[$id] . '&element=' . $element . '">continue reading</a>
+        <a class="opacity-low" href="templates/element.php?id=' . $row[$id] . '&element=' . $element . '">continue reading</a>
         </main>
-        </article>';
+        </article>
+        </div>
+        </section>';
       }
     } else {
       $about = $this->run_query('SELECT * FROM about')->fetch();
@@ -225,7 +229,7 @@ class Element extends Database
     <div>by ' . $element['author_username'] . '</div>
     </div>
     </header>
-    <article id="text-' . $element_id . '">' . $element[$text] . '</article>
+    <article id="text-' . $element_id . '" class="element-text">' . $element[$text] . '</article>
     </div>';
   }
 }
