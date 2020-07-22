@@ -1,13 +1,12 @@
-<nav class="">
-
-  <span class="">welcome, </span><a href=" <?php echo ROOT_DIR . '/templates/user.php'; ?> " class="">
-    <span class=""> <?php echo $_SESSION['user']; ?> </span>
-  </a>
-  <a href=" <?php echo ROOT_DIR . '/templates/create_element.php'; ?> " class="">
-    <span class="">add</span>
-  </a>
-  <a href=" <?php echo ROOT_DIR . '/controllers/logout.php?logout=yes'; ?> " class="">
-    <span class="">logout</span>
-  </a>
-
-</nav>
+<a href=" <?php echo ROOT_DIR . '/templates/user.php'; ?> " class="">
+  <i class="fa fa-user-circle-o" aria-hidden="true"></i>
+  <span class="nav-item"> <?php echo $_SESSION['user']; ?> </span>
+</a>
+<a href=" <?php echo ROOT_DIR . '/templates/create_element.php'; ?> " class="">
+  <i class="fa fa-plus-circle" aria-hidden="true"></i>
+  <span class="nav-item">create</span>
+</a>
+<a href=" <?php echo ROOT_DIR . '/controllers/logout.php?logout=yes'; ?> " class="">
+  <i class="fa fa-sign-out" aria-hidden="true"></i>
+  <span class="nav-item">logout</span>
+</a>
