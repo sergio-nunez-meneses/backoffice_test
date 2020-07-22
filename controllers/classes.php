@@ -161,25 +161,25 @@ class Element extends Database
     } else {
       $about = $this->run_query('SELECT * FROM about')->fetch();
 
-      echo
-      '<section class="about-container">
-      <header>';
-
       if ($_SESSION['logged_in'] == true && $_SESSION['status'] === 'admin') {
         echo '<button id="handler-tab">edit</button>';
       }
 
       echo
-      '<h2 id="aboutTitle" class="about-title">' . $about['about_title'] . '</h2>
+      '<section class="about-container">
+      <header class="about-header">
+      <h2 id="aboutTitle" class="about-title">' . $about['about_title'] . '</h2>
       <img id="aboutImage" class="about-image" src="../img' . DIRECTORY_SEPARATOR . $about['about_image'] . '">
       </header>
-      <article id="aboutText" class="about-text">' . $about['about_text'] . '</article>
+      <article id="aboutText" class="about-text">
+      <p>' . $about['about_text'] . '</p>
+      </article>
       </section>
       <button id="cvTab">show cv</button>
       <div id="myModal" class="modal hidden">
       <button id="closeBtn" class="close cursor">&times;</button>
       <div class="cv-container">
-      <iframe src="..' . DIRECTORY_SEPARATOR . 'img' . DIRECTORY_SEPARATOR . 'cv.pdf"></iframe>
+      <iframe src="../img' . DIRECTORY_SEPARATOR . 'cv.pdf"></iframe>
       </div>
       </div>';
     }

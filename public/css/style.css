@@ -11,15 +11,6 @@ body {
   margin: 0;
   font-family: 'Montserrat', helvetica, sans-serif;
 }
-/* display single element */
-.element-text {
-  display: flex;
-  flex-direction: column;
-  margin: 0.0625rem;
-  padding: 0.5rem;
-  padding-top: 0;
-  border: 0.0625rem solid #000;
-}
 a {
   text-decoration: none;
 }
@@ -78,7 +69,6 @@ button {
 .presentation-text {
   display: flex;
   align-self: flex-start;
-  /* width: 100%; */
   max-height: 0;
   margin: 0.125rem 0;
   text-transform: uppercase;
@@ -141,11 +131,16 @@ button {
 }
 .about-container {
   display: flex;
-  flex-direction: column;
+  justify-content: center;
+  align-content: center;
   align-items: center;
-  max-width: 500px;
+  max-width: 80%;
   height: auto;
+  margin: 0 auto;
   text-align: center;
+}
+.about-header {
+  width: 100%;
 }
 .about-image {
   max-width: 100%;
@@ -154,12 +149,24 @@ button {
   margin: 0.5rem;
   border-radius: 100%;
 }
+.about-text {
+  max-width: 50%;
+}
 .article-container {
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
   margin: 0.5rem 0;
   padding: 0.5rem;
+  border: 0.0625rem solid #000;
+}
+/* display single element */
+.element-text {
+  display: flex;
+  flex-direction: column;
+  margin: 0.0625rem;
+  padding: 0.5rem;
+  padding-top: 0;
   border: 0.0625rem solid #000;
 }
 .sign-in-container, .sign-up-container, .ajax-form-container {
