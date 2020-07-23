@@ -117,6 +117,7 @@ class User extends Database
 class Element extends Database
 {
   public function display_content($element) {
+
     if ($element !== 'about') {
       if ($element === 'articles') {
         $data = $this->run_query('SELECT * FROM articles ORDER BY article_id DESC LIMIT 10');
@@ -137,7 +138,14 @@ class Element extends Database
         $image = 'project_image';
         $author = 'author_id';
       }
+
       foreach ($data as $row) {
+        $formatted_date = $row[$date];
+        $formatted_date = date('jS F, Y H:i', strtotime($formatted_date));
+
+        $shorten_text = $row[$text];
+        $shorten_text = substr($row[$text], 0, 80);
+
         echo
         '<section class="element-box">
         <img class="element-image" src="' . 'img' . DIRECTORY_SEPARATOR . $row[$image] . '">
@@ -146,12 +154,12 @@ class Element extends Database
         <header>
         <h3><a class="element-title" href="templates/element.php?id=' . $row[$id] . '&element=' . $element .'">' . $row[$title].'</a></h3>
         <div class="">
-        <div class="element-date">on ' . $row[$date] . '</div>
+        <div class="element-date">on ' . $formatted_date . '</div>
         <div class="element-author">by '  .$row[$author] . '</div>
         </div>
         </header>
         <main>
-        <p>' . $row[$text] . '...</p>
+        <p>' . $shorten_text . '...</p>
         <a class="opacity-low" href="templates/element.php?id=' . $row[$id] . '&element=' . $element . '">continue reading</a>
         </main>
         </article>
@@ -160,6 +168,12 @@ class Element extends Database
       }
     } else {
       $about = $this->run_query('SELECT * FROM about')->fetch();
+      $paragraphs = explode("\n", $about['about_text']);
+      $formatted_text = '';
+
+      foreach ($paragraphs as $paragraph) {
+        $formatted_text .= '<p>' . $paragraph . '</p>';
+      }
 
       if ($_SESSION['logged_in'] == true && $_SESSION['status'] === 'admin') {
         echo '<button id="handler-tab">edit</button>';
@@ -171,9 +185,7 @@ class Element extends Database
       <h2 id="aboutTitle" class="about-title">' . $about['about_title'] . '</h2>
       <img id="aboutImage" class="about-image" src="../img' . DIRECTORY_SEPARATOR . $about['about_image'] . '">
       </header>
-      <article id="aboutText" class="about-text">
-      <p>' . $about['about_text'] . '</p>
-      </article>
+      <article id="aboutText" class="about-text">' . $formatted_text . '</article>
       </section>
 
       <button id="cvTab">show cv</button>
@@ -193,26 +205,37 @@ class Element extends Database
     $element_id = $_GET['id'];
 
     if ($element === 'articles') {
-      $stmt = $this->run_query('SELECT * FROM articles JOIN authors ON articles.author_id = authors.author_id WHERE article_id = :element_id', ['element_id' => $element_id]);
+      $stmt = $this->run_query('SELECT * FROM articles JOIN authors ON articles.author_id = authors.author_id WHERE articles.article_id = :element_id', ['element_id' => $element_id]);
+      // JOIN article_categories ON articles.article_id = article_categories.article_id
 
       $title = 'article_title';
       $text = 'article_text';
       $date = 'DATETIME';
       $image = 'article_image';
       $author = 'author_id';
+      $categories = "category_names";
     } elseif ($element === 'projects') {
-      $stmt = $this->run_query('SELECT * FROM projects JOIN authors ON projects.author_id = authors.author_id WHERE project_id = :element_id', ['element_id' => $element_id]);
+      $stmt = $this->run_query('SELECT * FROM projects JOIN authors ON projects.author_id = authors.author_id WHERE projects.project_id = :element_id', ['element_id' => $element_id]);
 
       $title = 'project_title';
       $text = 'project_text';
       $date = 'DATETIME';
       $image = 'project_image';
       $author = 'author_id';
+      $categories = "category_names";
     } else {
       return;
     }
 
     $element = $stmt->fetch();
+    $formatted_date = $element[$date];
+    $formatted_date = date('jS F, Y H:i', strtotime($formatted_date));
+    $paragraphs = explode("\n", $element[$text]);
+    $formatted_text = '';
+
+    foreach ($paragraphs as $paragraph) {
+      $formatted_text .= '<p>' . $paragraph . '</p>';
+    }
 
     if(isset($_SESSION['logged_in'])) {
       if ($_SESSION['logged_in'] == true && $element['author_username'] === $_SESSION['user']) {
@@ -224,13 +247,13 @@ class Element extends Database
     '<div id="element-' . $element_id . '" class="focus-element-container">
     <section class="focus-element-header">
     <img id="image-' . $element_id . '" class="focus-element-image" src="../img' . DIRECTORY_SEPARATOR . $element[$image] . '">
+    </section>
     <div class="focus-content-container">
     <h2 id="title-' . $element_id . '" class="focus-element-title">' . $element[$title] . '</h2>
-    <div id="date-' . $element_id . '" class="focus-element-date">on ' . $element[$date] . '</div>
+    <div id="date-' . $element_id . '" class="focus-element-date">on ' . $formatted_date . '</div>
     <div class="focus-element-username">by ' . $element['author_username'] . '</div>
-    <article id="text-' . $element_id . '" class="focus-element-text">' . $element[$text] . '</article>
+    <article id="text-' . $element_id . '" class="focus-element-text">' . $formatted_text . '</article>
     </div>
-    </section>
     </div>';
   }
 }
@@ -284,7 +307,7 @@ class Editor extends Database
       </select>
       <input class="" type="number" name="id" value="' . $element_id . '" placeholder="id: ' . $element_id . '">
       <input class="" type="text" name="title" value="' . $element[$title] . '" placeholder="title: ' . $element[$title] . '">
-      <input class="" type="number" name="author" value="' . $author['author_id'] . '" placeholder="author: ' . $author['author_username'] . '">
+      <input class="" type="number" name="author[]" value="' . $author['author_id'] . '" placeholder="author: ' . $author['author_username'] . '">
       <input class="" type="file" multiple name="images[]" value="' . $element[$image] . '">
       <textarea class="" name="text" cols="50" rows="8" placeholder="">' . $element[$text] . '</textarea>
       <legend>choose action</legend>

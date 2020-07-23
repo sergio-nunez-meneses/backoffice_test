@@ -36,13 +36,23 @@ CREATE TABLE archives(
   archive_text TEXT NOT NULL,
   DATETIME DATETIME NOT NULL,
   archive_image VARCHAR (250) NOT NULL,
-  author_id INT NOT NULL,
+  aricle_id INT NOT NULL,
   PRIMARY KEY (archive_id),
-  FOREIGN KEY (author_id) REFERENCES authors(author_id)
+  FOREIGN KEY (article_id) REFERENCES articles(article_id)
 )charset=utf8;
 
-CREATE TABLE categories(
+CREATE TABLE project_categories(
   category_id INT AUTO_INCREMENT NOT NULL,
-  category_name VARCHAR(150) NOT NULL,
-  PRIMARY KEY (category_id)
+  category_name VARCHAR(250) NOT NULL,
+  project_id INT NOT NULL,
+  PRIMARY KEY (category_id),
+  FOREIGN KEY (project_id) REFERENCES projects(project_id)
+)charset=utf8;
+
+CREATE TABLE article_categories(
+  category_id INT AUTO_INCREMENT NOT NULL,
+  category_name VARCHAR(250) NOT NULL,
+  article_id INT NOT NULL,
+  PRIMARY KEY (category_id),
+  FOREIGN KEY (article_id) REFERENCES articles(article_id)
 )charset=utf8;

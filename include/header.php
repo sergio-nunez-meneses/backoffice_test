@@ -36,7 +36,7 @@ $user = new User();
     </div>
 
     <div id="presentationText" class="presentation-text">
-      <small><em class="nav-text">composer, computer music designer, full stack web development student, and future phd student</em></small>
+      <small><em class="nav-text">composer, computer music designer, web development student, and future phd student</em></small>
     </div>
 
     <nav id="navbarContainer" class="navbar-container">

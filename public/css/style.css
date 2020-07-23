@@ -168,7 +168,7 @@ button {
 .article-container {
   display: flex;
   flex-direction: column;
-  flex-wrap: nowrap;
+  /* flex-wrap: nowrap; */
   margin: 0.5rem 0;
   padding: 0.5rem;
   border: 0.0625rem solid #000;
@@ -185,31 +185,31 @@ button {
 }
 
 /* element caption display */
+.element-box {
+  display: inline-block;
+  box-sizing: content-box;
+  width: 480px;
+  height: 320px;
+  margin: 10px;
+  border: 0.0625rem solid #000;
+  background-color: #fff;
+  color: #fff;
+  position: relative;
+  overflow: hidden;
+}
 .element-image {
-  height: 250px;
-  width: 350px;
+  width: 100%;
+  height: inherit;
   transform: scale(1.0);
   transition: transform 0.4s ease;
 }
-.element-box {
-  box-sizing: content-box;
-  margin: 10px;
-  height: 250px;
-  width: 350px;
-  overflow: hidden;
-  display: inline-block;
-  color: #fff;
-  position: relative;
-  background-color: #fff;
-  border: 0.0625rem solid #000;
-}
 .transparent-box {
-  height: 250px;
-  width: 350px;
-  background-color:rgba(0, 0, 0, 0);
-  position: absolute;
+  width: 100%;
+  height: inherit;
   top: 0;
   left: 0;
+  background-color:rgba(0, 0, 0, 0);
+  position: absolute;
   transition: background-color 0.3s ease;
 }
 .transparent-box > .element-caption {
@@ -246,15 +246,18 @@ button {
 /* single element display */
 .focus-element-container {
   display: flex;
+  /* max-width: 60%; */
+  margin: 0 auto;
 }
 .focus-element-header {
   display: flex;
   flex-basis: 100%;
   flex-grow: 3;
+  justify-content: center;
+  align-content: center;
 }
 .focus-element-image {
   max-width: 100%;
-  width: 100%;
   height: auto;
   padding: 1rem;
 }
