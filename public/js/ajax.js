@@ -25,6 +25,7 @@ function ajaxSuccess() {
       getID('element-' + response['id']).classList.add('hidden');
 
       INFO_TEXT.innerHTML = response['action_message'];
+
     } else if (response['action'] === 'create') {
       let sec = document.createElement('SECTION'),
         btnImgTitleDiv = document.createElement('HEADER'),
@@ -63,6 +64,8 @@ function ajaxSuccess() {
       INFO_TEXT.innerHTML = response['action_message'];
 
       getID('handler-tab').addEventListener('click', displayAjaxForm);
+    } else if (response['action'] === 'archive') {
+      INFO_TEXT.innerHTML = response['action_message'];
     }
   } else if (response['form'] === 'ajax-mail-form') {
     if (response['info'].length > 0) {

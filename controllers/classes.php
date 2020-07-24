@@ -120,7 +120,7 @@ class Element extends Database
 
     if ($element !== 'about') {
       if ($element === 'articles') {
-        $data = $this->run_query('SELECT * FROM articles ORDER BY article_id DESC LIMIT 10');
+        $data = $this->run_query('SELECT * FROM articles WHERE article_archived = 0 ORDER BY article_id DESC LIMIT 10');
 
         $id = 'article_id';
         $title = 'article_title';
@@ -128,14 +128,34 @@ class Element extends Database
         $date = 'DATETIME';
         $image = 'article_image';
         $author = 'author_id';
+      } elseif ($element === 'all-articles') {
+        $data = $this->run_query('SELECT * FROM articles ORDER BY article_id DESC LIMIT 6');
+
+        $element = 'articles';
+        $id = 'article_id';
+        $title = 'article_title';
+        $text = 'article_text';
+        $date = 'DATETIME';
+        $image = 'article_image';
+        $author = 'author_id';
       } elseif ($element === 'projects') {
-        $data = $this->run_query('SELECT * FROM projects ORDER BY project_id DESC LIMIT 10');
+        $data = $this->run_query('SELECT * FROM projects WHERE project_archived = 0 ORDER BY project_id DESC LIMIT 10');
 
         $id = 'project_id';
         $title = 'project_title';
         $text = 'project_text';
         $date = 'DATETIME';
         $image = 'project_image';
+        $author = 'author_id';
+      } elseif ($element === 'all-projects') {
+        $data = $this->run_query('SELECT * FROM projects ORDER BY project_id DESC LIMIT 6');
+
+        $element = 'projects';
+        $id = 'article_id';
+        $title = 'article_title';
+        $text = 'article_text';
+        $date = 'DATETIME';
+        $image = 'article_image';
         $author = 'author_id';
       }
 
@@ -274,6 +294,7 @@ class Editor extends Database
           $text = 'article_text';
           $image = 'article_image';
           $author_id = 'author_id';
+          $archived = 'article_archived';
         } elseif ($element_type === 'projects') {
           $stmt = $this->run_query('SELECT * FROM projects JOIN authors ON projects.author_id = authors.author_id WHERE project_id = :element_id', ['element_id' => $element_id]);
 
@@ -281,6 +302,7 @@ class Editor extends Database
           $text = 'project_text';
           $image = 'project_image';
           $author_id = 'author_id';
+          $archived = 'project_archived';
         }
         $element = $stmt->fetch();
       } else {
@@ -304,8 +326,24 @@ class Editor extends Database
       <legend>element handler</legend>
       <select class="" name="content[]">
       <option value="' . $element_type . '">' . $element_type . '</option>
-      </select>
-      <input class="" type="number" name="id" value="' . $element_id . '" placeholder="id: ' . $element_id . '">
+      </select>';
+
+      if ($element[$archived]) {
+        echo
+        '<select class="" name="archive[]">
+        <option value="' . $element[$archived] . '">archived</option>
+        <option value="' . 0 . '">unarchive</option>
+        </select>';
+      } else {
+        echo
+        '<select class="" name="archive[]">
+        <option value="' . $element[$archived] . '">unarchived</option>
+        <option value="' . 1 . '">archive</option>
+        </select>';
+      }
+
+      echo
+      '<input class="" type="number" name="id" value="' . $element_id . '" placeholder="id: ' . $element_id . '">
       <input class="" type="text" name="title" value="' . $element[$title] . '" placeholder="title: ' . $element[$title] . '">
       <input class="" type="number" name="author[]" value="' . $author['author_id'] . '" placeholder="author: ' . $author['author_username'] . '">
       <input class="" type="file" multiple name="images[]" value="' . $element[$image] . '">

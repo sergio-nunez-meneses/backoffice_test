@@ -66,17 +66,18 @@ function ajax_receiver() {
       $author_id = $author['author_id'];
 
       if ($_POST['action'][0] === 'create') {
+        $element_archived = 0;
         if ($_POST['content'][0] === 'articles') {
-          // move image
           $section = $_POST['content'][0];
 
-          $pdo->prepare('INSERT INTO articles VALUES (:element_id, :element_title, :element_text, :element_date, :element_image, :author_id)')->execute([
+          $pdo->prepare('INSERT INTO articles VALUES (:element_id, :element_title, :element_text, :element_date, :element_image, :author_id, :element_archived)')->execute([
             'element_id' => $element_id,
             'element_title' => $element_title,
             'element_text' => $element_text,
             'element_date' => $element_date,
             'element_image' => $element_image,
-            'author_id' => $author_id
+            'author_id' => $author_id,
+            'element_archived' => $element_archived
           ]);
         } elseif ($_POST['content'][0] === 'projects') {
           // edit project
@@ -87,8 +88,9 @@ function ajax_receiver() {
         $action_message = 'element created <br>';
 
       } elseif ($_POST['action'][0] === 'edit') {
+        $element_archived = $_POST['archive'][0];
+
         if ($_POST['content'][0] === 'about') {
-          // move image
           $section = $_POST['content'][0];
 
           $pdo->prepare('UPDATE about SET about_title = :element_title, about_image = :element_image, about_text = :element_text WHERE about_id = :element_id')->execute([
@@ -98,15 +100,15 @@ function ajax_receiver() {
             'element_id' => $element_id
           ]);
         } elseif ($_POST['content'][0] === 'articles') {
-          // move image
           $section = $_POST['content'][0];
 
-          $pdo->prepare('UPDATE articles SET article_title = :element_title, article_text = :element_text, DATETIME = :element_date, article_image = :element_image, author_id = :author_id WHERE article_id = :element_id')->execute([
+          $pdo->prepare('UPDATE articles SET article_title = :element_title, article_text = :element_text, DATETIME = :element_date, article_image = :element_image, author_id = :author_id, article_archived = :element_archived WHERE article_id = :element_id')->execute([
             'element_title' => $element_title,
             'element_text' => $element_text,
             'element_date' => $element_date,
             'element_image' => $element_image,
             'author_id' => $author_id,
+            'element_archived' => $element_archived,
             'element_id' => $element_id
           ]);
         } elseif ($_POST['content'][0] === 'projects') {
@@ -118,7 +120,31 @@ function ajax_receiver() {
         $action_message = 'element edited <br>';
 
       } elseif ($_POST['action'][0] === 'archive') {
-        // $section = $_POST['content'][0];
+        $element_archived = 1;
+        if ($_POST['content'][0] === 'articles') {
+          $section = $_POST['content'][0];
+
+          $pdo->prepare('UPDATE articles SET article_archived = :element_archived WHERE article_id = :element_id')->execute([
+            'element_archived' => $element_archived,
+            'element_id' => $element_id
+          ]);
+
+          $pdo->prepare('INSERT INTO archives VALUES (NULL, :element_title, :element_text, :element_date, :element_image, :author_id, :element_id)')->execute([
+            'element_title' => $element_title,
+            'element_text' => $element_text,
+            'element_date' => $element_date,
+            'element_image' => $element_image,
+            'author_id' => $author_id,
+            'element_id' => $element_id
+          ]);
+        } elseif ($_POST['content'][0] === 'projects') {
+          $section = $_POST['content'][0];
+          //
+        }
+
+        $action = $_POST['action'][0];
+        $action_message = 'element archived <br>';
+
       } elseif ($_POST['action'][0] === 'delete') {
         if ($_POST['content'][0] === 'articles') {
           $pdo->prepare('DELETE FROM articles WHERE article_id = :element_id')->execute([

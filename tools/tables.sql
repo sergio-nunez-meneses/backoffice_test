@@ -15,6 +15,7 @@ CREATE TABLE projects(
   project_technologies VARCHAR(250) NOT NULL,
   project_image VARCHAR (250) NOT NULL,
   author_id INT NOT NULL,
+  article_archived = BOOLEAN NOT NULL,
 	PRIMARY KEY(project_id),
   FOREIGN KEY (author_id) REFERENCES authors(author_id)
 )charset=utf8;
@@ -26,6 +27,7 @@ CREATE TABLE articles(
   DATETIME DATETIME NOT NULL,
   article_image VARCHAR (250) NOT NULL,
   author_id INT NOT NULL,
+  project_archived = BOOLEAN NOT NULL,
   PRIMARY KEY (article_id),
   FOREIGN KEY (author_id) REFERENCES authors(author_id)
 )charset=utf8;
@@ -44,15 +46,15 @@ CREATE TABLE archives(
 CREATE TABLE project_categories(
   category_id INT AUTO_INCREMENT NOT NULL,
   category_name VARCHAR(250) NOT NULL,
-  project_id INT NOT NULL,
+  -- project_id INT NOT NULL,
   PRIMARY KEY (category_id),
-  FOREIGN KEY (project_id) REFERENCES projects(project_id)
+  -- FOREIGN KEY (project_id) REFERENCES projects(project_id)
 )charset=utf8;
 
 CREATE TABLE article_categories(
   category_id INT AUTO_INCREMENT NOT NULL,
   category_name VARCHAR(250) NOT NULL,
-  article_id INT NOT NULL,
+  -- article_id INT NOT NULL,
   PRIMARY KEY (category_id),
-  FOREIGN KEY (article_id) REFERENCES articles(article_id)
+  -- FOREIGN KEY (article_id) REFERENCES articles(article_id)
 )charset=utf8;
