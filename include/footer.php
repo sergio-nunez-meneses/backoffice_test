@@ -24,5 +24,13 @@
 
     </footer>
 
+    <?php
+    // load ajax or the corresponding script
+    if (isset($_SESSION['logged_in']) || $_SESSION['logged_in'] == true) {
+      echo '<script src="' . ROOT_DIR . '/public/js/autoLogout.js"></script>';
+    }
+    ?>
+
+
   </body>
 </html>

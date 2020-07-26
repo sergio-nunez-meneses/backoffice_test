@@ -121,6 +121,7 @@ function ajax_receiver() {
 
       } elseif ($_POST['action'][0] === 'archive') {
         $element_archived = 1;
+
         if ($_POST['content'][0] === 'articles') {
           $section = $_POST['content'][0];
 

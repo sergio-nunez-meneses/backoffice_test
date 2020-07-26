@@ -86,6 +86,8 @@ class User extends Database
           $_SESSION['logged_in'] = true;
           $_SESSION['user'] = $username;
           $_SESSION['status'] = $status;
+
+
           header('Location:../index.php');
         } else {
           $error_message .= 'password incorrect <br>';
@@ -319,8 +321,9 @@ class Editor extends Database
       $stmt = $this->run_query('SELECT * FROM authors WHERE author_username = :username', ['username' => $username]);
       $author = $stmt->fetch();
 
+      // onsubmit="ajaxSend(this); return false;"
       echo
-      '<form id="ajax-form" class="hidden" action="../controllers/content_editor_receiver.php" method="post" enctype="multipart/form-data"
+      '<form id="ajax-form" class="hidden" name="editor-form" action="../controllers/content_editor_receiver.php" method="POST" enctype="multipart/form-data"
       onsubmit="ajaxSend(this); return false;">
       <fieldset class="ajax-form-container">
       <legend>element handler</legend>
@@ -344,7 +347,7 @@ class Editor extends Database
 
       echo
       '<input class="" type="number" name="id" value="' . $element_id . '" placeholder="id: ' . $element_id . '">
-      <input class="" type="text" name="title" value="' . $element[$title] . '" placeholder="title: ' . $element[$title] . '">
+      <input id="titleElement" class="" type="text" name="title" value="' . $element[$title] . '" placeholder="title: ' . $element[$title] . '">
       <input class="" type="number" name="author[]" value="' . $author['author_id'] . '" placeholder="author: ' . $author['author_username'] . '">
       <input class="" type="file" multiple name="images[]" value="' . $element[$image] . '">
       <textarea class="" name="text" cols="50" rows="8" placeholder="">' . $element[$text] . '</textarea>
@@ -356,18 +359,17 @@ class Editor extends Database
       <option>archive</option>
       <option>delete</option>
       </select>
-      <input id="" class="" type="submit" name="submit" value="submit"/>
+      <input class="" type="submit" name="submit" value="submit"/>
       </fieldset>
       </form>';
     } else {
       // query to get articles and projects' last ids
-
       $username = $_SESSION['user'];
       $stmt = $this->run_query('SELECT * FROM authors WHERE author_username = :username', ['username' => $username]);
       $author = $stmt->fetch();
 
       echo
-      '<form id="ajax-form" class="" action="../controllers/content_editor_receiver.php" method="post" enctype="multipart/form-data"
+      '<form id="ajax-form" class="" action="../controllers/content_editor_receiver.php" method="POST" enctype="multipart/form-data"
       onsubmit="ajaxSend(this); return false;">
       <fieldset class="ajax-form-container">
       <legend>create element</legend>
