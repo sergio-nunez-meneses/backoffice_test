@@ -2,120 +2,120 @@
 
 require_once dirname(dirname(__FILE__)) . '/classes/abstract/db.php';
 
-class User extends Database
-{
-  public function sign_up() {
-    $username = $password = $status = $error_message = '';
-    $error = false;
-
-    if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['sign-up'])) {
-
-      if (empty($_POST['username'])) {
-        $error = true;
-        $error_message .= 'username cannot be empty <br>';
-      } elseif (strlen($_POST['username']) < 6){
-        $error = true;
-        $error_message .= 'username must contain more than 6 characters <br>';
-      } else {
-        $username = filter_var($_POST['username'], FILTER_SANITIZE_STRING);
-      }
-
-      if (empty($_POST['password'])) {
-        $error = true;
-        $error_message .= 'password cannot be empty <br>';
-      } elseif (strlen($_POST['password']) < 7){
-        $error = true;
-        $error_message .= 'password must contain more than 7 characters <br>';
-      } elseif(!preg_match("#[0-9]+#", $_POST['password'])) {
-        $error = true;
-        $error_message .= 'password must contain at least one number! <br>';
-      } elseif(!preg_match("#[a-z]+#", $_POST['password'])) {
-        $error = true;
-        $error_message .= 'password must contain at least one lowercase character! <br>';
-      } elseif(!preg_match("#[A-Z]+#", $_POST['password'])) {
-        $error = true;
-        $error_message .= 'password must contain at least one uppercase character! <br>';
-      } elseif(!preg_match("#\W+#", $_POST['password'])) {
-        $error = true;
-        $error_message .= 'password must contain at least one symbol! <br>';
-      } elseif ($_POST['password'] != $_POST['confirm-password']) {
-        $error = true;
-        $error_message .= 'passwords do not match <br>';
-      } else {
-        $options = [
-          'cost' => 12,
-        ];
-        $password = password_hash($_POST['password'], PASSWORD_BCRYPT, $options);
-      }
-    }
-
-    $status = filter_var($_POST['status'], FILTER_SANITIZE_STRING);
-
-    if (!($error)) {
-      // UserModel -> create_new_user()
-      $this->run_query('INSERT INTO authors (author_status, author_username, author_password) VALUES (:status, :username, :password)', ['status' => $status, 'username' => $username, 'password' => $password]);
-
-      $_SESSION['logged_in'] = true;
-      $_SESSION['user'] = $username;
-      $_SESSION['status'] = $status;
-
-      header('Location:../index.php');
-    } else {
-      header("Location:../templates/login.php?error=yes&error_message=$error_message");
-    }
-  }
-  public function login() {
-    $error_message = '';
-    $error = false;
-
-    if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['sign-in'])) {
-      $username = $_POST['username'];
-      $password = $_POST['password'];
-      // UserModel -> get_user()
-      $stmt = $this->run_query('SELECT * FROM authors WHERE author_username = :username', ['username' => $username]);
-      $user = $stmt->fetch();
-
-      if ($user == false) {
-        $error = true;
-        $error_message .= 'user does not exist <br>';
-      } else {
-        $username = $user['author_username'];
-        $stored_password = $user['author_password'];
-        $status = $user['author_status'];
-
-        if (password_verify($password, $stored_password) && $error !== true) {
-          $_SESSION['logged_in'] = true;
-          $_SESSION['user'] = $username;
-          $_SESSION['status'] = $status;
-
-
-          header('Location:../index.php');
-        } else {
-          $error_message .= 'password incorrect <br>';
-          header("Location:../templates/login.php?error=yes&error_message=$error_message");
-        }
-      }
-    }
-  }
-  public function logout() {
-    if ($_GET['logout'] == 'yes') {
-      session_unset();
-      session_destroy();
-      header('Location:../index.php');
-    }
-  }
-  function is_logged() {
-    if(!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
-      include __ROOT__ . '/include/logout_nav.php';
-    } else {
-      if ($_SESSION['status'] === 'admin') {
-        include __ROOT__ . '/include/admin_login_nav.php';
-      } elseif ($_SESSION['status'] === 'collaborator') {
-        include __ROOT__ . '/include/collaborator_login_nav.php';
-      }
-    }
-  }
-}
+// class User extends Database
+// {
+//   public function sign_up() {
+//     $username = $password = $status = $error_message = '';
+//     $error = false;
+//
+//     if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['sign-up'])) {
+//
+//       if (empty($_POST['username'])) {
+//         $error = true;
+//         $error_message .= 'username cannot be empty <br>';
+//       } elseif (strlen($_POST['username']) < 6){
+//         $error = true;
+//         $error_message .= 'username must contain more than 6 characters <br>';
+//       } else {
+//         $username = filter_var($_POST['username'], FILTER_SANITIZE_STRING);
+//       }
+//
+//       if (empty($_POST['password'])) {
+//         $error = true;
+//         $error_message .= 'password cannot be empty <br>';
+//       } elseif (strlen($_POST['password']) < 7){
+//         $error = true;
+//         $error_message .= 'password must contain more than 7 characters <br>';
+//       } elseif(!preg_match("#[0-9]+#", $_POST['password'])) {
+//         $error = true;
+//         $error_message .= 'password must contain at least one number! <br>';
+//       } elseif(!preg_match("#[a-z]+#", $_POST['password'])) {
+//         $error = true;
+//         $error_message .= 'password must contain at least one lowercase character! <br>';
+//       } elseif(!preg_match("#[A-Z]+#", $_POST['password'])) {
+//         $error = true;
+//         $error_message .= 'password must contain at least one uppercase character! <br>';
+//       } elseif(!preg_match("#\W+#", $_POST['password'])) {
+//         $error = true;
+//         $error_message .= 'password must contain at least one symbol! <br>';
+//       } elseif ($_POST['password'] != $_POST['confirm-password']) {
+//         $error = true;
+//         $error_message .= 'passwords do not match <br>';
+//       } else {
+//         $options = [
+//           'cost' => 12,
+//         ];
+//         $password = password_hash($_POST['password'], PASSWORD_BCRYPT, $options);
+//       }
+//     }
+//
+//     $status = filter_var($_POST['status'], FILTER_SANITIZE_STRING);
+//
+//     if (!($error)) {
+//       // UserModel -> create_new_user()
+//       $this->run_query('INSERT INTO authors (author_status, author_username, author_password) VALUES (:status, :username, :password)', ['status' => $status, 'username' => $username, 'password' => $password]);
+//
+//       $_SESSION['logged_in'] = true;
+//       $_SESSION['user'] = $username;
+//       $_SESSION['status'] = $status;
+//
+//       header('Location:../index.php');
+//     } else {
+//       header("Location:../templates/login.php?error=yes&error_message=$error_message");
+//     }
+//   }
+//   public function login() {
+//     $error_message = '';
+//     $error = false;
+//
+//     if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['sign-in'])) {
+//       $username = $_POST['username'];
+//       $password = $_POST['password'];
+//       // UserModel -> get_user()
+//       $stmt = $this->run_query('SELECT * FROM authors WHERE author_username = :username', ['username' => $username]);
+//       $user = $stmt->fetch();
+//
+//       if ($user == false) {
+//         $error = true;
+//         $error_message .= 'user does not exist <br>';
+//       } else {
+//         $username = $user['author_username'];
+//         $stored_password = $user['author_password'];
+//         $status = $user['author_status'];
+//
+//         if (password_verify($password, $stored_password) && $error !== true) {
+//           $_SESSION['logged_in'] = true;
+//           $_SESSION['user'] = $username;
+//           $_SESSION['status'] = $status;
+//
+//
+//           header('Location:../index.php');
+//         } else {
+//           $error_message .= 'password incorrect <br>';
+//           header("Location:../templates/login.php?error=yes&error_message=$error_message");
+//         }
+//       }
+//     }
+//   }
+//   public function logout() {
+//     if ($_GET['logout'] == 'yes') {
+//       session_unset();
+//       session_destroy();
+//       header('Location:../index.php');
+//     }
+//   }
+//   function is_logged() {
+//     if(!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
+//       include __ROOT__ . '/include/logout_nav.php';
+//     } else {
+//       if ($_SESSION['status'] === 'admin') {
+//         include __ROOT__ . '/include/admin_login_nav.php';
+//       } elseif ($_SESSION['status'] === 'collaborator') {
+//         include __ROOT__ . '/include/collaborator_login_nav.php';
+//       }
+//     }
+//   }
+// }
 
 class Element extends Database
 {

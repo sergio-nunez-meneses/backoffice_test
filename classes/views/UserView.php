@@ -2,6 +2,7 @@
 
 class UserView extends Database
 {
+
   public function login_view()
   {
     if (isset($_GET['error']) && ($_GET['error'] === 'yes'))
@@ -38,5 +39,3 @@ class UserView extends Database
     <?php
   }
 }
-
-(new UserView())->login_view();

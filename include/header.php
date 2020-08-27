@@ -1,4 +1,5 @@
 <?php
+ob_start();
 session_start();
 define('ABS_PATH', dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR);
 define('REL_PATH', DIRECTORY_SEPARATOR . basename(ABS_PATH) . DIRECTORY_SEPARATOR);

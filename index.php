@@ -13,17 +13,19 @@ include 'include/header.php';
     $page = $_GET['page'];
 
     if ($page === 'login') {
-      require_once ABS_PATH . '/classes/models/UserModel.php';
-      require_once ABS_PATH . '/classes/controllers/UserController.php';
-      require_once ABS_PATH . '/classes/views/UserView.php';
+      (new UserView())->login_view();
       ?>
       <script src="public/js/login.js"></script>
       <?php
     } elseif ($page === 'about') {
-      // code...
+      // code
+    } elseif ($page === 'article') {
+      (new ArticleController())->display_single_article();
+    } elseif ($page === 'project') {
+      // code
     }
   } else {
-    require_once ABS_PATH . '/classes/views/HomeView.php';
+    (new HomeView())->home_view();
     ?>
     <script src="public/js/index.js"></script>
     <?php

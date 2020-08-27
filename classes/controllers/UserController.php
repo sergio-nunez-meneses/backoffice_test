@@ -2,6 +2,7 @@
 
 class UserController extends Database
 {
+
   public function sign_up()
   {
     $error = false;
@@ -106,7 +107,7 @@ class UserController extends Database
     }
   }
 
-  function is_logged()
+  public function is_logged()
   {
     if(!isset($_SESSION['logged_in']) || ($_SESSION['logged_in'] !== true)) {
       include __ROOT__ . '/include/logout_nav.php';
@@ -126,6 +127,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['sign-up']))
 } elseif ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['sign-in']))
 {
   (new UserController())->sign_in();
-} elseif (isset($_GET['logout']) && ($_GET['logout'] == 'yes')) {
+} elseif ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['logout']) && ($_GET['logout'] === 'yes')) {
   (new UserController())->sign_out();
 }
