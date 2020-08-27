@@ -4,11 +4,12 @@ session_start();
 define('__ROOT__', dirname(dirname(__FILE__)));
 define('ROOT_DIR', '/' . basename(__ROOT__));
 require_once __ROOT__ . '/controllers/functions.php';
+require_once __ROOT__ . '/classes/abstract/db.php';
 require_once __ROOT__ . '/controllers/classes.php';
+require_once __ROOT__ . '/classes/controllers/UserController.php';
 
-error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING);
-
-$user = new User();
+$user = new UserController();
+echo base_url();
 ?>
 
 <!DOCTYPE html>
@@ -16,6 +17,7 @@ $user = new User();
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <base href="<?php echo base_url(); ?>">
   <link rel="stylesheet" href=" <?php echo ROOT_DIR . '/public/css/normalize.css'; ?> ">
   <link rel="stylesheet" href=" <?php echo ROOT_DIR . '/public/css/style.css'; ?> ">
   <script src="https://use.fontawesome.com/275ae55494.js"></script>
@@ -61,5 +63,7 @@ $user = new User();
     </nav>
 
   </header>
+
+  <main>
 
   <script src=" <?php echo ROOT_DIR . '/public/js/header.js'; ?> "></script>

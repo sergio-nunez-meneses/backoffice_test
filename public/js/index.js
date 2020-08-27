@@ -38,4 +38,4 @@ function displayAll() {
 }
 
 ELEMENTS_TAB.addEventListener('click', displayElements);
-ALL_ELEMENTS_TAB.addEventListener('click', displayAll);
+if (ALL_ELEMENTS_TAB !== null) ALL_ELEMENTS_TAB.addEventListener('click', displayAll);

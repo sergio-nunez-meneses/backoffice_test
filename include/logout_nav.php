@@ -1,4 +1,4 @@
-<a href=" <?php echo ROOT_DIR . '/templates/login.php' ?> ">
+<a href="index.php?page=login">
   <i class="fa fa-sign-in" aria-hidden="true"></i>
   <span class="nav-item">sign in</span>
 </a>

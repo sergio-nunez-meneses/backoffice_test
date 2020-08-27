@@ -1,6 +1,6 @@
 <?php
 
-require_once dirname(dirname(__FILE__)) . '/controllers/class_db.php';
+require_once dirname(dirname(__FILE__)) . '/classes/abstract/db.php';
 
 class User extends Database
 {
@@ -52,6 +52,7 @@ class User extends Database
     $status = filter_var($_POST['status'], FILTER_SANITIZE_STRING);
 
     if (!($error)) {
+      // UserModel -> create_new_user()
       $this->run_query('INSERT INTO authors (author_status, author_username, author_password) VALUES (:status, :username, :password)', ['status' => $status, 'username' => $username, 'password' => $password]);
 
       $_SESSION['logged_in'] = true;
@@ -70,7 +71,7 @@ class User extends Database
     if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['sign-in'])) {
       $username = $_POST['username'];
       $password = $_POST['password'];
-
+      // UserModel -> get_user()
       $stmt = $this->run_query('SELECT * FROM authors WHERE author_username = :username', ['username' => $username]);
       $user = $stmt->fetch();
 
@@ -170,7 +171,7 @@ class Element extends Database
 
         echo
         '<section class="element-box">
-        <img class="element-image" src="' . 'img' . DIRECTORY_SEPARATOR . $row[$image] . '">
+        <img class="element-image" src="' . 'public/img/' . $row[$image] . '">
         <div class="transparent-box">
         <article class="element-caption">
         <header>
@@ -205,7 +206,7 @@ class Element extends Database
       '<section class="about-container">
       <header class="about-header">
       <h2 id="aboutTitle" class="about-title">' . $about['about_title'] . '</h2>
-      <img id="aboutImage" class="about-image" src="../img' . DIRECTORY_SEPARATOR . $about['about_image'] . '">
+      <img id="aboutImage" class="about-image" src="../public/img' . DIRECTORY_SEPARATOR . $about['about_image'] . '">
       </header>
       <article id="aboutText" class="about-text">' . $formatted_text . '</article>
       </section>
@@ -323,43 +324,42 @@ class Editor extends Database
 
       // onsubmit="ajaxSend(this); return false;"
       echo
-      '<form id="ajax-form" class="hidden" name="editor-form" action="../controllers/content_editor_receiver.php" method="POST" enctype="multipart/form-data"
-      onsubmit="ajaxSend(this); return false;">
+      '<form id="ajax-form" class="hidden" name="editor-form" action="../controllers/content_editor_receiver.php" method="POST" enctype="multipart/form-data" onsubmit="ajaxSend(this); return false;">
       <fieldset class="ajax-form-container">
       <legend>element handler</legend>
-      <select class="" name="content[]">
+      <select id="elementContent" class="" name="content[]">
       <option value="' . $element_type . '">' . $element_type . '</option>
       </select>';
 
       if ($element[$archived]) {
         echo
-        '<select class="" name="archive[]">
+        '<select id="elementArchive" class="" name="archive[]">
         <option value="' . $element[$archived] . '">archived</option>
         <option value="' . 0 . '">unarchive</option>
         </select>';
       } else {
         echo
-        '<select class="" name="archive[]">
+        '<select id="elementArchive" class="" name="archive[]">
         <option value="' . $element[$archived] . '">unarchived</option>
         <option value="' . 1 . '">archive</option>
         </select>';
       }
 
       echo
-      '<input class="" type="number" name="id" value="' . $element_id . '" placeholder="id: ' . $element_id . '">
+      '<input id="elementId" class="" type="number" name="id" value="' . $element_id . '" placeholder="id: ' . $element_id . '">
       <input id="titleElement" class="" type="text" name="title" value="' . $element[$title] . '" placeholder="title: ' . $element[$title] . '">
-      <input class="" type="number" name="author[]" value="' . $author['author_id'] . '" placeholder="author: ' . $author['author_username'] . '">
-      <input class="" type="file" multiple name="images[]" value="' . $element[$image] . '">
-      <textarea class="" name="text" cols="50" rows="8" placeholder="">' . $element[$text] . '</textarea>
+      <input id="elementAuthor" class="" type="number" name="author[]" value="' . $author['author_id'] . '" placeholder="author: ' . $author['author_username'] . '">
+      <input id="elementImage" class="" type="file" multiple name="images[]" value="' . $element[$image] . '">
+      <textarea id="elementText" class="" name="text" cols="50" rows="8" placeholder="">' . $element[$text] . '</textarea>
       <legend>choose action</legend>
-      <select class="" name="action[]">
+      <select id="elementAction" class="" name="action[]">
       <option></option>
       <option>create</option>
       <option>edit</option>
       <option>archive</option>
       <option>delete</option>
       </select>
-      <input class="" type="submit" name="submit" value="submit"/>
+      <button id="elementSubmit" class="" type="submit" name="button">submit</button>
       </fieldset>
       </form>';
     } else {
@@ -369,8 +369,7 @@ class Editor extends Database
       $author = $stmt->fetch();
 
       echo
-      '<form id="ajax-form" class="" action="../controllers/content_editor_receiver.php" method="POST" enctype="multipart/form-data"
-      onsubmit="ajaxSend(this); return false;">
+      '<form id="ajax-form" class="" action="../controllers/content_editor_receiver.php" method="POST" enctype="multipart/form-data" onsubmit="ajaxSend(this); return false;">
       <fieldset class="ajax-form-container">
       <legend>create element</legend>
       <select class="" name="content[]">
@@ -391,7 +390,7 @@ class Editor extends Database
       <option>archive</option>
       <option>delete</option>
       </select>
-      <input id="" class="" type="submit" name="submit" value="submit"/>
+      <button id="elementSubmit" class="" type="submit" name="button">submit</button>
       </fieldset>
       </form>';
     }

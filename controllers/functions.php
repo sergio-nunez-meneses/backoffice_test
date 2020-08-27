@@ -1,5 +1,12 @@
 <?php
 
+function base_url() {
+  $protocol = empty($_SERVER['HTTPS']) ? 'http' : 'https';
+  $domain = $_SERVER['SERVER_NAME'];
+  $url = "${protocol}://${domain}/" . basename(dirname($_SERVER['SCRIPT_FILENAME'])) . '/';
+  return $url;
+}
+
 function connection() {
   require dirname(dirname(__FILE__))  . '/controllers/database.php';
 
@@ -242,5 +249,3 @@ function send_mail() {
   ];
   echo json_encode($array);
 }
-
-?>

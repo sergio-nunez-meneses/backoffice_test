@@ -1,4 +1,6 @@
-const HANDLER_TAB = getID('handler-tab'),
+const FORM = getID('ajax-form'),
+  // SUBMIT_BUTTON = getID('elementSubmit'),
+  HANDLER_TAB = getID('handler-tab'),
   INFO_TEXT = getID('ajaxResponse');
 
 function ajaxSuccess() {
@@ -107,6 +109,72 @@ function ajaxSend(oFormElement) {
   }
 }
 
+function validateForm() {
+  let content = getID('elementContent'),
+    archive = getID('elementArchive'),
+    id = getID('elementId'),
+    title = getID('elementTitle'),
+    author = getID('elementAuthor'),
+    image = getID('elementImage'),
+    action = getID('elementAction'),
+    errors = 0,
+    errorMessage = '';
+
+  if(content.value == "") {
+    error++;
+    errorMessage += 'content cannot be empty <br>';
+  }
+
+  if(archive.value == "") {
+    error++;
+    errorMessage += 'archive cannot be empty <br>';
+  }
+
+  if(id.value == "") {
+    error++;
+    errorMessage += 'id cannot be empty <br>';
+  }
+
+  if(title.value == "") {
+    error++;
+    errorMessage += 'title cannot be empty <br>';
+  } else if (title.length < 5) {
+    errors++;
+    errorMessage += 'title must contain more than 5 characters <br>';
+  }
+
+  if(author.value == "") {
+    error++;
+    errorMessage += 'author cannot be empty <br>';
+  }
+
+  if(text.value == "") {
+    error++;
+    errorMessage += 'text cannot be empty <br>';
+  } else if (text.length < 50) {
+    errors++;
+    errorMessage += 'text must contain more than 10 characters <br>';
+  }
+
+  if(action.value == "") {
+    error++;
+    errorMessage += 'action cannot be empty <br>';
+  }
+  if (action.value == 'delete') {
+    let answer = confirm('do you really want to hurt me?');
+    if (answer == false) {
+      return false;
+    }
+  }
+
+  if (errors == 0) {
+    FORM.submit();
+  } else {
+    alert(errorMessage);
+    return false;
+  }
+}
+
 function displayAjaxForm() {
   if (getID('ajax-form').classList.contains('hidden')) {
     getID('ajax-form').classList.remove('hidden');
@@ -131,3 +199,5 @@ function changeContactForm() {
 
 if (HANDLER_TAB !== null) HANDLER_TAB.addEventListener('click', displayAjaxForm);
 if (getID('mail-tab') !== null) getID('mail-tab').addEventListener('click', changeContactForm);
+
+// SUBMIT_BUTTON.addEventListener('click', validateForm);
