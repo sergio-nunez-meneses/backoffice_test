@@ -9,7 +9,7 @@ include 'include/header.php';
     echo $_GET['error_message'];
   }
 
-  if (isset($_GET['page'])) {
+  if (($_SERVER['REQUEST_METHOD'] == 'GET') && isset($_GET['page'])) {
     $page = $_GET['page'];
 
     if ($page === 'login') {
@@ -21,8 +21,16 @@ include 'include/header.php';
       // code
     } elseif ($page === 'article') {
       (new ArticleController())->display_single_article();
+      ?>
+      <script src="public/js/ajax.js"></script>
+      <?php
     } elseif ($page === 'project') {
       // code
+    } elseif ($page === 'create') {
+      (new EditorController())->create_content();
+      ?>
+      <script src="public/js/ajax.js"></script>
+      <?php
     }
   } else {
     (new HomeView())->home_view();

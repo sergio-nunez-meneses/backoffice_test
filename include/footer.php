@@ -23,16 +23,14 @@
     <div class="footer-text">
       <small class="">Site developed by Sergio Nuñez Meneses 2020</small>
     </div>
-
   </footer>
 
   <?php
   if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] == true) {
     ?>
-    <script src="' . ABS_PATH . '/public/js/autoLogout.js"></script>
+    <script src="public/js/autoLogout.js"></script>
     <?php
   }
   ?>
-
   </body>
 </html>

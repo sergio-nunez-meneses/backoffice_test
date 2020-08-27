@@ -1,4 +1,4 @@
-<a href="index.php?page=user" class="">
+<a href="index.php?page=user&username=<?php echo $_SESSION['user']; ?>" class="">
   <i class="fa fa-user-circle-o" aria-hidden="true"></i>
   <span class="nav-item"> <?php echo $_SESSION['user']; ?> </span>
 </a>

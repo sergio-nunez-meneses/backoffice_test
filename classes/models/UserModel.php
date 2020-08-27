@@ -17,6 +17,13 @@ class UserModel extends Database
     return $user;
   }
 
+  public function get_user_id($username)
+  {
+    $stmt = $this->run_query('SELECT author_id FROM authors WHERE author_username = :username', ['username' => $username]);
+    $user_id = $stmt->fetch();
+    return $user_id['author_id'];
+  }
+
   public function get_username($id)
   {
     $stmt = $this->run_query('SELECT author_username FROM authors WHERE author_id = :id', ['id' => $id]);

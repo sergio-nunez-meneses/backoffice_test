@@ -141,7 +141,8 @@ class Element extends Database
         $date = 'DATETIME';
         $image = 'article_image';
         $author = 'author_id';
-      } elseif ($element === 'projects') {
+      } else
+      if ($element === 'projects') {
         $data = $this->run_query('SELECT * FROM projects WHERE project_archived = 0 ORDER BY project_id DESC LIMIT 10');
 
         $id = 'project_id';
@@ -237,7 +238,8 @@ class Element extends Database
       $image = 'article_image';
       $author = 'author_id';
       $categories = "category_names";
-    } elseif ($element === 'projects') {
+    } else
+    if ($element === 'projects') {
       $stmt = $this->run_query('SELECT * FROM projects JOIN authors ON projects.author_id = authors.author_id WHERE projects.project_id = :element_id', ['element_id' => $element_id]);
 
       $title = 'project_title';

@@ -11,38 +11,49 @@ class UserController extends Database
     if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['sign-up']))
     {
 
-      if (empty($_POST['username'])) {
+      if (empty($_POST['username']))
+      {
         $error = true;
         $error_msg .= '<p>username cannot be empty</p>';
-      } elseif (strlen($_POST['username']) < 6) {
+      } elseif (strlen($_POST['username']) < 6)
+      {
         $error = true;
         $error_msg .= '<p>username must contain more than 6 characters</p>';
-      } else {
+      } else
+      {
         $username = filter_var($_POST['username'], FILTER_SANITIZE_STRING);
       }
 
-      if (empty($_POST['password'])) {
+      if (empty($_POST['password']))
+      {
         $error = true;
         $error_msg .= '<p>password cannot be empty</p>';
-      } elseif (strlen($_POST['password']) < 7) {
+      } elseif (strlen($_POST['password']) < 7)
+      {
         $error = true;
         $error_msg .= '<p>password must contain more than 7 characters</p>';
-      } elseif(!preg_match("#[0-9]+#", $_POST['password'])) {
+      } elseif(!preg_match("#[0-9]+#", $_POST['password']))
+      {
         $error = true;
         $error_msg .= '<p>password must contain at least one number!</p>';
-      } elseif(!preg_match("#[a-z]+#", $_POST['password'])) {
+      } elseif(!preg_match("#[a-z]+#", $_POST['password']))
+      {
         $error = true;
         $error_msg .= '<p>password must contain at least one lowercase character!</p>';
-      } elseif(!preg_match("#[A-Z]+#", $_POST['password'])) {
+      } elseif(!preg_match("#[A-Z]+#", $_POST['password']))
+      {
         $error = true;
         $error_msg .= '<p>password must contain at least one uppercase character!</p>';
-      } elseif(!preg_match("#\W+#", $_POST['password'])) {
+      } elseif(!preg_match("#\W+#", $_POST['password']))
+      {
         $error = true;
         $error_msg .= '<p>password must contain at least one symbol!</p>';
-      } elseif ($_POST['password'] !== $_POST['confirm-password']) {
+      } elseif ($_POST['password'] !== $_POST['confirm-password'])
+      {
         $error = true;
         $error_msg .= '<p>passwords do not match</p>';
-      } else {
+      } else
+      {
         $options = [
           'cost' => 12,
         ];
@@ -51,7 +62,8 @@ class UserController extends Database
       $status = filter_var($_POST['status'], FILTER_SANITIZE_STRING);
     }
 
-    if (!$error) {
+    if (!$error)
+    {
       (new UserModel())->create_new_user($status, $username, $password);
 
       $_SESSION['user'] = $username;
@@ -59,7 +71,8 @@ class UserController extends Database
       $_SESSION['logged_in'] = true;
 
       header('Location:index.php');
-    } else {
+    } else
+    {
       header("Location:index.php?error=yes&error_message=$error_msg");
     }
   }
@@ -75,22 +88,26 @@ class UserController extends Database
 
       $user = (new UserModel())->get_user($username);
 
-      if ($user == false) {
+      if ($user == false)
+      {
         $error = true;
         $error_msg .= '<p>user does not exist</p>';
-      } else {
+      } else
+      {
         $username = $user['author_username'];
         $stored_password = $user['author_password'];
         $status = $user['author_status'];
 
-        if (password_verify($password, $stored_password) && $error !== true) {
+        if (password_verify($password, $stored_password) && $error !== true)
+        {
           $_SESSION['user'] = $username;
           $_SESSION['status'] = $status;
           $_SESSION['logged_in'] = true;
 
           header('Location:index.php');
           ob_end_flush();
-        } else {
+        } else
+        {
           $error_msg .= '<p>password incorrect</p>';
           header("Location:index.php?error=yes&error_message=$error_msg");
         }
@@ -100,7 +117,8 @@ class UserController extends Database
 
   public function sign_out()
   {
-    if ($_GET['logout'] == 'yes') {
+    if ($_GET['logout'] == 'yes')
+    {
       session_unset();
       session_destroy();
       header('Location:index.php');
@@ -109,12 +127,16 @@ class UserController extends Database
 
   public function is_logged()
   {
-    if(!isset($_SESSION['logged_in']) || ($_SESSION['logged_in'] !== true)) {
+    if (!isset($_SESSION['logged_in']) || ($_SESSION['logged_in'] !== true))
+    {
       include __ROOT__ . '/include/logout_nav.php';
-    } else {
-      if ($_SESSION['status'] === 'admin') {
+    } else
+    {
+      if ($_SESSION['status'] === 'admin')
+      {
         include __ROOT__ . '/include/admin_login_nav.php';
-      } elseif ($_SESSION['status'] === 'collaborator') {
+      } elseif ($_SESSION['status'] === 'collaborator')
+      {
         include __ROOT__ . '/include/collaborator_login_nav.php';
       }
     }
@@ -127,6 +149,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['sign-up']))
 } elseif ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['sign-in']))
 {
   (new UserController())->sign_in();
-} elseif ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['logout']) && ($_GET['logout'] === 'yes')) {
+} elseif ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['logout']) && ($_GET['logout'] === 'yes'))
+{
   (new UserController())->sign_out();
 }
