@@ -53,16 +53,17 @@ class UserController extends Database
     if (!$error) {
       (new UserModel())->create_new_user($status, $username, $password);
 
-      $_SESSION['logged_in'] = true;
       $_SESSION['user'] = $username;
+      $_SESSION['status'] = $status;
+      $_SESSION['logged_in'] = true;
 
-      header('Location:../index.php');
+      header('Location:index.php');
     } else {
-      header("Location:../templates/login.php?error=yes&error_message=$error_msg");
+      header("Location:index.php?error=yes&error_message=$error_msg");
     }
   }
 
-  public function login()
+  public function sign_in()
   {
     $error = false;
     $username = $password = $error_msg = '';
@@ -79,27 +80,29 @@ class UserController extends Database
       } else {
         $username = $user['author_username'];
         $stored_password = $user['author_password'];
+        $status = $user['author_status'];
 
         if (password_verify($password, $stored_password) && $error !== true) {
-          $_SESSION['logged_in'] = true;
           $_SESSION['user'] = $username;
+          $_SESSION['status'] = $status;
+          $_SESSION['logged_in'] = true;
 
-          header('Location:../index.php');
+          header('Location:index.php');
           ob_end_flush();
         } else {
           $error_msg .= '<p>password incorrect</p>';
-          header("Location:../templates/login.php?error=yes&error_message=$error_msg");
+          header("Location:index.php?error=yes&error_message=$error_msg");
         }
       }
     }
   }
 
-  public function logout()
+  public function sign_out()
   {
     if ($_GET['logout'] == 'yes') {
       session_unset();
       session_destroy();
-      header('Location:../index.php');
+      header('Location:index.php');
     }
   }
 
@@ -115,4 +118,14 @@ class UserController extends Database
       }
     }
   }
+}
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['sign-up']))
+{
+  (new UserController())->sign_up();
+} elseif ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['sign-in']))
+{
+  (new UserController())->sign_in();
+} elseif (isset($_GET['logout']) && ($_GET['logout'] == 'yes')) {
+  (new UserController())->sign_out();
 }

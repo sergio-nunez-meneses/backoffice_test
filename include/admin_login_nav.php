@@ -6,7 +6,7 @@
   <i class="fa fa-plus-circle" aria-hidden="true"></i>
   <span class="nav-item">create</span>
 </a>
-<a href=" <?php echo ROOT_DIR . '/controllers/logout.php?logout=yes'; ?> " class="">
+<a href="index.php?logout=yes" class="">
   <i class="fa fa-sign-out" aria-hidden="true"></i>
   <span class="nav-item">logout</span>
 </a>

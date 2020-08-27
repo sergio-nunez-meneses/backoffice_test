@@ -1,13 +1,13 @@
-let timer = setInterval(autoLogout, 100000);
+let timer = setInterval(autoLogout, 10000);
 
 function resetTimer() {
   clearInterval(timer);
-  timer = setInterval(autoLogout, 100000);
+  timer = setInterval(autoLogout, 10000);
 }
 
 function autoLogout() {
   if(confirm('wanna logout ? press OK to keep logged in')) {
-    window.location='controllers/logout.php?logout=yes';
+    window.location='index.php?logout=yes';
   }
 }
 

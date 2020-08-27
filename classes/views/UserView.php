@@ -12,7 +12,7 @@ class UserView extends Database
     <div class="login-container">
       <button id="sign-in-tab" class="">Sign in</button>
       <!-- SIGN IN -->
-      <form id="sign-in-form" class="" method="post" action="login.php">
+      <form id="sign-in-form" class="" method="post" action=".">
         <fieldset class="sign-in-container">
         <legend>Sign in</legend>
         <input class="" type="text" name="username" value="" placeholder="username" required>
@@ -21,7 +21,7 @@ class UserView extends Database
         </fieldset>
       </form>
       <!-- SIGN UP -->
-      <form id="sign-up-form" class="hidden" method="post" action="../controllers/validate.php">
+      <form id="sign-up-form" class="hidden" method="post" action=".">
         <fieldset class="sign-up-container">
         <legend>Sign up</legend>
         <input class="" type="text" name="username" placeholder="username" required>

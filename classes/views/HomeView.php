@@ -2,8 +2,6 @@
 
 class HomeView extends Database
 {
-  public $title;
-
   public function home_view()
   {
     ?>

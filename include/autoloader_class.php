@@ -2,30 +2,26 @@
 
 class ClassAutoloader
 {
-
   public function __construct() {
     spl_autoload_register(array($this, 'loader'));
   }
 
   public function loader($class_name) {
     $full_path = $root_folder = $parent_folder = $file_extension = '';
-    $class_name = strtolower($class_name);
-    $file_name = $class_name . 's';
 
-    if ($class_name === 'db') {
+    if ($class_name === 'Database') {
       $parent_folder = 'abstract/';
-      $file_name = $class_name;
-    } elseif ($class_name === 'controller') {
+    } elseif (substr($class_name, -10) === 'Controller') {
       $parent_folder = 'controllers/';
-    } elseif ($class_name === 'model') {
+    } elseif (substr($class_name, -5) === 'Model') {
       $parent_folder = 'models/';
-    } elseif ($class_name === 'view') {
+    } elseif (substr($class_name, -4) === 'View') {
       $parent_folder = 'views/';
     }
 
     $root_folder = 'classes/';
     $file_extension = '.php';
-    $full_path = $root_folder . $parent_folder . $file_name . $file_extension;
+    $full_path = $root_folder . $parent_folder . $class_name . $file_extension;
 
     require_once $full_path;
   }
