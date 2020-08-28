@@ -3,7 +3,6 @@ ob_start();
 session_start();
 define('ABS_PATH', dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR);
 define('REL_PATH', DIRECTORY_SEPARATOR . basename(ABS_PATH) . DIRECTORY_SEPARATOR);
-define('__ROOT__', dirname(dirname(__FILE__)));
 require_once ABS_PATH . '/include/autoloader_class.php';
 require_once ABS_PATH . '/controllers/functions.php';
 require_once ABS_PATH . '/controllers/classes.php';
@@ -18,7 +17,7 @@ require_once ABS_PATH . '/controllers/classes.php';
   <link rel="stylesheet" href=" <?php echo REL_PATH . 'public/css/normalize.css'; ?> ">
   <link rel="stylesheet" href=" <?php echo REL_PATH . 'public/css/style.css'; ?> ">
   <script src="https://use.fontawesome.com/275ae55494.js"></script>
-  <script src=" <?php echo REL_PATH . '/public/js/functions.js'; ?> "></script>
+  <script src=" <?php echo REL_PATH . 'public/js/functions.js'; ?> "></script>
   <title> <?php echo $title; ?> </title>
 </head>
 
@@ -44,11 +43,11 @@ require_once ABS_PATH . '/controllers/classes.php';
           <i class="fa fa-home" aria-hidden="true"></i>
           <span class="nav-item">home</span>
         </a>
-        <a href=" <?php echo REL_PATH . 'templates/about.php?id=1&element=about'; ?> ">
+        <a href=" <?php echo REL_PATH . 'index.php?id=1&element=about'; ?> ">
           <i class="fa fa-info" aria-hidden="true"></i>
           <span class="nav-item">about</span>
         </a>
-        <a href=" <?php echo REL_PATH . 'templates/contact.php'; ?> " class="">
+        <a href=" <?php echo REL_PATH . 'index.php?page=contact'; ?> " class="">
           <i class="fa fa-envelope" aria-hidden="true"></i>
           <span class="nav-item">contact</span>
         </a>

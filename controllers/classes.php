@@ -283,120 +283,118 @@ class Element extends Database
   }
 }
 
-class Editor extends Database
-{
-  public function content_handler() {
-    $element = '';
-    $element_type = $_GET['element'];
-    $element_id = $_GET['id'];
-
-    if (basename($_SERVER['SCRIPT_FILENAME']) !== 'create_element.php') {
-      if ($element_type !== 'about') {
-        if ($element_type === 'articles') {
-          $stmt = $this->run_query('SELECT * FROM articles JOIN authors ON articles.author_id = authors.author_id WHERE article_id = :element_id', ['element_id' => $element_id]);
-
-          $title = 'article_title';
-          $text = 'article_text';
-          $image = 'article_image';
-          $author_id = 'author_id';
-          $archived = 'article_archived';
-        } elseif ($element_type === 'projects') {
-          $stmt = $this->run_query('SELECT * FROM projects JOIN authors ON projects.author_id = authors.author_id WHERE project_id = :element_id', ['element_id' => $element_id]);
-
-          $title = 'project_title';
-          $text = 'project_text';
-          $image = 'project_image';
-          $author_id = 'author_id';
-          $archived = 'project_archived';
-        }
-        $element = $stmt->fetch();
-      } else {
-        $stmt = $this->run_query('SELECT * FROM about WHERE about_id = :element_id', ['element_id' => $element_id]);
-        $element = $stmt->fetch();
-
-        $title = 'about_title';
-        $text = 'about_text';
-        $image = 'about_image';
-        $author_id = '1';
-      }
-
-      $username = $_SESSION['user'];
-      $stmt = $this->run_query('SELECT * FROM authors WHERE author_username = :username', ['username' => $username]);
-      $author = $stmt->fetch();
-
-      // onsubmit="ajaxSend(this); return false;"
-      echo
-      '<form id="ajax-form" class="hidden" name="editor-form" action="../controllers/content_editor_receiver.php" method="POST" enctype="multipart/form-data" onsubmit="ajaxSend(this); return false;">
-      <fieldset class="ajax-form-container">
-      <legend>element handler</legend>
-      <select id="elementContent" class="" name="content[]">
-      <option value="' . $element_type . '">' . $element_type . '</option>
-      </select>';
-
-      if ($element[$archived]) {
-        echo
-        '<select id="elementArchive" class="" name="archive[]">
-        <option value="' . $element[$archived] . '">archived</option>
-        <option value="' . 0 . '">unarchive</option>
-        </select>';
-      } else {
-        echo
-        '<select id="elementArchive" class="" name="archive[]">
-        <option value="' . $element[$archived] . '">unarchived</option>
-        <option value="' . 1 . '">archive</option>
-        </select>';
-      }
-
-      echo
-      '<input id="elementId" class="" type="number" name="id" value="' . $element_id . '" placeholder="id: ' . $element_id . '">
-      <input id="titleElement" class="" type="text" name="title" value="' . $element[$title] . '" placeholder="title: ' . $element[$title] . '">
-      <input id="elementAuthor" class="" type="number" name="author[]" value="' . $author['author_id'] . '" placeholder="author: ' . $author['author_username'] . '">
-      <input id="elementImage" class="" type="file" multiple name="images[]" value="' . $element[$image] . '">
-      <textarea id="elementText" class="" name="text" cols="50" rows="8" placeholder="">' . $element[$text] . '</textarea>
-      <legend>choose action</legend>
-      <select id="elementAction" class="" name="action[]">
-      <option></option>
-      <option>create</option>
-      <option>edit</option>
-      <option>archive</option>
-      <option>delete</option>
-      </select>
-      <button id="elementSubmit" class="" type="submit" name="button">submit</button>
-      </fieldset>
-      </form>';
-    } else {
-      // query to get articles and projects' last ids
-      $username = $_SESSION['user'];
-      $stmt = $this->run_query('SELECT * FROM authors WHERE author_username = :username', ['username' => $username]);
-      $author = $stmt->fetch();
-
-      echo
-      '<form id="ajax-form" class="" action="../controllers/content_editor_receiver.php" method="POST" enctype="multipart/form-data" onsubmit="ajaxSend(this); return false;">
-      <fieldset class="ajax-form-container">
-      <legend>create element</legend>
-      <select class="" name="content[]">
-      <option value=""></option>
-      <option value="articles">article</option>
-      <option value="projects">project</option>
-      </select>
-      <input class="" type="number" name="id" value="" placeholder="element id:">
-      <input class="" type="text" name="title" value="" placeholder="element title:">
-      <input class="" type="number" name="author" value="' . $author['author_id'] . '" placeholder="author:">
-      <input class="" type="file" multiple name="images[]" value="">
-      <textarea class="" name="text" cols="50" rows="8" placeholder="element text"></textarea>
-      <legend>choose action</legend>
-      <select class="" name="action[]">
-      <option></option>
-      <option>create</option>
-      <option>edit</option>
-      <option>archive</option>
-      <option>delete</option>
-      </select>
-      <button id="elementSubmit" class="" type="submit" name="button">submit</button>
-      </fieldset>
-      </form>';
-    }
-  }
-}
-
-?>
+// class Editor extends Database
+// {
+//   public function content_handler() {
+//     $element = '';
+//     $element_type = $_GET['element'];
+//     $element_id = $_GET['id'];
+//
+//     if (basename($_SERVER['SCRIPT_FILENAME']) !== 'create_element.php') {
+//       if ($element_type !== 'about') {
+//         if ($element_type === 'articles') {
+//           $stmt = $this->run_query('SELECT * FROM articles JOIN authors ON articles.author_id = authors.author_id WHERE article_id = :element_id', ['element_id' => $element_id]);
+//
+//           $title = 'article_title';
+//           $text = 'article_text';
+//           $image = 'article_image';
+//           $author_id = 'author_id';
+//           $archived = 'article_archived';
+//         } elseif ($element_type === 'projects') {
+//           $stmt = $this->run_query('SELECT * FROM projects JOIN authors ON projects.author_id = authors.author_id WHERE project_id = :element_id', ['element_id' => $element_id]);
+//
+//           $title = 'project_title';
+//           $text = 'project_text';
+//           $image = 'project_image';
+//           $author_id = 'author_id';
+//           $archived = 'project_archived';
+//         }
+//         $element = $stmt->fetch();
+//       } else {
+//         $stmt = $this->run_query('SELECT * FROM about WHERE about_id = :element_id', ['element_id' => $element_id]);
+//         $element = $stmt->fetch();
+//
+//         $title = 'about_title';
+//         $text = 'about_text';
+//         $image = 'about_image';
+//         $author_id = '1';
+//       }
+//
+//       $username = $_SESSION['user'];
+//       $stmt = $this->run_query('SELECT * FROM authors WHERE author_username = :username', ['username' => $username]);
+//       $author = $stmt->fetch();
+//
+//       // onsubmit="ajaxSend(this); return false;"
+//       echo
+//       '<form id="ajax-form" class="hidden" name="editor-form" action="../controllers/content_editor_receiver.php" method="POST" enctype="multipart/form-data" onsubmit="ajaxSend(this); return false;">
+//       <fieldset class="ajax-form-container">
+//       <legend>element handler</legend>
+//       <select id="elementContent" class="" name="content[]">
+//       <option value="' . $element_type . '">' . $element_type . '</option>
+//       </select>';
+//
+//       if ($element[$archived]) {
+//         echo
+//         '<select id="elementArchive" class="" name="archive[]">
+//         <option value="' . $element[$archived] . '">archived</option>
+//         <option value="' . 0 . '">unarchive</option>
+//         </select>';
+//       } else {
+//         echo
+//         '<select id="elementArchive" class="" name="archive[]">
+//         <option value="' . $element[$archived] . '">unarchived</option>
+//         <option value="' . 1 . '">archive</option>
+//         </select>';
+//       }
+//
+//       echo
+//       '<input id="elementId" class="" type="number" name="id" value="' . $element_id . '" placeholder="id: ' . $element_id . '">
+//       <input id="titleElement" class="" type="text" name="title" value="' . $element[$title] . '" placeholder="title: ' . $element[$title] . '">
+//       <input id="elementAuthor" class="" type="number" name="author[]" value="' . $author['author_id'] . '" placeholder="author: ' . $author['author_username'] . '">
+//       <input id="elementImage" class="" type="file" multiple name="images[]" value="' . $element[$image] . '">
+//       <textarea id="elementText" class="" name="text" cols="50" rows="8" placeholder="">' . $element[$text] . '</textarea>
+//       <legend>choose action</legend>
+//       <select id="elementAction" class="" name="action[]">
+//       <option></option>
+//       <option>create</option>
+//       <option>edit</option>
+//       <option>archive</option>
+//       <option>delete</option>
+//       </select>
+//       <button id="elementSubmit" class="" type="submit" name="button">submit</button>
+//       </fieldset>
+//       </form>';
+//     } else {
+//       // query to get articles and projects' last ids
+//       $username = $_SESSION['user'];
+//       $stmt = $this->run_query('SELECT * FROM authors WHERE author_username = :username', ['username' => $username]);
+//       $author = $stmt->fetch();
+//
+//       echo
+//       '<form id="ajax-form" class="" action="../controllers/content_editor_receiver.php" method="POST" enctype="multipart/form-data" onsubmit="ajaxSend(this); return false;">
+//       <fieldset class="ajax-form-container">
+//       <legend>create element</legend>
+//       <select class="" name="content[]">
+//       <option value=""></option>
+//       <option value="articles">article</option>
+//       <option value="projects">project</option>
+//       </select>
+//       <input class="" type="number" name="id" value="" placeholder="element id:">
+//       <input class="" type="text" name="title" value="" placeholder="element title:">
+//       <input class="" type="number" name="author" value="' . $author['author_id'] . '" placeholder="author:">
+//       <input class="" type="file" multiple name="images[]" value="">
+//       <textarea class="" name="text" cols="50" rows="8" placeholder="element text"></textarea>
+//       <legend>choose action</legend>
+//       <select class="" name="action[]">
+//       <option></option>
+//       <option>create</option>
+//       <option>edit</option>
+//       <option>archive</option>
+//       <option>delete</option>
+//       </select>
+//       <button id="elementSubmit" class="" type="submit" name="button">submit</button>
+//       </fieldset>
+//       </form>';
+//     }
+//   }
+// }

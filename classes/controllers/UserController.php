@@ -129,15 +129,15 @@ class UserController extends Database
   {
     if (!isset($_SESSION['logged_in']) || ($_SESSION['logged_in'] !== true))
     {
-      include __ROOT__ . '/include/logout_nav.php';
+      include ABS_PATH . '/include/logout_nav.php';
     } else
     {
       if ($_SESSION['status'] === 'admin')
       {
-        include __ROOT__ . '/include/admin_login_nav.php';
+        include ABS_PATH . '/include/admin_login_nav.php';
       } elseif ($_SESSION['status'] === 'collaborator')
       {
-        include __ROOT__ . '/include/collaborator_login_nav.php';
+        include ABS_PATH . '/include/collaborator_login_nav.php';
       }
     }
   }

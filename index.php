@@ -19,13 +19,11 @@ include 'include/header.php';
       <?php
     } elseif ($page === 'about') {
       // code
-    } elseif ($page === 'article') {
-      (new ArticleController())->display_single_article();
+    } elseif ($page === 'element') {
+      (new ElementController())->display_single_element();
       ?>
       <script src="public/js/ajax.js"></script>
       <?php
-    } elseif ($page === 'project') {
-      // code
     } elseif ($page === 'create') {
       (new EditorController())->create_content();
       ?>

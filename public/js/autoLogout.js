@@ -1,8 +1,8 @@
-let timer = setInterval(autoLogout, 10000);
+let timer = setInterval(autoLogout, 1000000);
 
 function resetTimer() {
   clearInterval(timer);
-  timer = setInterval(autoLogout, 10000);
+  timer = setInterval(autoLogout, 1000000);
 }
 
 function autoLogout() {

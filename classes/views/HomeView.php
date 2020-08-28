@@ -17,16 +17,16 @@ class HomeView extends Database
         ?>
       </div>
       <div id="recentArticles" class="content-container">
-        <?php (new ArticleController())->display_all_articles('unarchived_articles'); ?>
+        <?php (new ElementController())->display_all_elements('unarchived_articles'); ?>
       </div>
       <div id="recentProjects" class="content-container hidden">
-        <?php (new Element())->display_content('projects'); ?>
+        <?php (new ElementController())->display_all_elements('unarchived_projects'); ?>
       </div>
       <div id="allArticles" class="content-container hidden">
-        <?php (new ArticleController())->display_all_articles('all_articles'); ?>
+        <?php (new ElementController())->display_all_elements('all_articles'); ?>
       </div>
       <div id="allProjects" class="content-container hidden">
-        <?php (new Element())->display_content('all-projects'); ?>
+        <?php (new ElementController())->display_all_elements('all_projects'); ?>
       </div>
     </div>
     <?php
