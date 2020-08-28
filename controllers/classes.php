@@ -116,7 +116,7 @@
 //     }
 //   }
 // }
-
+//
 // class Element extends Database
 // {
 //   public function display_content($element) {
@@ -223,7 +223,7 @@
 //       </div>';
 //     }
 //   }
-
+//
 //   public function display_element() {
 //     $element = $_GET['element'];
 //     $element_id = $_GET['id'];
@@ -282,7 +282,7 @@
 //     </div>';
 //   }
 // }
-
+//
 // class Editor extends Database
 // {
 //   public function content_handler() {

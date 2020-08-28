@@ -5,7 +5,7 @@ define('ABS_PATH', dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR);
 define('REL_PATH', DIRECTORY_SEPARATOR . basename(ABS_PATH) . DIRECTORY_SEPARATOR);
 require_once ABS_PATH . '/include/autoloader_class.php';
 require_once ABS_PATH . '/controllers/functions.php';
-require_once ABS_PATH . '/controllers/classes.php';
+// require_once ABS_PATH . '/controllers/classes.php';
 ?>
 
 <!DOCTYPE html>
