@@ -1,6 +1,6 @@
 <?php
 
-require_once dirname(dirname(__FILE__)) . '/classes/abstract/db.php';
+// require_once dirname(dirname(__FILE__)) . '/classes/abstract/db.php';
 
 // class User extends Database
 // {
@@ -117,171 +117,171 @@ require_once dirname(dirname(__FILE__)) . '/classes/abstract/db.php';
 //   }
 // }
 
-class Element extends Database
-{
-  public function display_content($element) {
+// class Element extends Database
+// {
+//   public function display_content($element) {
+//
+//     if ($element !== 'about') {
+//       if ($element === 'articles') {
+//         $data = $this->run_query('SELECT * FROM articles WHERE article_archived = 0 ORDER BY article_id DESC LIMIT 10');
+//
+//         $id = 'article_id';
+//         $title = 'article_title';
+//         $text = 'article_text';
+//         $date = 'DATETIME';
+//         $image = 'article_image';
+//         $author = 'author_id';
+//       } elseif ($element === 'all-articles') {
+//         $data = $this->run_query('SELECT * FROM articles ORDER BY article_id DESC LIMIT 6');
+//
+//         $element = 'articles';
+//         $id = 'article_id';
+//         $title = 'article_title';
+//         $text = 'article_text';
+//         $date = 'DATETIME';
+//         $image = 'article_image';
+//         $author = 'author_id';
+//       } else
+//       if ($element === 'projects') {
+//         $data = $this->run_query('SELECT * FROM projects WHERE project_archived = 0 ORDER BY project_id DESC LIMIT 10');
+//
+//         $id = 'project_id';
+//         $title = 'project_title';
+//         $text = 'project_text';
+//         $date = 'DATETIME';
+//         $image = 'project_image';
+//         $author = 'author_id';
+//       } elseif ($element === 'all-projects') {
+//         $data = $this->run_query('SELECT * FROM projects ORDER BY project_id DESC LIMIT 6');
+//
+//         $element = 'projects';
+//         $id = 'article_id';
+//         $title = 'article_title';
+//         $text = 'article_text';
+//         $date = 'DATETIME';
+//         $image = 'article_image';
+//         $author = 'author_id';
+//       }
+//
+//       foreach ($data as $row) {
+//         $formatted_date = $row[$date];
+//         $formatted_date = date('jS F, Y H:i', strtotime($formatted_date));
+//
+//         $shorten_text = $row[$text];
+//         $shorten_text = substr($row[$text], 0, 80);
+//
+//         echo
+//         '<section class="element-box">
+//         <img class="element-image" src="' . 'public/img/' . $row[$image] . '">
+//         <div class="transparent-box">
+//         <article class="element-caption">
+//         <header>
+//         <h3><a class="element-title" href="templates/element.php?id=' . $row[$id] . '&element=' . $element .'">' . $row[$title].'</a></h3>
+//         <div class="">
+//         <div class="element-date">on ' . $formatted_date . '</div>
+//         <div class="element-author">by '  .$row[$author] . '</div>
+//         </div>
+//         </header>
+//         <main>
+//         <p>' . $shorten_text . '...</p>
+//         <a class="opacity-low" href="templates/element.php?id=' . $row[$id] . '&element=' . $element . '">continue reading</a>
+//         </main>
+//         </article>
+//         </div>
+//         </section>';
+//       }
+//     } else {
+//       $about = $this->run_query('SELECT * FROM about')->fetch();
+//       $paragraphs = explode("\n", $about['about_text']);
+//       $formatted_text = '';
+//
+//       foreach ($paragraphs as $paragraph) {
+//         $formatted_text .= '<p>' . $paragraph . '</p>';
+//       }
+//
+//       if ($_SESSION['logged_in'] == true && $_SESSION['status'] === 'admin') {
+//         echo '<button id="handler-tab">edit</button>';
+//       }
+//
+//       echo
+//       '<section class="about-container">
+//       <header class="about-header">
+//       <h2 id="aboutTitle" class="about-title">' . $about['about_title'] . '</h2>
+//       <img id="aboutImage" class="about-image" src="../public/img' . DIRECTORY_SEPARATOR . $about['about_image'] . '">
+//       </header>
+//       <article id="aboutText" class="about-text">' . $formatted_text . '</article>
+//       </section>
+//
+//       <button id="cvTab">show cv</button>
+//       <div id="myModal" class="modal hidden">
+//       <button id="closeBtn" class="close cursor">
+//       <i class="fa fa-times" aria-hidden="true"></i>
+//       </button>
+//       <div class="cv-container">
+//       <iframe src="../img' . DIRECTORY_SEPARATOR . 'cv.pdf"></iframe>
+//       </div>
+//       </div>';
+//     }
+//   }
 
-    if ($element !== 'about') {
-      if ($element === 'articles') {
-        $data = $this->run_query('SELECT * FROM articles WHERE article_archived = 0 ORDER BY article_id DESC LIMIT 10');
-
-        $id = 'article_id';
-        $title = 'article_title';
-        $text = 'article_text';
-        $date = 'DATETIME';
-        $image = 'article_image';
-        $author = 'author_id';
-      } elseif ($element === 'all-articles') {
-        $data = $this->run_query('SELECT * FROM articles ORDER BY article_id DESC LIMIT 6');
-
-        $element = 'articles';
-        $id = 'article_id';
-        $title = 'article_title';
-        $text = 'article_text';
-        $date = 'DATETIME';
-        $image = 'article_image';
-        $author = 'author_id';
-      } else
-      if ($element === 'projects') {
-        $data = $this->run_query('SELECT * FROM projects WHERE project_archived = 0 ORDER BY project_id DESC LIMIT 10');
-
-        $id = 'project_id';
-        $title = 'project_title';
-        $text = 'project_text';
-        $date = 'DATETIME';
-        $image = 'project_image';
-        $author = 'author_id';
-      } elseif ($element === 'all-projects') {
-        $data = $this->run_query('SELECT * FROM projects ORDER BY project_id DESC LIMIT 6');
-
-        $element = 'projects';
-        $id = 'article_id';
-        $title = 'article_title';
-        $text = 'article_text';
-        $date = 'DATETIME';
-        $image = 'article_image';
-        $author = 'author_id';
-      }
-
-      foreach ($data as $row) {
-        $formatted_date = $row[$date];
-        $formatted_date = date('jS F, Y H:i', strtotime($formatted_date));
-
-        $shorten_text = $row[$text];
-        $shorten_text = substr($row[$text], 0, 80);
-
-        echo
-        '<section class="element-box">
-        <img class="element-image" src="' . 'public/img/' . $row[$image] . '">
-        <div class="transparent-box">
-        <article class="element-caption">
-        <header>
-        <h3><a class="element-title" href="templates/element.php?id=' . $row[$id] . '&element=' . $element .'">' . $row[$title].'</a></h3>
-        <div class="">
-        <div class="element-date">on ' . $formatted_date . '</div>
-        <div class="element-author">by '  .$row[$author] . '</div>
-        </div>
-        </header>
-        <main>
-        <p>' . $shorten_text . '...</p>
-        <a class="opacity-low" href="templates/element.php?id=' . $row[$id] . '&element=' . $element . '">continue reading</a>
-        </main>
-        </article>
-        </div>
-        </section>';
-      }
-    } else {
-      $about = $this->run_query('SELECT * FROM about')->fetch();
-      $paragraphs = explode("\n", $about['about_text']);
-      $formatted_text = '';
-
-      foreach ($paragraphs as $paragraph) {
-        $formatted_text .= '<p>' . $paragraph . '</p>';
-      }
-
-      if ($_SESSION['logged_in'] == true && $_SESSION['status'] === 'admin') {
-        echo '<button id="handler-tab">edit</button>';
-      }
-
-      echo
-      '<section class="about-container">
-      <header class="about-header">
-      <h2 id="aboutTitle" class="about-title">' . $about['about_title'] . '</h2>
-      <img id="aboutImage" class="about-image" src="../public/img' . DIRECTORY_SEPARATOR . $about['about_image'] . '">
-      </header>
-      <article id="aboutText" class="about-text">' . $formatted_text . '</article>
-      </section>
-
-      <button id="cvTab">show cv</button>
-      <div id="myModal" class="modal hidden">
-      <button id="closeBtn" class="close cursor">
-      <i class="fa fa-times" aria-hidden="true"></i>
-      </button>
-      <div class="cv-container">
-      <iframe src="../img' . DIRECTORY_SEPARATOR . 'cv.pdf"></iframe>
-      </div>
-      </div>';
-    }
-  }
-
-  public function display_element() {
-    $element = $_GET['element'];
-    $element_id = $_GET['id'];
-
-    if ($element === 'articles') {
-      $stmt = $this->run_query('SELECT * FROM articles JOIN authors ON articles.author_id = authors.author_id WHERE articles.article_id = :element_id', ['element_id' => $element_id]);
-      // JOIN article_categories ON articles.article_id = article_categories.article_id
-
-      $title = 'article_title';
-      $text = 'article_text';
-      $date = 'DATETIME';
-      $image = 'article_image';
-      $author = 'author_id';
-      $categories = "category_names";
-    } else
-    if ($element === 'projects') {
-      $stmt = $this->run_query('SELECT * FROM projects JOIN authors ON projects.author_id = authors.author_id WHERE projects.project_id = :element_id', ['element_id' => $element_id]);
-
-      $title = 'project_title';
-      $text = 'project_text';
-      $date = 'DATETIME';
-      $image = 'project_image';
-      $author = 'author_id';
-      $categories = "category_names";
-    } else {
-      return;
-    }
-
-    $element = $stmt->fetch();
-    $formatted_date = $element[$date];
-    $formatted_date = date('jS F, Y H:i', strtotime($formatted_date));
-    $paragraphs = explode("\n", $element[$text]);
-    $formatted_text = '';
-
-    foreach ($paragraphs as $paragraph) {
-      $formatted_text .= '<p>' . $paragraph . '</p>';
-    }
-
-    if(isset($_SESSION['logged_in'])) {
-      if ($_SESSION['logged_in'] == true && $element['author_username'] === $_SESSION['user']) {
-        echo '<button id="handler-tab">edit</button>';
-      }
-    }
-
-    echo
-    '<div id="element-' . $element_id . '" class="focus-element-container">
-    <section class="focus-element-header">
-    <img id="image-' . $element_id . '" class="focus-element-image" src="../img' . DIRECTORY_SEPARATOR . $element[$image] . '">
-    </section>
-    <div class="focus-content-container">
-    <h2 id="title-' . $element_id . '" class="focus-element-title">' . $element[$title] . '</h2>
-    <div id="date-' . $element_id . '" class="focus-element-date">on ' . $formatted_date . '</div>
-    <div class="focus-element-username">by ' . $element['author_username'] . '</div>
-    <article id="text-' . $element_id . '" class="focus-element-text">' . $formatted_text . '</article>
-    </div>
-    </div>';
-  }
-}
+//   public function display_element() {
+//     $element = $_GET['element'];
+//     $element_id = $_GET['id'];
+//
+//     if ($element === 'articles') {
+//       $stmt = $this->run_query('SELECT * FROM articles JOIN authors ON articles.author_id = authors.author_id WHERE articles.article_id = :element_id', ['element_id' => $element_id]);
+//       // JOIN article_categories ON articles.article_id = article_categories.article_id
+//
+//       $title = 'article_title';
+//       $text = 'article_text';
+//       $date = 'DATETIME';
+//       $image = 'article_image';
+//       $author = 'author_id';
+//       $categories = "category_names";
+//     } else
+//     if ($element === 'projects') {
+//       $stmt = $this->run_query('SELECT * FROM projects JOIN authors ON projects.author_id = authors.author_id WHERE projects.project_id = :element_id', ['element_id' => $element_id]);
+//
+//       $title = 'project_title';
+//       $text = 'project_text';
+//       $date = 'DATETIME';
+//       $image = 'project_image';
+//       $author = 'author_id';
+//       $categories = "category_names";
+//     } else {
+//       return;
+//     }
+//
+//     $element = $stmt->fetch();
+//     $formatted_date = $element[$date];
+//     $formatted_date = date('jS F, Y H:i', strtotime($formatted_date));
+//     $paragraphs = explode("\n", $element[$text]);
+//     $formatted_text = '';
+//
+//     foreach ($paragraphs as $paragraph) {
+//       $formatted_text .= '<p>' . $paragraph . '</p>';
+//     }
+//
+//     if(isset($_SESSION['logged_in'])) {
+//       if ($_SESSION['logged_in'] == true && $element['author_username'] === $_SESSION['user']) {
+//         echo '<button id="handler-tab">edit</button>';
+//       }
+//     }
+//
+//     echo
+//     '<div id="element-' . $element_id . '" class="focus-element-container">
+//     <section class="focus-element-header">
+//     <img id="image-' . $element_id . '" class="focus-element-image" src="../img' . DIRECTORY_SEPARATOR . $element[$image] . '">
+//     </section>
+//     <div class="focus-content-container">
+//     <h2 id="title-' . $element_id . '" class="focus-element-title">' . $element[$title] . '</h2>
+//     <div id="date-' . $element_id . '" class="focus-element-date">on ' . $formatted_date . '</div>
+//     <div class="focus-element-username">by ' . $element['author_username'] . '</div>
+//     <article id="text-' . $element_id . '" class="focus-element-text">' . $formatted_text . '</article>
+//     </div>
+//     </div>';
+//   }
+// }
 
 // class Editor extends Database
 // {

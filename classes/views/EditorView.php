@@ -22,22 +22,24 @@ class EditorView extends Database
           <option value="<?php echo $type; ?>"><?php echo $type; ?></option>
         </select>
       <?php
-      if ($element[$prefix . 'archived'])
-      {
-        ?>
-        <select id="elementArchive" class="" name="archive[]">
-          <option value="<?php echo $element[$prefix . 'archived']; ?>">archived</option>
-          <option value=" <?php echo 0; ?>">unarchive</option>
-        </select>
-        <?php
-      } else
-      {
-        ?>
-        <select id="elementArchive" class="" name="archive[]">
-          <option value="<?php echo $element[$prefix . 'archived']; ?>">unarchived</option>
-          <option value="<?php echo 1; ?>">archive</option>
-        </select>
-        <?php
+      if ($type !== 'about') {
+        if ($element[$prefix . 'archived'])
+        {
+          ?>
+          <select id="elementArchive" class="" name="archive[]">
+            <option value="<?php echo $element[$prefix . 'archived']; ?>">archived</option>
+            <option value=" <?php echo 0; ?>">unarchive</option>
+          </select>
+          <?php
+        } else
+        {
+          ?>
+          <select id="elementArchive" class="" name="archive[]">
+            <option value="<?php echo $element[$prefix . 'archived']; ?>">unarchived</option>
+            <option value="<?php echo 1; ?>">archive</option>
+          </select>
+          <?php
+        }
       }
       ?>
       <input id="elementId" class="" type="number" name="id" value="<?php echo $element[$prefix . 'id']; ?>" placeholder="id: <?php echo $id; ?>">
@@ -92,6 +94,7 @@ class EditorView extends Database
         <button id="elementSubmit" class="" type="submit" name="submit">submit</button>
       </fieldset>
     </form>
+    <script src="public/js/ajax.js"></script>
     <?php
   }
 }

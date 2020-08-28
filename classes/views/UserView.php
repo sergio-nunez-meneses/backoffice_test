@@ -36,6 +36,7 @@ class UserView extends Database
         </fieldset>
       </form>
     </div>
+    <script src="public/js/login.js"></script>
     <?php
   }
 }

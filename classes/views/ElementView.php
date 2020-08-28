@@ -55,7 +55,7 @@ class ElementView extends Database
       $formatted_text .= "<p>$paragraph</p>";
     }
 
-    if(isset($_SESSION['logged_in']) && ($_SESSION['logged_in'] == true) && $_SESSION['status'] === 'admin')
+    if (isset($_SESSION['logged_in']) && ($_SESSION['logged_in'] == true) && ($_SESSION['status'] === 'admin'))
     {
       ?>
       <button id="handler-tab">edit</button>
@@ -79,6 +79,7 @@ class ElementView extends Database
         <p id="ajaxResponse" class="info"></p>
       </div>
     </div>
+    <script src="public/js/ajax.js"></script>
     <?php
   }
 }

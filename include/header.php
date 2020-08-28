@@ -43,7 +43,7 @@ require_once ABS_PATH . '/controllers/classes.php';
           <i class="fa fa-home" aria-hidden="true"></i>
           <span class="nav-item">home</span>
         </a>
-        <a href=" <?php echo REL_PATH . 'index.php?id=1&element=about'; ?> ">
+        <a href=" <?php echo REL_PATH . 'index.php?page=about&element=about&id=1'; ?> ">
           <i class="fa fa-info" aria-hidden="true"></i>
           <span class="nav-item">about</span>
         </a>

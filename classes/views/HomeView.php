@@ -29,6 +29,7 @@ class HomeView extends Database
         <?php (new ElementController())->display_all_elements('all_projects'); ?>
       </div>
     </div>
+    <script src="public/js/index.js"></script>
     <?php
   }
 }

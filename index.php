@@ -14,27 +14,15 @@ include 'include/header.php';
 
     if ($page === 'login') {
       (new UserView())->login_view();
-      ?>
-      <script src="public/js/login.js"></script>
-      <?php
     } elseif ($page === 'about') {
-      // code
+      (new AboutController())->display_about();
     } elseif ($page === 'element') {
       (new ElementController())->display_single_element();
-      ?>
-      <script src="public/js/ajax.js"></script>
-      <?php
     } elseif ($page === 'create') {
       (new EditorController())->create_content();
-      ?>
-      <script src="public/js/ajax.js"></script>
-      <?php
     }
   } else {
     (new HomeView())->home_view();
-    ?>
-    <script src="public/js/index.js"></script>
-    <?php
   }
   ?>
 </main>
