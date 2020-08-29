@@ -3,7 +3,7 @@
 class AboutView extends Database
 {
 
-  public function about_view($about)
+  public static function about_view($about)
   {
     $paragraphs = explode("\n", $about['about_text']);
     $formatted_text = '';

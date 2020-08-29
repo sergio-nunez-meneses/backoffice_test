@@ -15,7 +15,7 @@ class EditorView extends Database
     }
     ?>
     <!-- onsubmit="ajaxSend(this); return false;" -->
-    <form id="ajax-form" class="hidden" name="editor-form" action="" method="POST" enctype="multipart/form-data" onsubmit="AJAXSubmit(this); return false;">
+    <form id="ajax-form" class="hidden" name="editor-form" action="." method="POST" enctype="multipart/form-data">
       <fieldset class="ajax-form-container">
         <legend>Edit <?php echo $type; ?></legend>
         <select id="elementContent" class="" name="content[]">
@@ -64,7 +64,7 @@ class EditorView extends Database
   public function creation_view()
   {
     ?>
-    <form id="ajax-form" class="" action="" method="POST" enctype="multipart/form-data" onsubmit="AJAXSubmit(this); return false;">
+    <form id="ajax-form" class="" action="." method="POST" enctype="multipart/form-data">
       <fieldset class="ajax-form-container">
         <legend>Create</legend>
         <select class="" name="content[]">
@@ -74,12 +74,7 @@ class EditorView extends Database
         </select>
         <input class="" type="number" name="id" value="" placeholder="element id: ">
         <input class="" type="text" name="title" value="" placeholder="element title:">
-        <input class="" type="text" name="author" value="
-        <?php
-        $user_id = (new UserModel())->get_user_id($_SESSION['user']);
-        echo $user_id;
-        ?>
-        " placeholder="author: <?php echo (new UserModel())->get_username($user_id); ?>">
+        <input class="" type="text" name="author" value="<?php echo (new UserModel())->get_user_id($_SESSION['user']); ?>">
         <input type="hidden" name="stored_image" value="">
         <input class="" type="file" multiple name="images[]" value="">
         <textarea class="" name="text" cols="50" rows="8" placeholder="element text"></textarea>
@@ -91,7 +86,7 @@ class EditorView extends Database
           <option>archive</option>
           <option>delete</option>
         </select>
-        <button id="elementSubmit" class="" type="submit" name="submit">submit</button>
+        <button id="elementSubmit" class="" type="submit" name="create">submit</button>
       </fieldset>
     </form>
     <script src="public/js/ajax.js"></script>

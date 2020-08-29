@@ -2,7 +2,7 @@
 
 class HomeView extends Database
 {
-  public function home_view()
+  public static function home_view()
   {
     ?>
     <div class="container">

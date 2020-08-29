@@ -2,11 +2,13 @@
 
 class ClassAutoloader
 {
-  public function __construct() {
-    spl_autoload_register(array($this, 'loader'));
+  public function __construct()
+  {
+    spl_autoload_register([$this, 'loader']);
   }
 
-  public function loader($class_name) {
+  public function loader($class_name)
+  {
     $full_path = $root_folder = $parent_folder = $file_extension = '';
 
     if ($class_name === 'Database') {

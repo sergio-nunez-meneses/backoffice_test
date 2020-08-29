@@ -43,7 +43,6 @@ class ElementController extends Database
         $project = (new ElementModel())->get_single_project();
         (new ElementView())->single_element_view($project, $element);
       }
-
     }
   }
 }

@@ -1,11 +1,15 @@
 <?php
-ob_start();
+// ob_start();
 session_start();
 define('ABS_PATH', dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR);
 define('REL_PATH', DIRECTORY_SEPARATOR . basename(ABS_PATH) . DIRECTORY_SEPARATOR);
 require_once ABS_PATH . '/include/autoloader_class.php';
 require_once ABS_PATH . '/controllers/functions.php';
-// require_once ABS_PATH . '/controllers/classes.php';
+
+if (($_SERVER['REQUEST_METHOD'] == 'POST') && isset($_POST['create']))
+{
+  (new ActionsController())->create_element();
+}
 ?>
 
 <!DOCTYPE html>
@@ -56,9 +60,8 @@ require_once ABS_PATH . '/controllers/functions.php';
         <?php (new UserController())->is_logged(); ?>
       </div>
     </nav>
-
   </header>
 
   <script src=" <?php echo REL_PATH . 'public/js/header.js'; ?> "></script>
 
-  <main>
+  <main class="main-container">

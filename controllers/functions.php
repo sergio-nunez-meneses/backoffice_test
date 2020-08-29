@@ -1,5 +1,4 @@
 <?php
-
 function base_url() {
   $protocol = empty($_SERVER['HTTPS']) ? 'http' : 'https';
   $domain = $_SERVER['SERVER_NAME'];
@@ -7,20 +6,20 @@ function base_url() {
   return $url;
 }
 
-function connection() {
-  require dirname(dirname(__FILE__))  . '/controllers/database.php';
-
-  $host = 'localhost';
-  $charset = 'utf8';
-  $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
-
-  try {
-    $pdo = new PDO($dsn, $user, $password, $options);
-  } catch (\PDOException $e) {
-    throw new \PDOException($e->getMessage(), (int)$e->getCode());
-  }
-  return $pdo;
-}
+// function connection() {
+//   require dirname(dirname(__FILE__))  . '/controllers/database.php';
+//
+//   $host = 'localhost';
+//   $charset = 'utf8';
+//   $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
+//
+//   try {
+//     $pdo = new PDO($dsn, $user, $password, $options);
+//   } catch (\PDOException $e) {
+//     throw new \PDOException($e->getMessage(), (int)$e->getCode());
+//   }
+//   return $pdo;
+// }
 
 // function ajax_receiver() {
 //   $pdo = connection();
@@ -191,61 +190,61 @@ function connection() {
 //   }
 // }
 
-function send_mail() {
-  // $pdo = connection();
-
-  $form = 'ajax-mail-form';
-  $info = $error_message = '';
-  $error = false;
-
-  if (empty($_POST['firstname'])) {
-    $error_message .= 'firstname cannot be empty <br>';
-    $error = true;
-  } elseif (!preg_match('/^[a-z]{2,20}$/i', $_POST['firstname'])) {
-    $error_message .= 'invalid firstname format';
-    $error = true;
-  } else {
-    $username = $_POST['firstname'];
-  }
-
-  if (empty($_POST['lastname'])) {
-    $error_message .= 'lastname cannot be empty <br>';
-    $error = true;
-  } elseif (!preg_match('/^[a-z]{2,20}$/i', $_POST['lastname'])) {
-    $error_message .= 'invalid lastname format <br>';
-    $error = true;
-  } else {
-    $lastname = $_POST['lastname'];
-  }
-
-  if (empty($_POST['email'])) {
-    $error_message .= 'email cannot be empty <br>';
-    $error = true;
-  } elseif (!preg_match('/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i', $_POST['email'])) {
-    $error_message .= 'invalid email format <br>';
-    $error = true;
-  } else {
-    $from = $_POST['email'];
-  }
-
-  if (!($error)) {
-    $to = "To: $from";
-    $subject = "message from $username $lastname";
-    $message = $_POST['message'];
-    $headers = 'From: contact@site.com';
-
-    if (mail($to, $subject, $message, $headers)) {
-      $info = 'mail sucessfully sent!';
-    } else {
-      $info = 'failed to send email!';
-    }
-  }
-
-  // back to ajax.js
-  $array = [
-    'form' => $form,
-    'info' => $info,
-    'error' => $error_message
-  ];
-  echo json_encode($array);
-}
+// function send_mail() {
+//   // $pdo = connection();
+//
+//   $form = 'ajax-mail-form';
+//   $info = $error_message = '';
+//   $error = false;
+//
+//   if (empty($_POST['firstname'])) {
+//     $error_message .= 'firstname cannot be empty <br>';
+//     $error = true;
+//   } elseif (!preg_match('/^[a-z]{2,20}$/i', $_POST['firstname'])) {
+//     $error_message .= 'invalid firstname format';
+//     $error = true;
+//   } else {
+//     $username = $_POST['firstname'];
+//   }
+//
+//   if (empty($_POST['lastname'])) {
+//     $error_message .= 'lastname cannot be empty <br>';
+//     $error = true;
+//   } elseif (!preg_match('/^[a-z]{2,20}$/i', $_POST['lastname'])) {
+//     $error_message .= 'invalid lastname format <br>';
+//     $error = true;
+//   } else {
+//     $lastname = $_POST['lastname'];
+//   }
+//
+//   if (empty($_POST['email'])) {
+//     $error_message .= 'email cannot be empty <br>';
+//     $error = true;
+//   } elseif (!preg_match('/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i', $_POST['email'])) {
+//     $error_message .= 'invalid email format <br>';
+//     $error = true;
+//   } else {
+//     $from = $_POST['email'];
+//   }
+//
+//   if (!($error)) {
+//     $to = "To: $from";
+//     $subject = "message from $username $lastname";
+//     $message = $_POST['message'];
+//     $headers = 'From: contact@site.com';
+//
+//     if (mail($to, $subject, $message, $headers)) {
+//       $info = 'mail sucessfully sent!';
+//     } else {
+//       $info = 'failed to send email!';
+//     }
+//   }
+//
+//   // back to ajax.js
+//   $array = [
+//     'form' => $form,
+//     'info' => $info,
+//     'error' => $error_message
+//   ];
+//   echo json_encode($array);
+// }

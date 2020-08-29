@@ -73,7 +73,7 @@ class UserController extends Database
       header('Location:index.php');
     } else
     {
-      header("Location:index.php?error=yes&error_message=$error_msg");
+      header("Location:index.php?page=login&error=$error_msg");
     }
   }
 
@@ -92,6 +92,7 @@ class UserController extends Database
       {
         $error = true;
         $error_msg .= '<p>user does not exist</p>';
+        header("Location:index.php?page=login&error=$error_msg");
       } else
       {
         $username = $user['author_username'];
@@ -105,11 +106,11 @@ class UserController extends Database
           $_SESSION['logged_in'] = true;
 
           header('Location:index.php');
-          ob_end_flush();
+          // ob_end_flush();
         } else
         {
           $error_msg .= '<p>password incorrect</p>';
-          header("Location:index.php?error=yes&error_message=$error_msg");
+          header("Location:index.php?page=login&error=$error_msg");
         }
       }
     }
@@ -143,10 +144,10 @@ class UserController extends Database
   }
 }
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['sign-up']))
+if (($_SERVER['REQUEST_METHOD'] == 'POST') && isset($_POST['sign-up']))
 {
   (new UserController())->sign_up();
-} elseif ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['sign-in']))
+} elseif (($_SERVER['REQUEST_METHOD'] == 'POST') && isset($_POST['sign-in']))
 {
   (new UserController())->sign_in();
 } elseif ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['logout']) && ($_GET['logout'] === 'yes'))
