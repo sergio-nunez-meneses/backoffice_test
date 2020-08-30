@@ -10,6 +10,11 @@ if (($_SERVER['REQUEST_METHOD'] == 'POST') && isset($_POST['create']))
 {
   (new ActionsController())->create_element();
 }
+
+if (($_SERVER['REQUEST_METHOD'] == 'POST') && isset($_POST['edit']) && ($_POST['action'][0] === 'delete'))
+{
+  (new ActionsController())->delete_element();
+}
 ?>
 
 <!DOCTYPE html>

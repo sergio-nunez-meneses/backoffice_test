@@ -19,7 +19,7 @@ class EditorView extends Database
       <fieldset class="ajax-form-container">
         <legend>Edit <?php echo $type; ?></legend>
         <select id="elementContent" class="" name="content[]">
-          <option value="<?php echo $type; ?>"><?php echo $type; ?></option>
+          <option value="<?php echo $type . 's'; ?>"><?php echo $type; ?></option>
         </select>
       <?php
       if ($type !== 'about') {
@@ -55,7 +55,7 @@ class EditorView extends Database
         <option>archive</option>
         <option>delete</option>
       </select>
-      <button id="elementSubmit" class="" type="submit" name="submit">submit</button>
+      <button id="elementSubmit" class="" type="submit" name="edit">submit</button>
       </fieldset>
     </form>
     <?php
@@ -64,7 +64,15 @@ class EditorView extends Database
   public function creation_view()
   {
     ?>
-    <form id="ajax-form" class="" action="." method="POST" enctype="multipart/form-data">
+    <div>
+      <?php
+      if (($_SERVER['REQUEST_METHOD'] == 'GET') && isset($_GET['result']))
+      {
+        echo urldecode($_GET['result']);
+      }
+      ?>
+    </div>
+    <form id="ajax-form" class="" action="index.php?page=create" method="POST" enctype="multipart/form-data">
       <fieldset class="ajax-form-container">
         <legend>Create</legend>
         <select class="" name="content[]">
