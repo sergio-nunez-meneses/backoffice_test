@@ -15,6 +15,8 @@ if (($_SERVER['REQUEST_METHOD'] == 'POST') && isset($_POST['edit']))
 {
   if ($_POST['action'][0] === 'edit') {
     (new ActionsController())->update_element();
+  } elseif ($_POST['action'][0] === 'archive') {
+    (new ActionsController())->archive_element();
   } elseif ($_POST['action'][0] === 'delete') {
     (new ActionsController())->delete_element();
   }

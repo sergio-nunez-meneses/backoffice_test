@@ -40,7 +40,7 @@ class ActionsModel extends Database
     ]);
   }
 
-  public function archive_article($element_id, $element_title, $element_image, $author_id, $element_archived)
+  public function archive_article($element_id, $element_title, $element_text, $element_image, $author_id, $element_archived)
   {
     $this->run_query('UPDATE articles SET article_archived = :element_archived WHERE article_id = :element_id', [
       'element_archived' => $element_archived,
