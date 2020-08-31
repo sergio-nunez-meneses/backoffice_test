@@ -1,47 +1,71 @@
 <?php
 
-class ElementController extends Database
+class ElementController
 {
 
-  public function display_all_elements($elements)
+  public static function all_elements($elements)
   {
-    $element = explode('_', $elements)[1];
+    $element = [];
+    $type = substr(explode('_', $elements)[1], 0, -1);
+    $prefix = $type . '_';
 
     if ($elements === 'unarchived_articles')
     {
-      $articles = (new ElementModel($elements))->get_unarchived_articles();
-      (new ElementView())->all_elements_view($articles, $element);
+      $element = (new ElementModel())->get_unarchived_articles();
     } elseif ($elements === 'unarchived_projects')
     {
-      $projects = (new ElementModel($elements))->get_unarchived_projets();
-      (new ElementView())->all_elements_view($projects, $element);
+      $element = (new ElementModel())->get_unarchived_projets();
     } elseif ($elements === 'all_articles')
     {
-      $articles = (new ElementModel())->get_all_articles();
-      (new ElementView())->all_elements_view($articles, $element);
+      $element = (new ElementModel())->get_all_articles();
     } elseif ($elements === 'all_projects')
     {
-      $projects = (new ElementModel())->get_all_projects();
-      (new ElementView())->all_elements_view($projects, $element);
+      $element = (new ElementModel())->get_all_projects();
+    }
+
+    foreach ($element as $row) {
+      $date = $row['DATETIME'];
+      $formatted_date = date('jS F, Y H:i', strtotime($date));
+      $text = $row[$prefix . 'text'];
+      $shorten_text = substr($text, 0, 80);
+
+      require ABS_PATH . 'templates/allArticlesView.php';
     }
   }
 
-  public function display_single_element()
+  public static function single_element()
   {
-    $project_id = '';
+    $id = $type = '';
+    $element = [];
 
     if (($_SERVER['REQUEST_METHOD'] == 'GET') && isset($_GET['id']) && isset($_GET['element']))
     {
-      $element = $_GET['element'];
+      $id = $_GET['id'];
+      $type = $_GET['element'];
 
-      if ($element === 'article')
+      if ($type === 'article')
       {
-        $article = (new ElementModel())->get_single_article();
-        (new ElementView())->single_element_view($article, $element);
+        $element = (new ElementModel())->get_single_article($id);
       } elseif ($element === 'project')
       {
-        $project = (new ElementModel())->get_single_project();
-        (new ElementView())->single_element_view($project, $element);
+        $element = (new ElementModel())->get_single_project($id);
+      }
+
+      if ($element == true) {
+        $prefix = $type . '_';
+        $date = $element['DATETIME'];
+        $formatted_date = date('jS F, Y H:i', strtotime($date));
+        $text = $element[$prefix . 'text'];
+        $paragraphs = explode("\n", $text);
+        $formatted_text = '';
+
+        foreach ($paragraphs as $paragraph) {
+          $formatted_text .= "<p>$paragraph</p>";
+        }
+
+        require ABS_PATH . 'templates/singleArticleView.php';
+      } else {
+        echo 'Element not found';
       }
     }
   }

@@ -1,30 +1,30 @@
 <?php
 
-class ActionsController extends Database
+class ActionsController
 {
 
-  public function create_element()
+  public static function create_element()
   {
-      // $form = 'ajax-element-form';
-      $error = false;
-      $author_id = $element_id = $element_type = $element_title = $element_text = $action = $action_msg = $error_msg = '';
+    // $form = 'ajax-element-form';
+    $error = false;
+    $author_id = $element_id = $element_type = $element_title = $element_text = $action = $action_msg = $error_msg = '';
 
-      date_default_timezone_set('Europe/Paris');
+    date_default_timezone_set('Europe/Paris');
 
     if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true)
     {
       $error = true;
-      $error_msg .= '<p>sign in to create an element</p>';
+      $error_msg .= 'sign in to create an element';
     } else
     {
       if (empty($_POST['title']))
       {
         $error = true;
-        $error_msg .= '<p>title cannot be empty</p>';
+        $error_msg .= 'title cannot be empty';
       } elseif (strlen($_POST['title']) < 5)
       {
         $error = true;
-        $error_msg .= '<p>title must contain more than 5 characters</p>';
+        $error_msg .= 'title must contain more than 5 characters';
       } else
       {
         $element_title = filter_var($_POST['title'], FILTER_SANITIZE_STRING);
@@ -33,10 +33,10 @@ class ActionsController extends Database
       if (empty($_POST['text']))
       {
         $error = true;
-        $error_msg .= '<p>text cannot be empty</p>';
+        $error_msg .= 'text cannot be empty';
       } elseif (strlen($_POST['text']) < 10){
         $error = true;
-        $error_msg .= '<p>text must contain more than 10 characters</p>';
+        $error_msg .= 'text must contain more than 10 characters</p>';
       } else
       {
         $element_text = filter_var($_POST['text'], FILTER_SANITIZE_STRING);
@@ -71,25 +71,26 @@ class ActionsController extends Database
             {
               (new ActionsModel())->create_article($element_title, $element_text, $element_image, $author_id, $element_archived);
             }
-            $action_msg .= '<p>element created</p>';
-            header('Location:index.php?page=create&result=' . urlencode($action_msg));
-            // echo $action_msg;
+            $action_msg .= 'element created';
+            header('Location:/?result=' . urlencode($action_msg));
+            echo $action_msg;
           }
         } else
         {
-          $error_msg .= "<p>you are not allowed to $action content</p>";
-          header('Location:index.php?page=create&result=' . urlencode($error_msg));
+          $error_msg .= "you are not allowed to $action content";
+          header('Location:/create?result=' . urlencode($error_msg));
+          echo "$error_msg<br>";
         }
       } else
       {
-        $error_msg .= '<p>could not perform requested action</p>';
-        header('Location:index.php?page=create&result=' . urlencode($error_msg));
-        // echo "$error_msg<br>";
+        $error_msg .= 'could not perform requested action';
+        header('Location:/create?result=' . urlencode($error_msg));
+        echo "$error_msg<br>";
       }
     }
   }
 
-  public function update_element()
+  public static function update_element()
   {
     // $form = 'ajax-element-form';
     $error = false;
@@ -173,7 +174,7 @@ class ActionsController extends Database
     }
   }
 
-  public function archive_element()
+  public static function archive_element()
   {
     // $form = 'ajax-element-form';
     $error = false;
@@ -257,7 +258,7 @@ class ActionsController extends Database
     }
   }
 
-  public function delete_element()
+  public static function delete_element()
   {
     // $form = 'ajax-element-form';
     $error = false;

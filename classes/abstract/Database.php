@@ -4,7 +4,7 @@ require_once ABS_PATH . '/tools/sql.php';
 class Database
 {
 
-  public $pdo;
+  private $pdo;
 
   public function __construct()
   {

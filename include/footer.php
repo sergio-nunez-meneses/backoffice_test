@@ -28,7 +28,7 @@
   <?php
   if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] == true) {
     ?>
-    <script src="public/js/autoLogout.js"></script>
+    <script src="/public/js/autoLogout.js"></script>
     <?php
   }
   ?>

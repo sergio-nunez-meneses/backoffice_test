@@ -1,35 +1,38 @@
 <?php
 
-class EditorController extends Database
+class EditorController
 {
 
-  public function edit_content()
+  public static function edit_content()
   {
-    if (($_SERVER['REQUEST_METHOD'] == 'GET') && isset($_GET['element']))
-    {
-      $element = $_GET['element'];
+    $id = $type = $prefix = '';
+    $element = [];
 
-      if ($element === 'article')
+    if (($_SERVER['REQUEST_METHOD'] == 'GET') && isset($_GET['id']) && isset($_GET['element']))
+    {
+      $id = $_GET['id'];
+      $type = $_GET['element'];
+      $prefix = $type . '_';
+
+      if ($type === 'article')
       {
-        $article = (new EditorModel())->get_element_content();
-        (new EditorView())->edition_view($article);
-      } elseif ($element === 'project')
+        $element = (new EditorModel())->get_element_content($type, $id);
+      } elseif ($type === 'project')
       {
-        $project = (new EditorModel())->get_element_content();
-        (new EditorView())->edition_view($project);
-      } elseif ($element === 'about')
+        $element = (new EditorModel())->get_element_content($type, $id);
+      } elseif ($type === 'about')
       {
-        $about = (new EditorModel())->get_element_content();
-        (new EditorView())->edition_view($about);
+        $element = (new EditorModel())->get_element_content($type, $id);
       }
+      require ABS_PATH . 'templates/editionView.php';
     }
   }
 
-  public function create_content()
+  public static function create_content()
   {
     if (isset($_SESSION['logged_in']) && ($_SESSION['logged_in'] == true) && ($_SESSION['status'] === 'admin' || $_SESSION['status'] === 'collaborator'))
     {
-      (new EditorView())->creation_view();
+      require ABS_PATH . 'templates/creationView.php';
     }
   }
 }

@@ -27,28 +27,18 @@ class ElementModel extends Database
     return $projects;
   }
 
-  public function get_single_article()
+  public function get_single_article($id)
   {
-    $article_id = '';
-
-    if (($_SERVER['REQUEST_METHOD'] == 'GET') && isset($_GET['id'])) {
-      $article_id = $_GET['id'];
-      $stmt = $this->run_query('SELECT * FROM articles JOIN authors ON articles.author_id = authors.author_id WHERE articles.article_id = :article_id', ['article_id' => $article_id]);
-      $article = $stmt->fetch();
-      return $article;
-    }
+    $stmt = $this->run_query('SELECT * FROM articles JOIN authors ON articles.author_id = authors.author_id WHERE articles.article_id = :id', ['id' => $id]);
+    $article = $stmt->fetch();
+    return $article;
   }
 
-  public function get_single_project()
+  public function get_single_project($id)
   {
-    $project_id = '';
-
-    if (($_SERVER['REQUEST_METHOD'] == 'GET') && isset($_GET['id'])) {
-      $project_id = $_GET['id'];
-      $stmt = $this->run_query('SELECT * FROM projects JOIN authors ON projects.author_id = authors.author_id WHERE projects.project_id = :project_id', ['project_id' => $project_id]);
-      $project = $stmt->fetch();
-      return $project;
-    }
+    $stmt = $this->run_query('SELECT * FROM projects JOIN authors ON projects.author_id = authors.author_id WHERE projects.project_id = :id', ['id' => $id]);
+    $project = $stmt->fetch();
+    return $project;
   }
 
   public function get_last_article()

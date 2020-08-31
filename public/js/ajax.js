@@ -1,10 +1,11 @@
 const FORM = getID('ajax-form'),
-  SUBMIT_BUTTON = getID('elementSubmit'),
+  SUBMIT_BUTTON = getName('create')[0],
   HANDLER_TAB = getID('handler-tab'),
   INFO_TEXT = getID('ajaxResponse');
 
-function AJAXsuccess() {
-  console.log(this.responseText);
+// function AJAXsuccess() {
+//   console.log(this.responseText);
+//   INFO_TEXT.innerHTML = this.responseText;
   // let response = JSON.parse(this.responseText);
   // console.log(response);
 
@@ -72,7 +73,7 @@ function AJAXsuccess() {
   //     INFO_TEXT.innerHTML = response['error'];
   //   }
   // }
-}
+// }
 
 function AJAXSubmit(oFormElement) {
   if (!oFormElement.action) {
@@ -112,6 +113,7 @@ function changeContactForm() {
 if (HANDLER_TAB !== null) HANDLER_TAB.addEventListener('click', displayAjaxForm);
 if (getID('mail-tab') !== null) getID('mail-tab').addEventListener('click', changeContactForm);
 
-// SUBMIT_BUTTON.addEventListener('submit', (e) => {
-//   ajaxSubmit(FORM);
+// SUBMIT_BUTTON.addEventListener('click', (e) => {
+//   e.preventDefault();
+//   AJAXSubmit(FORM);
 // });

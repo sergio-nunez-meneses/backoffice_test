@@ -1,25 +1,37 @@
 <?php
-// ob_start();
 session_start();
 define('ABS_PATH', dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR);
 define('REL_PATH', DIRECTORY_SEPARATOR . basename(ABS_PATH) . DIRECTORY_SEPARATOR);
 require_once ABS_PATH . '/include/autoloader_class.php';
-require_once ABS_PATH . '/controllers/functions.php';
+require_once ABS_PATH . '/functions/functions.php';
 
 if (($_SERVER['REQUEST_METHOD'] == 'POST') && isset($_POST['create']))
 {
-  (new ActionsController())->create_element();
-}
-
-if (($_SERVER['REQUEST_METHOD'] == 'POST') && isset($_POST['edit']))
+  ActionsController::create_element();
+} elseif (($_SERVER['REQUEST_METHOD'] == 'POST') && isset($_POST['edit']))
 {
   if ($_POST['action'][0] === 'edit') {
-    (new ActionsController())->update_element();
+    ActionsController::update_element();
   } elseif ($_POST['action'][0] === 'archive') {
-    (new ActionsController())->archive_element();
+    ActionsController::archive_element();
   } elseif ($_POST['action'][0] === 'delete') {
-    (new ActionsController())->delete_element();
+    ActionsController::delete_element();
   }
+}
+
+// if (($_SERVER['REQUEST_METHOD'] == 'POST') && isset($_POST['send-message']))
+// {
+//   (new MailController())->send_mail();
+// }
+
+if (($_SERVER['REQUEST_METHOD'] == 'GET') && isset($_GET['result']))
+{
+  echo $_GET['result'];
+}
+
+if (($_SERVER['REQUEST_METHOD'] == 'GET') && isset($_GET['mail']))
+{
+  echo $_GET['mail'];
 }
 ?>
 
@@ -29,10 +41,10 @@ if (($_SERVER['REQUEST_METHOD'] == 'POST') && isset($_POST['edit']))
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <base href="<?php echo base_url(); ?>">
-  <link rel="stylesheet" href=" <?php echo REL_PATH . 'public/css/normalize.css'; ?> ">
-  <link rel="stylesheet" href=" <?php echo REL_PATH . 'public/css/style.css'; ?> ">
+  <link rel="stylesheet" href="/public/css/normalize.css">
+  <link rel="stylesheet" href="/public/css/style.css">
   <script src="https://use.fontawesome.com/275ae55494.js"></script>
-  <script src=" <?php echo REL_PATH . 'public/js/functions.js'; ?> "></script>
+  <script src="/public/js/functions.js"></script>
   <title> <?php echo $title; ?> </title>
 </head>
 
@@ -54,25 +66,25 @@ if (($_SERVER['REQUEST_METHOD'] == 'POST') && isset($_POST['edit']))
 
     <nav id="navbarContainer" class="navbar-container">
       <div class="navbar-left">
-        <a href=".">
+        <a href="/">
           <i class="fa fa-home" aria-hidden="true"></i>
           <span class="nav-item">home</span>
         </a>
-        <a href=" <?php echo REL_PATH . 'index.php?page=about&element=about&id=1'; ?> ">
+        <a href="/about?element=about&id=1">
           <i class="fa fa-info" aria-hidden="true"></i>
           <span class="nav-item">about</span>
         </a>
-        <a href=" <?php echo REL_PATH . 'index.php?page=contact'; ?> " class="">
+        <a href="/contact" class="">
           <i class="fa fa-envelope" aria-hidden="true"></i>
           <span class="nav-item">contact</span>
         </a>
       </div>
       <div class="navbar-right">
-        <?php (new UserController())->is_logged(); ?>
+        <?php UserController::is_logged(); ?>
       </div>
     </nav>
   </header>
 
-  <script src=" <?php echo REL_PATH . 'public/js/header.js'; ?> "></script>
+  <script src="/public/js/header.js"></script>
 
   <main class="main-container">
