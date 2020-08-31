@@ -1,12 +1,11 @@
 <?php
-require ABS_PATH . 'templates/mailView.php';
 
 class MailController
 {
 
   public static function send_mail()
   {
-    $form = 'ajax-mail-form';
+    // $form = 'ajax-mail-form';
     $error = false;
     $info = $error_msg = '';
 
@@ -15,11 +14,11 @@ class MailController
       if (empty($_POST['firstname']))
       {
         $error = true;
-        $error_msg .= '<p>firstname cannot be empty</p>';
+        $error_msg .= 'firstname cannot be empty';
       } elseif (!preg_match('/^[a-z]{2,20}$/i', $_POST['firstname']))
       {
         $error = true;
-        $error_msg .= '<p>invalid firstname format</p>';
+        $error_msg .= 'invalid firstname format';
       } else {
         $username = filter_var($_POST['firstname'], FILTER_SANITIZE_STRING);
       }
@@ -27,11 +26,11 @@ class MailController
       if (empty($_POST['lastname']))
       {
         $error = true;
-        $error_msg .= '<p>lastname cannot be empty</p>';
+        $error_msg .= 'lastname cannot be empty';
       } elseif (!preg_match('/^[a-z]{2,20}$/i', $_POST['lastname']))
       {
         $error = true;
-        $error_msg .= '<p>invalid lastname format</p>';
+        $error_msg .= 'invalid lastname format';
       } else
       {
         $lastname = filter_var($_POST['lastname'], FILTER_SANITIZE_STRING);
@@ -40,11 +39,11 @@ class MailController
       if (empty($_POST['email']))
       {
         $error = true;
-        $error_msg .= '<p>email cannot be empty</p>';
+        $error_msg .= 'email cannot be empty';
       } elseif (!preg_match('/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i', $_POST['email']))
       {
         $error = true;
-        $error_msg .= '<p>invalid email format</p>';
+        $error_msg .= 'invalid email format';
       } else
       {
         $from = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
@@ -59,19 +58,15 @@ class MailController
 
         if (mail($to, $subject, $message, $headers))
         {
-          $info .= '<p>mail sucessfully sent!</p>';
+          $info .= 'mail sucessfully sent!';
           header('Location:/contact?mail=' . urlencode($info));
         }
       } else
       {
-        $error_msg .= '<p>failed to send email!</p>';
+        $error_msg .= 'failed to send email!';
         header('Location:/contact?mail=' . urlencode($error_msg));
       }
     }
+    require ABS_PATH . 'templates/mailView.php';
   }
-}
-
-if (($_SERVER['REQUEST_METHOD'] == 'POST') && isset($_POST['send-message']))
-{
-  MailController::send_mail();
 }

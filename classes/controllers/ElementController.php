@@ -6,8 +6,6 @@ class ElementController
   public static function all_elements($elements)
   {
     $element = [];
-    $type = substr(explode('_', $elements)[1], 0, -1);
-    $prefix = $type . '_';
 
     if ($elements === 'unarchived_articles')
     {
@@ -23,13 +21,23 @@ class ElementController
       $element = (new ElementModel())->get_all_projects();
     }
 
-    foreach ($element as $row) {
-      $date = $row['DATETIME'];
-      $formatted_date = date('jS F, Y H:i', strtotime($date));
-      $text = $row[$prefix . 'text'];
-      $shorten_text = substr($text, 0, 80);
+    if ($element == true)
+    {
+      $type = substr(explode('_', $elements)[1], 0, -1);
+      $prefix = $type . '_';
 
-      require ABS_PATH . 'templates/allArticlesView.php';
+      foreach ($element as $row)
+      {
+        $date = $row['DATETIME'];
+        $formatted_date = date('jS F, Y H:i', strtotime($date));
+        $text = $row[$prefix . 'text'];
+        $shorten_text = substr($text, 0, 80);
+
+        require ABS_PATH . 'templates/allArticlesView.php';
+      }
+    } else
+    {
+      echo 'Elements not found';
     }
   }
 
@@ -42,7 +50,7 @@ class ElementController
     {
       $id = $_GET['id'];
       $type = $_GET['element'];
-
+      
       if ($type === 'article')
       {
         $element = (new ElementModel())->get_single_article($id);
@@ -51,7 +59,8 @@ class ElementController
         $element = (new ElementModel())->get_single_project($id);
       }
 
-      if ($element == true) {
+      if ($element == true)
+      {
         $prefix = $type . '_';
         $date = $element['DATETIME'];
         $formatted_date = date('jS F, Y H:i', strtotime($date));
@@ -59,12 +68,14 @@ class ElementController
         $paragraphs = explode("\n", $text);
         $formatted_text = '';
 
-        foreach ($paragraphs as $paragraph) {
+        foreach ($paragraphs as $paragraph)
+        {
           $formatted_text .= "<p>$paragraph</p>";
         }
 
         require ABS_PATH . 'templates/singleArticleView.php';
-      } else {
+      } else
+      {
         echo 'Element not found';
       }
     }

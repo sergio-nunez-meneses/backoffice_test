@@ -19,6 +19,8 @@ if (($_SERVER['REQUEST_METHOD'] == 'GET') && isset($_GET['page'])) {
   } else {
     require 'templates/homeView.php';
   }
+} else {
+  echo 'Error 404: page not found';
 }
 
 include 'include/footer.php';

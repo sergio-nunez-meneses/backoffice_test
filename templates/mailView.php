@@ -1,6 +1,12 @@
+<?php
+if (($_SERVER['REQUEST_METHOD'] == 'GET') && isset($_GET['mail']))
+{
+  echo $_GET['mail'];
+}
+?>
 <div class="contact-container">
   <button id="mail-tab">recover password</button>
-  <!-- contact -->
+  <!-- CONTACT -->
   <form id="ajax-mail-form" class="" action="/contact" method="POST" enctype="multipart/form-data">
     <fieldset class="ajax-form-container">
       <legend>send message</legend>
@@ -11,7 +17,7 @@
       <button id="" class="" type="submit" name="send-message">send</button>
     </fieldset>
   </form>
-  <!-- recover password -->
+  <!-- RECOVER PASSWORD -->
   <form id="ajax-recover-form" class="hidden" action="/contact" method="POST" enctype="multipart/form-data">
     <fieldset class="ajax-form-container">
       <legend>recover password</legend>

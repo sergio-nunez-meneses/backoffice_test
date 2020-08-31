@@ -10,28 +10,17 @@ if (($_SERVER['REQUEST_METHOD'] == 'POST') && isset($_POST['create']))
   ActionsController::create_element();
 } elseif (($_SERVER['REQUEST_METHOD'] == 'POST') && isset($_POST['edit']))
 {
-  if ($_POST['action'][0] === 'edit') {
-    ActionsController::update_element();
-  } elseif ($_POST['action'][0] === 'archive') {
-    ActionsController::archive_element();
-  } elseif ($_POST['action'][0] === 'delete') {
-    ActionsController::delete_element();
-  }
+  ActionsController::edit_element();
 }
 
-// if (($_SERVER['REQUEST_METHOD'] == 'POST') && isset($_POST['send-message']))
-// {
-//   (new MailController())->send_mail();
-// }
+if (($_SERVER['REQUEST_METHOD'] == 'POST') && isset($_POST['send-message']))
+{
+  MailController::send_mail();
+}
 
 if (($_SERVER['REQUEST_METHOD'] == 'GET') && isset($_GET['result']))
 {
   echo $_GET['result'];
-}
-
-if (($_SERVER['REQUEST_METHOD'] == 'GET') && isset($_GET['mail']))
-{
-  echo $_GET['mail'];
 }
 ?>
 

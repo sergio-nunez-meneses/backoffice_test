@@ -1,5 +1,5 @@
 <section class="element-box">
-  <img class="element-image" src="public/img/<?php echo $row[$prefix . 'image']; ?>">
+  <img class="element-image" src="/public/img/<?php echo $row[$prefix . 'image']; ?>">
   <div class="transparent-box">
     <article class="element-caption">
       <header>

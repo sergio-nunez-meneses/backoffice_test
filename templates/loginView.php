@@ -1,3 +1,9 @@
+<?php
+if (($_SERVER['REQUEST_METHOD'] == 'GET') && isset($_GET['error']))
+{
+  echo $_GET['error'];
+}
+?>
 <div class="login-container">
   <button id="sign-in-tab" class="">Sign in</button>
   <!-- SIGN IN -->

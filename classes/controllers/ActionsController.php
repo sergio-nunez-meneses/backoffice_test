@@ -36,7 +36,7 @@ class ActionsController
         $error_msg .= 'text cannot be empty';
       } elseif (strlen($_POST['text']) < 10){
         $error = true;
-        $error_msg .= 'text must contain more than 10 characters</p>';
+        $error_msg .= 'text must contain more than 10 characters';
       } else
       {
         $element_text = filter_var($_POST['text'], FILTER_SANITIZE_STRING);
@@ -73,7 +73,6 @@ class ActionsController
             }
             $action_msg .= 'element created';
             header('Location:/?result=' . urlencode($action_msg));
-            echo $action_msg;
           }
         } else
         {
@@ -90,7 +89,7 @@ class ActionsController
     }
   }
 
-  public static function update_element()
+  public static function edit_element()
   {
     // $form = 'ajax-element-form';
     $error = false;
@@ -101,17 +100,17 @@ class ActionsController
     if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true)
     {
       $error = true;
-      $error_msg .= '<p>sign in to edit this element</p>';
+      $error_msg .= 'sign in to edit this element';
     } else
     {
       if (empty($_POST['title']))
       {
         $error = true;
-        $error_msg .= '<p>title cannot be empty</p>';
+        $error_msg .= 'title cannot be empty';
       } elseif (strlen($_POST['title']) < 5)
       {
         $error = true;
-        $error_msg .= '<p>title must contain more than 5 characters</p>';
+        $error_msg .= 'title must contain more than 5 characters';
       } else
       {
         $element_title = filter_var($_POST['title'], FILTER_SANITIZE_STRING);
@@ -120,10 +119,10 @@ class ActionsController
       if (empty($_POST['text']))
       {
         $error = true;
-        $error_msg .= '<p>text cannot be empty</p>';
+        $error_msg .= 'text cannot be empty';
       } elseif (strlen($_POST['text']) < 10){
         $error = true;
-        $error_msg .= '<p>text must contain more than 10 characters</p>';
+        $error_msg .= 'text must contain more than 10 characters';
       } else
       {
         $element_text = filter_var($_POST['text'], FILTER_SANITIZE_STRING);
@@ -158,83 +157,8 @@ class ActionsController
             {
               (new ActionsModel())->update_article($element_title, $element_text, $element_image, $author_id, $element_archived, $element_id);
             }
-            $action_msg .= '<p>element updated</p>';
-            echo $action_msg;
-          }
-        } else
-        {
-          $error_msg .= "<p>you are not allowed to $action content</p>";
-          echo "$error_msg<br>";
-        }
-      } else
-      {
-        $error_msg .= '<p>could not perform requested action</p>';
-        echo "$error_msg<br>";
-      }
-    }
-  }
-
-  public static function archive_element()
-  {
-    // $form = 'ajax-element-form';
-    $error = false;
-    $author_id = $element_id = $element_type = $element_title = $element_text = $action = $action_msg = $error_msg = '';
-
-    date_default_timezone_set('Europe/Paris');
-
-    if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true)
-    {
-      $error = true;
-      $error_msg .= '<p>sign in to edit this element</p>';
-    } else
-    {
-      if (empty($_POST['title']))
-      {
-        $error = true;
-        $error_msg .= '<p>title cannot be empty</p>';
-      } elseif (strlen($_POST['title']) < 5)
-      {
-        $error = true;
-        $error_msg .= '<p>title must contain more than 5 characters</p>';
-      } else
-      {
-        $element_title = filter_var($_POST['title'], FILTER_SANITIZE_STRING);
-      }
-
-      if (empty($_POST['text']))
-      {
-        $error = true;
-        $error_msg .= '<p>text cannot be empty</p>';
-      } elseif (strlen($_POST['text']) < 10){
-        $error = true;
-        $error_msg .= '<p>text must contain more than 10 characters</p>';
-      } else
-      {
-        $element_text = filter_var($_POST['text'], FILTER_SANITIZE_STRING);
-      }
-
-      if (empty($_FILES['images']['name'][0]))
-      {
-        $image = filter_var($_POST['stored_image'], FILTER_SANITIZE_STRING);
-      } elseif (empty($_POST['stored_image']))
-      {
-        $image = filter_var($_FILES['images']['name'][0], FILTER_SANITIZE_STRING);
-      }
-
-      if (!$error)
-      {
-        if ((new ActionsModel())->check_user($_POST['author']))
-        {
-          $author_id = filter_var($_POST['author'], FILTER_SANITIZE_STRING);
-          $action = $_POST['action'][0];
-          $section = $_POST['content'][0];
-          $element_id = filter_var($_POST['id'], FILTER_SANITIZE_STRING);
-          $element_date = filter_var(substr(date("Y-m-d H:i:sa"), 0, -2), FILTER_SANITIZE_STRING);
-          $image_dir = 'public/img/';
-          $element_image = filter_var($image, FILTER_SANITIZE_STRING);
-          move_uploaded_file($_FILES['images']['tmp_name'][0], $image_dir . $element_image);
-
-          if ($action === 'archive')
+            $action_msg .= 'element updated';
+          } elseif ($action === 'archive')
           {
             $element_archived = 1;
 
@@ -242,62 +166,25 @@ class ActionsController
             {
               (new ActionsModel())->archive_article($element_id, $element_title, $element_text, $element_image, $author_id, $element_archived);
             }
-            $action_msg .= '<p>element archived</p>';
-            echo $action_msg;
-          }
-        } else
-        {
-          $error_msg .= "<p>you are not allowed to $action content</p>";
-          echo "$error_msg<br>";
-        }
-      } else
-      {
-        $error_msg .= '<p>could not perform requested action</p>';
-        echo "$error_msg<br>";
-      }
-    }
-  }
-
-  public static function delete_element()
-  {
-    // $form = 'ajax-element-form';
-    $error = false;
-    $author_id = $element_id = $action = $action_msg = $section = $error_msg = '';
-
-    if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true)
-    {
-      $error = true;
-      $error_msg .= '<p>sign in to delete this element</p>';
-    } else
-    {
-      if (!$error)
-      {
-        if ((new ActionsModel())->check_user($_POST['author']))
-        {
-          $author_id = filter_var($_POST['author'], FILTER_SANITIZE_STRING);
-          $element_id = filter_var($_POST['id'], FILTER_SANITIZE_STRING);;
-          $action = $_POST['action'][0];
-          $section = $_POST['content'][0];
-
-          if ($action === 'delete')
+            $action_msg .= 'element archived';
+          } elseif ($action === 'delete')
           {
             if ($section === 'articles')
             {
               (new ActionsModel())->delete_article($element_id);
             }
-            $action_msg .= '<p>element deleted</p>';
-            echo $action_msg;
+            $action_msg .= 'element deleted';
           }
+          header('Location:/?result=' . urlencode($action_msg));
         } else
         {
-          $error_msg .= "<p>you are not allowed to $action content</p>";
+          $error_msg .= "you are not allowed to $action content";
           echo "$error_msg<br>";
         }
       } else
       {
-        $error_msg .= '<p>could not perform requested action</p>';
+        $error_msg .= 'could not perform requested action';
         echo "$error_msg<br>";
       }
     }
   }
-}
